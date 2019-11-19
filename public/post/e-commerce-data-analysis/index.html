@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>E-commerce data analysis</title>
+  <meta name="author" content="A.M.Fuady" />
+  
+  
+  
+  
+  <meta name="keywords" content="R, visualization, programming">
+  
+  
+  <meta name="description" content="">
+
+  <meta name="generator" content="Hugo 0.59.1" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.green.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Angga Fuady Blog">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="en_us">
+  <meta property="og:site_name" content="Angga Fuady Blog">
+  <meta property="og:title" content="E-commerce data analysis">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="/post/e-commerce-data-analysis/" />
+  <meta property="og:description" content="">
+  <meta property="og:image" content="/img/sharing-default.png">
+  <meta property="og:image:type" content="image/png">
+  
+  
+  
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="420">
+  
+  
+  <meta property="og:updated_time" content="2019-11-19T00:00:00Z">
+  
+
+  
+  <meta name="twitter:card" content="summary">
+  
+  <meta name="twitter:title" content="E-commerce data analysis">
+  
+  <meta name="twitter:image" content="/img/sharing-default.png">
+  
+  <meta name="twitter:description" content="">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header>
+
+          <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
+
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/amf_logo.png" alt="E-commerce data analysis logo" class="hidden-xs hidden-sm">
+                    <img src="/img/amf_smalllogo.png" alt="E-commerce data analysis logo" class="visible-xs visible-sm">
+                    <span class="sr-only">E-commerce data analysis - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">Home</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/blog/">Blog</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="tentang">Tentang Penulis</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">
+
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+
+                </span>
+                    </div>
+                </form>
+
+            </div>
+            
+
+        </div>
+    </div>
+    
+
+</div>
+
+
+
+
+        </header>
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>E-commerce data analysis</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        <p class="text-muted text-uppercase mb-small text-right">By <a href="#">A.M.Fuady</a> | November 19, 2019</p>
+
+                        <div id="post-content">
+                          
+
+
+<div id="loading-libraries" class="section level2">
+<h2>Loading libraries</h2>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 3.5.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(magrittr)
+library(Hmisc)</code></pre>
+<pre><code>## Warning: package &#39;Hmisc&#39; was built under R version 3.5.3</code></pre>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## Warning: package &#39;lattice&#39; was built under R version 3.5.3</code></pre>
+<pre><code>## Loading required package: survival</code></pre>
+<pre><code>## Loading required package: Formula</code></pre>
+<pre><code>## Warning: package &#39;Formula&#39; was built under R version 3.5.2</code></pre>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.5.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Hmisc&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:dplyr&#39;:
+## 
+##     src, summarize</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     format.pval, units</code></pre>
+<pre class="r"><code>library(lubridate)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     date</code></pre>
+<pre class="r"><code>library(caret)</code></pre>
+<pre><code>## Warning: package &#39;caret&#39; was built under R version 3.5.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;caret&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:survival&#39;:
+## 
+##     cluster</code></pre>
+<pre class="r"><code>library(GGally)</code></pre>
+<pre><code>## Warning: package &#39;GGally&#39; was built under R version 3.5.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;GGally&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     nasa</code></pre>
+<pre class="r"><code>library(reshape2)
+library(recommenderlab)</code></pre>
+<pre><code>## Warning: package &#39;recommenderlab&#39; was built under R version 3.5.3</code></pre>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## Warning: package &#39;Matrix&#39; was built under R version 3.5.3</code></pre>
+<pre><code>## Loading required package: arules</code></pre>
+<pre><code>## Warning: package &#39;arules&#39; was built under R version 3.5.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;arules&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     recode</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     abbreviate, write</code></pre>
+<pre><code>## Loading required package: proxy</code></pre>
+<pre><code>## Warning: package &#39;proxy&#39; was built under R version 3.5.3</code></pre>
+<pre><code>## 
+## Attaching package: &#39;proxy&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:Matrix&#39;:
+## 
+##     as.matrix</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     as.dist, dist</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     as.matrix</code></pre>
+<pre><code>## Loading required package: registry</code></pre>
+<pre><code>## Warning: package &#39;registry&#39; was built under R version 3.5.2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;recommenderlab&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:caret&#39;:
+## 
+##     MAE, RMSE</code></pre>
+<pre class="r"><code>2+2</code></pre>
+<pre><code>## [1] 4</code></pre>
+<!-- ## Loading data -->
+<!-- ```{r} -->
+<!-- marketing_spend <- read.csv("~/data/Marketing_Spend.csv") -->
+<!-- key_sku <- read.csv("KEY_SKU.csv") -->
+<!-- online <- read.csv("Online.csv") -->
+<!-- retail <- read.csv("Retail.csv") -->
+<!-- ``` -->
+<!-- ## Data pre-processing -->
+<!-- ```{r} -->
+<!-- dim(marketing_spend) -->
+<!-- dim(key_sku) -->
+<!-- dim(online) -->
+<!-- dim(retail) -->
+<!-- ``` -->
+<!-- Renaming colnames of each dataframe. -->
+<!-- ```{r} -->
+<!-- names(marketing_spend)[1] <- c("Date")  -->
+<!-- names(key_sku)[1] <- c("Product.SKU") -->
+<!-- names(online) <- c("Transaction.ID", "Date","Product.SKU", -->
+<!--                    "Product","Product.Category","Quantity.online", -->
+<!--                    "Avg.price","Revenue","Tax","Delivery") -->
+<!-- names(retail) <- c("Transaction.ID","Date","StockCode","Quantity.retail") -->
+<!-- ``` -->
+<!-- ### Marketing Spend dataset -->
+<!-- Adding extra variable which decompose Date into day, month and year. `yday` is the day count from 1st of January.  -->
+<!-- ```{r} -->
+<!-- marketing_spend$Date <- as.character(marketing_spend$Date) -->
+<!-- marketing_spend %<>% mutate( -->
+<!--   day = substr(marketing_spend$Date, nchar(marketing_spend$Date)-1, nchar(marketing_spend$Date)), -->
+<!--   month = substr(marketing_spend$Date, nchar(marketing_spend$Date)-4, nchar(marketing_spend$Date)-3), -->
+<!--   year = substr(marketing_spend$Date, nchar(marketing_spend$Date)-9, nchar(marketing_spend$Date)-6), -->
+<!--   yday = yday(marketing_spend$Date) -->
+<!-- ) -->
+<!-- summary(marketing_spend) -->
+<!-- ``` -->
+<!-- ### Key SKUs dataset -->
+<!-- ```{r} -->
+<!-- key_sku$Product.SKU <- as.character(key_sku$Product.SKU) -->
+<!-- summary(key_sku) -->
+<!-- ``` -->
+<!-- ### Retail dataset  -->
+<!-- ```{r} -->
+<!-- ## retail -->
+<!-- retail$Date <- as.character(retail$Date)   -->
+<!-- retail %<>% mutate( -->
+<!--   day = substr(retail$Date, nchar(retail$Date)-1, nchar(retail$Date)), -->
+<!--   month = substr(retail$Date, nchar(retail$Date)-4, nchar(retail$Date)-3), -->
+<!--   year = substr(retail$Date, nchar(retail$Date)-9, nchar(retail$Date)-6), -->
+<!--   yday = yday(retail$Date), -->
+<!--   workday = wday(ymd(Date)) -->
+<!-- ) -->
+<!-- summary(retail) -->
+<!-- ``` -->
+<!-- ### Online dataset -->
+<!-- ```{r} -->
+<!-- online$Date <- as.character(online$Date) -->
+<!-- online %<>% mutate( -->
+<!--   day = substr(online$Date, nchar(online$Date)-1, nchar(online$Date)), -->
+<!--   month = substr(online$Date, nchar(online$Date)-3, nchar(online$Date)-2), -->
+<!--   year = substr(online$Date, nchar(online$Date)-7, nchar(online$Date)-4), -->
+<!--   yday = yday(ymd(online$Date)), -->
+<!--   workday = wday(ymd(Date)), -->
+<!--   amount_spend = Quantity.online*Avg.price -->
+<!-- ) -->
+<!-- online$Product.SKU <- as.character(online$Product.SKU) -->
+<!-- online$Product <- as.character(online$Product) -->
+<!-- online$Product.Category <- as.character(online$Product.Category) -->
+<!-- summary(online) -->
+<!-- ``` -->
+<!-- We found some missing values in the `online` dataset, specifically in the `Quantity.online` and `Product.Category` variable.  -->
+<!-- For the `Product.Category` variable, the missing information will be fill in with `Uncategorized`. -->
+<!-- #### Removing missing value in `Product.Category` variable -->
+<!-- ```{r} -->
+<!-- online[which(is.na(online$Product.Category)),"Product.Category"] <- c("Uncategorized") -->
+<!-- ``` -->
+<!-- #### Removing missing value in `Quantity.online` variable -->
+<!-- ```{r} -->
+<!-- online <- online[-which(is.na(online$Quantity.online)),] # 5 missing removed -->
+<!-- ``` -->
+<!-- Adding Stock code and product SKU for online and retail datasets. For these datasets, add other variable `store` to identify each products with either online or offline. -->
+<!-- ```{r} -->
+<!-- online <- merge(online, key_sku, by="Product.SKU") -->
+<!-- retail <- merge(retail,key_sku,by="StockCode") -->
+<!-- online$store <- rep(c("online"), nrow(online)) -->
+<!-- retail$store <- rep(c("retail"), nrow(retail)) -->
+<!-- ``` -->
+<!-- Merge online and retail. -->
+<!-- ```{r} -->
+<!-- online_1 <- online[,c("Transaction.ID","Quantity.online","day","month","yday","workday","store")] -->
+<!-- retail_1 <- retail[,c("Transaction.ID","Quantity.retail","day","month","yday","workday","store")] -->
+<!-- names(online_1)[2] <- names(retail_1)[2] <- c("Quantity") -->
+<!-- merge.online.retail <- rbind(online_1,retail_1) -->
+<!-- ``` -->
+<!-- Plot number of transactions for each month. In this plot, we see the information of total number of transactions every month. The highest transaction for both online and retail in December. In both dataset, the number of transaction start to increase since september.  -->
+<!-- ```{r} -->
+<!-- ggplot(merge.online.retail %>%  -->
+<!--          group_by(Transaction.ID,month,store) %>% summarise(trans.n = n()) %>%  -->
+<!--          group_by(month,store) %>% summarise(trans.n.month = n() ), -->
+<!--        aes(month, trans.n.month,fill=store)) + -->
+<!--   geom_bar(stat="identity", position=position_dodge()) + -->
+<!--   facet_wrap(~store, nrow=2) + -->
+<!--   theme_set(theme_bw()) + -->
+<!--   theme(legend.position = "none") + -->
+<!--   geom_text(aes(label=trans.n.month), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) + -->
+<!--   scale_fill_brewer(palette="Paired") + -->
+<!--   scale_x_discrete(name = "Month", -->
+<!--                    labels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec")) +  -->
+<!--   labs( y = "Number of Transaction", -->
+<!--         title="Number of transactions for different Months") -->
+<!-- ``` -->
+<!-- Specific within December, we investigate more on specific date.  -->
+<!-- ```{r} -->
+<!-- merge.dec <- merge.online.retail[which(merge.online.retail$month=="12"),] %>%  -->
+<!--   group_by(Transaction.ID,day,store) %>% summarise(trans.n = n()) %>%  -->
+<!--   group_by(day,store) %>% summarise(trans.n.month = n()) -->
+<!-- add.merge.dec <- data.frame( day = c("04","11","18","25","30") , store= rep(c("retail"),5) ,  trans.n.month = rep(0,5)) -->
+<!-- ggplot( rbind(as.data.frame(merge.dec), add.merge.dec), -->
+<!--        aes(day, trans.n.month,fill=store)) + -->
+<!--   geom_bar(stat="identity") + -->
+<!--   facet_wrap(~store, nrow=2)+ -->
+<!--   theme_set(theme_bw()) + -->
+<!--   geom_text(aes(label=trans.n.month), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) + -->
+<!--   scale_fill_brewer(palette="Paired") + -->
+<!--   theme(axis.ticks.x = element_blank(), legend.position = "none") + -->
+<!--   labs( x="Date", y = "Number of Transaction", -->
+<!--         title="Number of transactions for different Dates in December") -->
+<!-- ``` -->
+<!-- Plot the total number of transactions for each working day. -->
+<!-- ```{r} -->
+<!-- ggplot(merge.online.retail %>%  -->
+<!--          group_by(Transaction.ID,workday,store) %>% summarise(trans.n = n()) %>%  -->
+<!--          group_by(workday,store) %>% summarise(trans.n.month = n() ), -->
+<!--        aes(workday, trans.n.month,fill=store)) + -->
+<!--   geom_bar(stat="identity") + -->
+<!--   facet_wrap(~store, nrow=2) + -->
+<!--   theme_set(theme_bw()) + -->
+<!--   geom_text(aes(label=trans.n.month), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) + -->
+<!--   scale_fill_brewer(palette="Paired") + -->
+<!--   theme(axis.ticks.x = element_blank(),legend.position = "none") + -->
+<!--   scale_x_discrete(name = "Day" ,limits= seq(1:7), breaks=seq(1:7), labels=c("Sun","Mon","Tue","Wed","Thur","Fri","Sat")) +   -->
+<!--   labs( y = "Number of Transaction", -->
+<!--         title="Number of transactions for different Days") -->
+<!-- ``` -->
+<!-- Plot of total marketing spend for retail and online. -->
+<!-- ```{r} -->
+<!-- ggplot(melt(marketing_spend[which(marketing_spend$month=="12"),2:5]) ,aes(day, value,fill= variable))+ -->
+<!--   geom_bar(stat="identity") + -->
+<!--   facet_wrap(~variable, nrow=2)+ -->
+<!--   theme_set(theme_bw()) + -->
+<!--   geom_text(aes(label=value), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) + -->
+<!--   scale_fill_brewer(palette="Paired") + -->
+<!--   theme(axis.ticks.x = element_blank(), legend.position = "none") + -->
+<!--   labs( x="Date", y = "Marketing Spend", -->
+<!--         title="Amount of marketing spend for different Dates in December") -->
+<!-- ``` -->
+<!-- Plot total sales and marketing spend online in december -->
+<!-- ```{r} -->
+<!-- data.december <- merge(merge.dec[which(merge.dec$store=="online"),], marketing_spend[which(marketing_spend$month=="12"),c("day","Online.Spend")],by="day") -->
+<!-- names(data.december)[3:4] <- c("Total sales","Marketing spend") -->
+<!-- ggplot(melt(data.december[,-2]) ,aes(day, value,fill= variable))+ -->
+<!--   geom_bar(stat="identity") + -->
+<!--   facet_wrap(~variable, scale="free" ,nrow=2)+ -->
+<!--   theme_set(theme_bw()) + -->
+<!--   geom_text(aes(label=value), vjust=1.6, color="white", size=3) + -->
+<!--   scale_fill_brewer(palette="Paired") + -->
+<!--   theme(axis.ticks.x = element_blank(), legend.position = "none") + -->
+<!--   labs( x="Date", -->
+<!--         title="Total sales and marketing spend Online in December") -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- online %>% group_by(Product.SKU,Product) %>% summarise(sum.quantity = sum(Quantity.online)) %>% arrange(desc(sum.quantity))%>% head(5) %>%  -->
+<!--   ggplot(aes(x=reorder(Product,sum.quantity), y= sum.quantity)) +  -->
+<!--     geom_bar(stat="identity",fill="steelblue") +  -->
+<!--     coord_flip() +  -->
+<!--   geom_text(aes(label=sum.quantity), hjust=1.6, color="white", size=3.5)+ -->
+<!--   theme(axis.title.y = element_blank()) + -->
+<!--   labs( x="Total quantity", y = "Product name", -->
+<!--         title="Top 5 Product Sold Online") -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- online %>% group_by(Product.Category) %>% summarise(sum.quantity = sum(Quantity.online)) %>% arrange(desc(sum.quantity))%>% head(5) %>%  -->
+<!--   ggplot(aes(x=reorder(Product.Category,sum.quantity), y= sum.quantity)) +  -->
+<!--   geom_bar(stat="identity",fill="steelblue") +  -->
+<!--   coord_flip() +  -->
+<!--   geom_text(aes(label=sum.quantity), hjust=1.6, color="white", size=3.5)+ -->
+<!--   theme(axis.title.y = element_blank()) + -->
+<!--   labs( x="Total quantity", y = "Product Category", -->
+<!--         title="Top 5 Product Category Sold Online") -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- online %>% group_by(Transaction.ID) %>% summarise(total_amount_spend = sum(amount_spend)) %>% arrange(desc(total_amount_spend)) %>% head(5) %>% -->
+<!--   ggplot(aes(x=reorder(Transaction.ID,total_amount_spend), y= total_amount_spend)) +  -->
+<!--   geom_bar(stat="identity",fill="steelblue") +  -->
+<!--   coord_flip() +  -->
+<!--   geom_text(aes(label=total_amount_spend), hjust=1.6, color="white", size=3.5)+ -->
+<!--   labs( x="Total amount spend per transaction", y = "Total amount spend per transaction", -->
+<!--         title="Top 5 Total amount spend per transaction ID") -->
+<!-- ``` -->
+<!-- ### Prediction model per day -->
+<!-- ```{r} -->
+<!-- transaction.perday <- online[,c("Transaction.ID","Revenue","Tax","Delivery","workday","yday")] -->
+<!-- transaction.unique <- transaction.perday[!duplicated(transaction.perday$Transaction.ID),] -->
+<!-- sum.per.day <- transaction.unique %>% group_by(yday) %>% summarise(sum.rev = sum(Revenue), sum.tax = sum(Tax), sum.delivery=sum(Delivery)) -->
+<!-- sum.quan.per.day <- online %>% group_by(yday) %>%summarise(sum.quan = sum(Quantity.online)) -->
+<!-- per.day.online <- merge(sum.per.day, sum.quan.per.day, by="yday") -->
+<!-- data.per.day <- merge(per.day.online,marketing_spend[,c("yday","Online.Spend")], by="yday") -->
+<!-- my_fn <- function(data, mapping, method="loess", ...){ -->
+<!--   p <- ggplot(data = data, mapping = mapping) +  -->
+<!--     geom_point() +  -->
+<!--     geom_smooth(method=method, ...) -->
+<!--   p -->
+<!-- } -->
+<!-- ``` -->
+<!-- Correlation matrix between variable of interest. -->
+<!-- ```{r} -->
+<!-- ggpairs(data.per.day[,-1], lower = list(continuous = my_fn)) -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- df.res.rev <- data.frame(predictor = c("quan","tax","deli","spend","quan.tax","quan.deli","quan.spend","tax.deli","tax.spend","deli.spend","quan.tax.deli","quan.tax.spend","quan.deli.spend","tax.deli.spend","quan.tax.deli.spend"), -->
+<!--            r.squared = c( -->
+<!-- summary(lm(sum.rev~sum.quan, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~sum.tax, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~sum.delivery, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~Online.Spend, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~sum.quan + sum.tax, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~sum.quan + sum.delivery, data = data.per.day))$r.squared,  -->
+<!-- summary(lm(sum.rev~sum.quan + Online.Spend, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~sum.tax + sum.delivery, data = data.per.day))$r.squared,  -->
+<!-- summary(lm(sum.rev~sum.tax + Online.Spend, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~sum.delivery + Online.Spend, data = data.per.day))$r.squared,  -->
+<!-- summary(lm(sum.rev~sum.quan + sum.tax + sum.delivery, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~sum.quan + sum.tax + Online.Spend, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~sum.quan + sum.delivery + Online.Spend, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~sum.tax + sum.delivery + Online.Spend, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.rev~sum.quan + sum.tax + sum.delivery + Online.Spend, data = data.per.day))$r.squared -->
+<!-- )) -->
+<!-- df.res.rev[order(df.res.rev$r.squared,decreasing = TRUE),] -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- df.res.quan <- data.frame(predictor = c("tax","deli","spend","tax.deli","tax.spend","deli.spend","tax.deli.spend"), -->
+<!--            r.squared = c( -->
+<!-- summary(lm(sum.quan~sum.tax, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.quan~sum.delivery, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.quan~Online.Spend, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.quan~sum.tax + sum.delivery, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.quan~sum.tax + Online.Spend, data = data.per.day))$r.squared,  -->
+<!-- summary(lm(sum.quan~sum.delivery + Online.Spend, data = data.per.day))$r.squared, -->
+<!-- summary(lm(sum.quan~sum.tax + sum.delivery + Online.Spend, data = data.per.day))$r.squared -->
+<!-- )) -->
+<!-- df.res.quan[order(df.res.quan$r.squared,decreasing = TRUE),] -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- fitControl <- trainControl(method = "repeatedcv",    -->
+<!--                            number = 10,     # number of folds -->
+<!--                            repeats = 10)    # repeated ten times -->
+<!-- model.rev.lm <- train(sum.rev~sum.quan + sum.tax , -->
+<!--                          data = data.per.day[,-1], -->
+<!--                          method = "lm",  # now we're using the lm method -->
+<!--                          trControl = fitControl)   -->
+<!-- model.rev.lasso <- train(sum.rev~sum.quan + sum.tax , -->
+<!--                          data = data.per.day[,-1], -->
+<!--                          method = "lasso",  # now we're using the lasso method -->
+<!--                          trControl = fitControl)   -->
+<!-- model.rev.ridge <- train(sum.rev~sum.quan + sum.tax , -->
+<!--                          data = data.per.day[,-1], -->
+<!--                          method = "ridge",  # now we're using the ridge method -->
+<!--                          trControl = fitControl)   -->
+<!-- model.rev.enet <- train(sum.rev~sum.quan + sum.tax , -->
+<!--                          data = data.per.day[,-1], -->
+<!--                          method = "enet",  # now we're using the enet method -->
+<!--                          trControl = fitControl)   -->
+<!-- model.rev.stepwise.backward <- train(sum.rev~. , -->
+<!--                                     data = data.per.day[,-1], -->
+<!--                                     tuneGrid = data.frame(nvmax = 1:4), -->
+<!--                                     method = "leapBackward",  # now we're using the nn method -->
+<!--                                     trControl = fitControl)   -->
+<!-- # lm, lasso, ridge, enet, neuralnet -->
+<!-- results.all.variable <- data.frame( method = c("LM","Lasso","Ridge","ElasticNet"), rbind(model.rev.lm$results[,2:4], -->
+<!-- model.rev.lasso$results[3,2:4], # used for multicolinearity penalised with absolute value, makes coefficient exactly zero -->
+<!-- model.rev.ridge$results[2,2:4], # used for multicolinearity penalised with square of regression coef. beta coef shrink -->
+<!-- model.rev.enet$results[8,3:5])) # used for multicolinearity (hybrid lasso and ridge) -->
+<!-- results.all.variable -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- summary(model.rev.stepwise.backward$finalModel)# tax and quantity -->
+<!-- ``` -->
+<!-- ### Modeling product recomendation -->
+<!-- ```{r} -->
+<!-- productmat <- dcast(online, Transaction.ID~Product.SKU, value.var = "Quantity.online", na.rm=FALSE) -->
+<!-- productmat[1:5,1:5] -->
+<!-- # first user transactionID = 16679 -->
+<!-- productmat <- as.matrix(productmat[,-1]) #remove TransactionID -->
+<!-- #Convert rating matrix into a recommenderlab sparse matrix -->
+<!-- productmat <- as(productmat, "realRatingMatrix") -->
+<!-- #Normalize the data -->
+<!-- productmat_norm <- normalize(productmat) -->
+<!-- #Create Recommender Model. "UBCF" stands for User-Based Collaborative Filtering -->
+<!-- recommender_model <- Recommender(productmat_norm, method = "UBCF", param=list(method="Cosine",nn=10)) -->
+<!-- recom <- predict(recommender_model, productmat[3], n=5) # Obtain top 5 recommendations for 1st user in dataset -->
+<!-- recom_list <- as(recom, "list") # convert recommenderlab object to readable list -->
+<!-- #Obtain top 5 recommendations for transactionID 1:  -->
+<!-- list_recom <- online[which(online$Product.SKU %in% unlist(recom_list)),c("Product.SKU","Product","Product.Category")] -->
+<!-- list_recom[!duplicated(list_recom$Product.SKU),] -->
+<!-- ``` -->
+</div>
+
+                        </div>
+                        
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            
+            <li>
+                <a href="/categories/analysis-data">analysis-data (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/lorem">lorem (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/programming">programming (2)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/pseudo">pseudo (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/r">r (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/starting">starting (1)</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+<div class="panel sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Tags</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="tag-cloud">
+            
+            
+            <li>
+                <a href="/tags/go"><i class="fas fa-tags"></i> go</a>
+            </li>
+            
+            <li>
+                <a href="/tags/golang"><i class="fas fa-tags"></i> golang</a>
+            </li>
+            
+            <li>
+                <a href="/tags/hugo"><i class="fas fa-tags"></i> hugo</a>
+            </li>
+            
+            <li>
+                <a href="/tags/ipsum"><i class="fas fa-tags"></i> ipsum</a>
+            </li>
+            
+            <li>
+                <a href="/tags/plot"><i class="fas fa-tags"></i> plot</a>
+            </li>
+            
+            <li>
+                <a href="/tags/programming"><i class="fas fa-tags"></i> programming</a>
+            </li>
+            
+            <li>
+                <a href="/tags/r"><i class="fas fa-tags"></i> r</a>
+            </li>
+            
+            <li>
+                <a href="/tags/r-markdown"><i class="fas fa-tags"></i> r-markdown</a>
+            </li>
+            
+            <li>
+                <a href="/tags/regression"><i class="fas fa-tags"></i> regression</a>
+            </li>
+            
+            <li>
+                <a href="/tags/theme"><i class="fas fa-tags"></i> theme</a>
+            </li>
+            
+            <li>
+                <a href="/tags/visualization"><i class="fas fa-tags"></i> visualization</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2015/10/10/migrate-from-jekyll/">
+                          
+                            <img src="/img/banners/banner-5.jpg" class="img-responsive" alt="Migrate from Jekyll">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2015/10/10/migrate-from-jekyll/">Migrate from Jekyll</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2015/10/02/linked-post/">
+                          
+                            <img src="/img/banners/banner-4.jpg" class="img-responsive" alt="Linked post">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2015/10/02/linked-post/">Linked post</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2015/09/17/go-is-for-lovers/">
+                          
+                            <img src="/img/banners/banner-2.jpg" class="img-responsive" alt="Go is for lovers">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2015/09/17/go-is-for-lovers/">Go is for lovers</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2019</p>
+            
+            <p class="pull-right">
+              Template by <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              Ported to Hugo by <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script src="/js/hpneo.gmaps.js"></script>
+<script src="/js/gmaps.init.js"></script>
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+  </body>
+</html>

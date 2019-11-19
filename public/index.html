@@ -77,7 +77,7 @@
     <meta property="og:image:height" content="420">
   
   
-  <meta property="og:updated_time" content="2015-10-10T13:07:31&#43;0200">
+  <meta property="og:updated_time" content="2019-11-19T00:00:00Z">
   
 
   
@@ -104,18 +104,12 @@
   <div class="container">
     <div class="row">
       <div class="col-xs-5">
-        <p class="hidden-sm hidden-xs">Contact us on +420 777 555 333 or hello@universal.com.</p>
-      <p class="hidden-md hidden-lg"><a href="#" data-animate-hover="pulse"><i class="fas fa-phone"></i></a>
-      <a href="#" data-animate-hover="pulse"><i class="fas fa-envelope"></i></a>
-      </p>
-      
+        
       </div>
       <div class="col-xs-7">
         <div class="social">
           
           <a href="https://github.com/Fuady" target="_blank" style="opacity: 1;"><i class='fab fa-2x fa-github'></i></a>
-          
-          <a href="https://www.linkedin.com/in/amfuady/" target="_blank" style="opacity: 1;"><i class='fa fa-2x fa-linkedin'></i></a>
           
           <a href="mailto:your@email.com" target="_blank" style="opacity: 1;"><i class='fa fa-2x fa-envelope'></i></a>
           
@@ -247,63 +241,29 @@
                         <div class="top">
                             <div class="image" style="overflow:hidden">
                                 
-                                <img src="/img/banners/banner-5.jpg" class="img-responsive" alt="" >
+                                <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="" >
                                 
                             </div>
                             <div class="bg"></div>
                             <div class="text">
                                 <p class="buttons">
-                                    <a href="/blog/2015/10/10/migrate-from-jekyll/" class="btn btn-template-transparent-primary"><i class="fas fa-link"></i> Read more</a>
+                                    <a href="/blog/2019/11/19/2019-11-19-e-commerce-data-analysis/" class="btn btn-template-transparent-primary"><i class="fas fa-link"></i> Read more</a>
                                 </p>
                             </div>
                         </div>
 
                         <div class="content">
-                            <h4><a href="/blog/2015/10/10/migrate-from-jekyll/">Migrate from Jekyll</a></h4>
+                            <h4><a href="/blog/2019/11/19/2019-11-19-e-commerce-data-analysis/">E-commerce data analysis</a></h4>
                             <p class="author-category">
                             
-                            on October 10, 2015
-                            </p>
-                            <p class="intro">Move static content to static Jekyll has a rule that any directory not starting with _ will be copied as-is to the _site output. Hugo keeps all static content under static. You should therefore move it all there. With Jekyll, something that looked like
-▾ &lt;root&gt;/ ▾ images/ logo.png  should become
-▾ &lt;root&gt;/ ▾ static/ ▾ images/ logo.png  Additionally, you&rsquo;ll want any files that should reside at the root (such as CNAME) to be moved to static.</p>
-                            <p class="read-more">
-                              <a href="/blog/2015/10/10/migrate-from-jekyll/" class="btn btn-template-main">Continue reading</a>
-                            </p>
-                        </div>
-                    </div>
-                    
-
-                </div>
-                
-                <div class="col-md-3 col-sm-6">
-                    <div class="box-image-text blog">
-                        <div class="top">
-                            <div class="image" style="overflow:hidden">
-                                
-                                <img src="/img/banners/banner-4.jpg" class="img-responsive" alt="" >
-                                
-                            </div>
-                            <div class="bg"></div>
-                            <div class="text">
-                                <p class="buttons">
-                                    <a href="/blog/2015/10/02/linked-post/" class="btn btn-template-transparent-primary"><i class="fas fa-link"></i> Read more</a>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="content">
-                            <h4><a href="/blog/2015/10/02/linked-post/">Linked post</a></h4>
-                            <p class="author-category">
+                            By <a href="#">A.M.Fuady</a>
                             
-                            By <a href="#">John Doe</a>
-                            
-                            on October 2, 2015
+                            on November 19, 2019
                             </p>
-                            <p class="intro">I&rsquo;m a linked post in the menu. You can add other posts by adding the following line to the frontmatter:
-menu = &quot;main&quot;  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mauris nulla, vestibulum vel auctor sed, posuere eu lorem. Aliquam consequat augue ut accumsan mollis. Suspendisse malesuada sodales tincidunt. Vivamus sed erat ac augue bibendum porta sed id ipsum. Ut mollis mauris eget ligula sagittis cursus. Aliquam id pharetra tellus.</p>
+                            <p class="intro">Hai, Di tulisan kali ini saya akan mencoba menganalisis data e-commmerce. Teman2 bisa mendownload datanya disini
+Loading librarieslibrary(dplyr)library(magrittr)library(Hmisc)library(lubridate)library(caret)library(GGally)library(reshape2)library(recommenderlab)Loading datamarketing_spend &lt;- read.csv(&quot;~/RepositoryBlog/data/Marketing_Spend.csv&quot;)key_sku &lt;- read.csv(&quot;~/RepositoryBlog/data/KEY_SKU.csv&quot;)online &lt;- read.csv(&quot;~/RepositoryBlog/data/Online.csv&quot;)retail &lt;- read.csv(&quot;~/RepositoryBlog/data/Retail.csv&quot;)Data pre-processingdim(marketing_spend)## [1] 365 3dim(key_sku)## [1] 1178 2dim(online)## [1] 54144 10dim(retail)## [1] 181247 4Renaming colnames of each dataframe.</p>
                             <p class="read-more">
-                              <a href="/blog/2015/10/02/linked-post/" class="btn btn-template-main">Continue reading</a>
+                              <a href="/blog/2019/11/19/2019-11-19-e-commerce-data-analysis/" class="btn btn-template-main">Continue reading</a>
                             </p>
                         </div>
                     </div>
@@ -322,58 +282,24 @@ menu = &quot;main&quot;  Lorem ipsum dolor sit amet, consectetur adipiscing elit
                             <div class="bg"></div>
                             <div class="text">
                                 <p class="buttons">
-                                    <a href="/blog/2015/09/17/go-is-for-lovers/" class="btn btn-template-transparent-primary"><i class="fas fa-link"></i> Read more</a>
+                                    <a href="/blog/2019/07/23/2015-07-23-r-rmarkdown/" class="btn btn-template-transparent-primary"><i class="fas fa-link"></i> Read more</a>
                                 </p>
                             </div>
                         </div>
 
                         <div class="content">
-                            <h4><a href="/blog/2015/09/17/go-is-for-lovers/">Go is for lovers</a></h4>
+                            <h4><a href="/blog/2019/07/23/2015-07-23-r-rmarkdown/">Hello R Markdown</a></h4>
                             <p class="author-category">
                             
-                            on September 17, 2015
-                            </p>
-                            <p class="intro">Hugo uses the excellent go html/template library for its template engine. It is an extremely lightweight engine that provides a very small amount of logic. In our experience that it is just the right amount of logic to be able to create a good static website. If you have used other template systems from different languages or frameworks you will find a lot of similarities in go templates.
-This document is a brief primer on using go templates.</p>
-                            <p class="read-more">
-                              <a href="/blog/2015/09/17/go-is-for-lovers/" class="btn btn-template-main">Continue reading</a>
-                            </p>
-                        </div>
-                    </div>
-                    
-
-                </div>
-                
-                <div class="col-md-3 col-sm-6">
-                    <div class="box-image-text blog">
-                        <div class="top">
-                            <div class="image" style="overflow:hidden">
-                                
-                                <img src="/img/banners/banner-3.jpg" class="img-responsive" alt="" >
-                                
-                            </div>
-                            <div class="bg"></div>
-                            <div class="text">
-                                <p class="buttons">
-                                    <a href="/blog/2015/08/03/hugo-is-for-lovers/" class="btn btn-template-transparent-primary"><i class="fas fa-link"></i> Read more</a>
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="content">
-                            <h4><a href="/blog/2015/08/03/hugo-is-for-lovers/">Hugo is for lovers</a></h4>
-                            <p class="author-category">
+                            By <a href="#">Frida Gomam</a>
                             
-                            on August 3, 2015
+                            on July 23, 2019
                             </p>
-                            <p class="intro">Step 1. Install Hugo Goto hugo releases and download the appropriate version for your os and architecture.
-Save it somewhere specific as we will be using it in the next step.
-More complete instructions are available at installing hugo
-Step 2. Build the Docs Hugo has its own example site which happens to also be the documentation site you are reading right now.
-Follow the following steps:
- Clone the hugo repository Go into the repo Run hugo in server mode and build the docs Open your browser to http://localhost:1313  Corresponding pseudo commands:</p>
+                            <p class="intro">R MarkdownThis is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+You can embed an R code chunk like this:
+summary(cars)## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</p>
                             <p class="read-more">
-                              <a href="/blog/2015/08/03/hugo-is-for-lovers/" class="btn btn-template-main">Continue reading</a>
+                              <a href="/blog/2019/07/23/2015-07-23-r-rmarkdown/" class="btn btn-template-main">Continue reading</a>
                             </p>
                         </div>
                     </div>
@@ -415,40 +341,27 @@ Follow the following steps:
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2015/10/10/migrate-from-jekyll/">
+                        <a href="/blog/2019/11/19/2019-11-19-e-commerce-data-analysis/">
                           
-                            <img src="/img/banners/banner-5.jpg" class="img-responsive" alt="Migrate from Jekyll">
+                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="E-commerce data analysis">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2015/10/10/migrate-from-jekyll/">Migrate from Jekyll</a></h5>
+                        <h5><a href="/blog/2019/11/19/2019-11-19-e-commerce-data-analysis/">E-commerce data analysis</a></h5>
                     </div>
                 </div>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="/blog/2015/10/02/linked-post/">
+                        <a href="/blog/2019/07/23/2015-07-23-r-rmarkdown/">
                           
-                            <img src="/img/banners/banner-4.jpg" class="img-responsive" alt="Linked post">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="/blog/2015/10/02/linked-post/">Linked post</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="/blog/2015/09/17/go-is-for-lovers/">
-                          
-                            <img src="/img/banners/banner-2.jpg" class="img-responsive" alt="Go is for lovers">
+                            <img src="/img/banners/banner-2.jpg" class="img-responsive" alt="Hello R Markdown">
                           
                         </a>
                     </div>
                     <div class="name same-height-always">
-                        <h5><a href="/blog/2015/09/17/go-is-for-lovers/">Go is for lovers</a></h5>
+                        <h5><a href="/blog/2019/07/23/2015-07-23-r-rmarkdown/">Hello R Markdown</a></h5>
                     </div>
                 </div>
                 
@@ -496,6 +409,19 @@ Follow the following steps:
     
 
     
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-150402048-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
 <script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
@@ -504,7 +430,7 @@ Follow the following steps:
 <script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
 
-<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyCFhtWLJcE30xOAjcbSFi-0fnoVmQZPb1Y&v=3.exp"></script>
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
 <script src="/js/hpneo.gmaps.js"></script>
 <script src="/js/gmaps.init.js"></script>

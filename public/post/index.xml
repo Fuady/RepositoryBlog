@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Angga Fuady Blog</title>
+    <link>/post/</link>
+    <description>Recent content in Posts on Angga Fuady Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>E-commerce data analysis</title>
+      <link>/post/e-commerce-data-analysis/</link>
+      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/e-commerce-data-analysis/</guid>
+      <description>Loading librarieslibrary(dplyr)## Warning: package &amp;#39;dplyr&amp;#39; was built under R version 3.5.3## ## Attaching package: &amp;#39;dplyr&amp;#39;## The following objects are masked from &amp;#39;package:stats&amp;#39;:## ## filter, lag## The following objects are masked from &amp;#39;package:base&amp;#39;:## ## intersect, setdiff, setequal, unionlibrary(magrittr)library(Hmisc)## Warning: package &amp;#39;Hmisc&amp;#39; was built under R version 3.5.3## Loading required package: lattice## Warning: package &amp;#39;lattice&amp;#39; was built under R version 3.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,387 @@
+---
+title: E-commerce data analysis
+banner: img/banners/banner-1.jpg
+author: A.M.Fuady
+date: '2019-11-19'
+slug: e-commerce-data-analysis
+categories:
+  - analysis data
+tags:
+  - R
+  - visualization
+  - programming
+---
+
+Hai, Di tulisan kali ini saya akan mencoba menganalisis data e-commmerce. Teman2 bisa mendownload datanya [disini]()
+
+## Loading libraries
+```{r, message=FALSE, warning=FALSE}
+library(dplyr)
+library(magrittr)
+library(Hmisc)
+library(lubridate)
+library(caret)
+library(GGally)
+library(reshape2)
+library(recommenderlab)
+```
+
+
+## Loading data
+
+```{r}
+marketing_spend <- read.csv("~/RepositoryBlog/data/Marketing_Spend.csv")
+key_sku <- read.csv("~/RepositoryBlog/data/KEY_SKU.csv")
+online <- read.csv("~/RepositoryBlog/data/Online.csv")
+retail <- read.csv("~/RepositoryBlog/data/Retail.csv")
+```
+
+## Data pre-processing
+
+```{r}
+dim(marketing_spend)
+dim(key_sku)
+dim(online)
+dim(retail)
+```
+Renaming colnames of each dataframe.
+```{r}
+names(marketing_spend)[1] <- c("Date")
+names(key_sku)[1] <- c("Product.SKU")
+names(online) <- c("Transaction.ID", "Date","Product.SKU",
+                   "Product","Product.Category","Quantity.online",
+                   "Avg.price","Revenue","Tax","Delivery")
+names(retail) <- c("Transaction.ID","Date","StockCode","Quantity.retail")
+```
+
+### Marketing Spend dataset
+Adding extra variable which decompose Date into day, month and year. `yday` is the day count from 1st of January.
+```{r}
+marketing_spend$Date <- as.character(marketing_spend$Date)
+
+marketing_spend %<>% mutate(
+  day = substr(marketing_spend$Date, nchar(marketing_spend$Date)-1, nchar(marketing_spend$Date)),
+  month = substr(marketing_spend$Date, nchar(marketing_spend$Date)-4, nchar(marketing_spend$Date)-3),
+  year = substr(marketing_spend$Date, nchar(marketing_spend$Date)-9, nchar(marketing_spend$Date)-6),
+  yday = yday(marketing_spend$Date)
+)
+summary(marketing_spend)
+```
+
+### Key SKUs dataset
+```{r}
+key_sku$Product.SKU <- as.character(key_sku$Product.SKU)
+summary(key_sku)
+```
+
+### Retail dataset
+```{r}
+## retail
+retail$Date <- as.character(retail$Date)
+retail %<>% mutate(
+  day = substr(retail$Date, nchar(retail$Date)-1, nchar(retail$Date)),
+  month = substr(retail$Date, nchar(retail$Date)-4, nchar(retail$Date)-3),
+  year = substr(retail$Date, nchar(retail$Date)-9, nchar(retail$Date)-6),
+  yday = yday(retail$Date),
+  workday = wday(ymd(Date))
+)
+
+summary(retail)
+```
+
+### Online dataset
+```{r}
+online$Date <- as.character(online$Date)
+online %<>% mutate(
+  day = substr(online$Date, nchar(online$Date)-1, nchar(online$Date)),
+  month = substr(online$Date, nchar(online$Date)-3, nchar(online$Date)-2),
+  year = substr(online$Date, nchar(online$Date)-7, nchar(online$Date)-4),
+  yday = yday(ymd(online$Date)),
+  workday = wday(ymd(Date)),
+  amount_spend = Quantity.online*Avg.price
+)
+
+online$Product.SKU <- as.character(online$Product.SKU)
+online$Product <- as.character(online$Product)
+online$Product.Category <- as.character(online$Product.Category)
+
+summary(online)
+```
+
+We found some missing values in the `online` dataset, specifically in the `Quantity.online` and `Product.Category` variable.
+For the `Product.Category` variable, the missing information will be fill in with `Uncategorized`.
+
+#### Removing missing value in `Product.Category` variable
+```{r}
+online[which(is.na(online$Product.Category)),"Product.Category"] <- c("Uncategorized")
+```
+
+
+#### Removing missing value in `Quantity.online` variable
+```{r}
+online <- online[-which(is.na(online$Quantity.online)),] # 5 missing removed
+```
+
+Adding Stock code and product SKU for online and retail datasets. For these datasets, add other variable `store` to identify each products with either online or offline.
+```{r}
+online <- merge(online, key_sku, by="Product.SKU")
+retail <- merge(retail,key_sku,by="StockCode")
+
+online$store <- rep(c("online"), nrow(online))
+retail$store <- rep(c("retail"), nrow(retail))
+```
+
+
+Merge online and retail.
+```{r}
+online_1 <- online[,c("Transaction.ID","Quantity.online","day","month","yday","workday","store")]
+retail_1 <- retail[,c("Transaction.ID","Quantity.retail","day","month","yday","workday","store")]
+names(online_1)[2] <- names(retail_1)[2] <- c("Quantity")
+
+merge.online.retail <- rbind(online_1,retail_1)
+```
+
+Plot number of transactions for each month. In this plot, we see the information of total number of transactions every month. The highest transaction for both online and retail in December. In both dataset, the number of transaction start to increase since september.
+```{r}
+ggplot(merge.online.retail %>%
+         group_by(Transaction.ID,month,store) %>% summarise(trans.n = n()) %>%
+         group_by(month,store) %>% summarise(trans.n.month = n() ),
+       aes(month, trans.n.month,fill=store)) +
+  geom_bar(stat="identity", position=position_dodge()) +
+  facet_wrap(~store, nrow=2) +
+  theme_set(theme_bw()) +
+  theme(legend.position = "none") +
+  geom_text(aes(label=trans.n.month), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) +
+  scale_fill_brewer(palette="Paired") +
+  scale_x_discrete(name = "Month",
+                   labels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec")) +
+  labs( y = "Number of Transaction",
+        title="Number of transactions for different Months")
+```
+
+Specific within December, we investigate more on specific date.
+```{r}
+merge.dec <- merge.online.retail[which(merge.online.retail$month=="12"),] %>%
+  group_by(Transaction.ID,day,store) %>% summarise(trans.n = n()) %>%
+  group_by(day,store) %>% summarise(trans.n.month = n())
+
+add.merge.dec <- data.frame( day = c("04","11","18","25","30") , store= rep(c("retail"),5) ,  trans.n.month = rep(0,5))
+
+ggplot( rbind(as.data.frame(merge.dec), add.merge.dec),
+       aes(day, trans.n.month,fill=store)) +
+  geom_bar(stat="identity") +
+  facet_wrap(~store, nrow=2)+
+  theme_set(theme_bw()) +
+  geom_text(aes(label=trans.n.month), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) +
+  scale_fill_brewer(palette="Paired") +
+  theme(axis.ticks.x = element_blank(), legend.position = "none") +
+  labs( x="Date", y = "Number of Transaction",
+        title="Number of transactions for different Dates in December")
+```
+
+Plot the total number of transactions for each working day.
+```{r}
+ggplot(merge.online.retail %>%
+         group_by(Transaction.ID,workday,store) %>% summarise(trans.n = n()) %>%
+         group_by(workday,store) %>% summarise(trans.n.month = n() ),
+       aes(workday, trans.n.month,fill=store)) +
+  geom_bar(stat="identity") +
+  facet_wrap(~store, nrow=2) +
+  theme_set(theme_bw()) +
+  geom_text(aes(label=trans.n.month), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) +
+  scale_fill_brewer(palette="Paired") +
+  theme(axis.ticks.x = element_blank(),legend.position = "none") +
+  scale_x_discrete(name = "Day" ,limits= seq(1:7), breaks=seq(1:7), labels=c("Sun","Mon","Tue","Wed","Thur","Fri","Sat")) +
+  labs( y = "Number of Transaction",
+        title="Number of transactions for different Days")
+```
+
+Plot of total marketing spend for retail and online.
+```{r}
+ggplot(melt(marketing_spend[which(marketing_spend$month=="12"),2:5]) ,aes(day, value,fill= variable))+
+  geom_bar(stat="identity") +
+  facet_wrap(~variable, nrow=2)+
+  theme_set(theme_bw()) +
+  geom_text(aes(label=value), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) +
+  scale_fill_brewer(palette="Paired") +
+  theme(axis.ticks.x = element_blank(), legend.position = "none") +
+  labs( x="Date", y = "Marketing Spend",
+        title="Amount of marketing spend for different Dates in December")
+```
+
+Plot total sales and marketing spend online in december
+```{r}
+data.december <- merge(merge.dec[which(merge.dec$store=="online"),], marketing_spend[which(marketing_spend$month=="12"),c("day","Online.Spend")],by="day")
+
+names(data.december)[3:4] <- c("Total sales","Marketing spend")
+ggplot(melt(data.december[,-2]) ,aes(day, value,fill= variable))+
+  geom_bar(stat="identity") +
+  facet_wrap(~variable, scale="free" ,nrow=2)+
+  theme_set(theme_bw()) +
+  geom_text(aes(label=value), vjust=1.6, color="white", size=3) +
+  scale_fill_brewer(palette="Paired") +
+  theme(axis.ticks.x = element_blank(), legend.position = "none") +
+  labs( x="Date",
+        title="Total sales and marketing spend Online in December")
+```
+
+
+```{r}
+online %>% group_by(Product.SKU,Product) %>% summarise(sum.quantity = sum(Quantity.online)) %>% arrange(desc(sum.quantity))%>% head(5) %>%
+  ggplot(aes(x=reorder(Product,sum.quantity), y= sum.quantity)) +
+    geom_bar(stat="identity",fill="steelblue") +
+    coord_flip() +
+  geom_text(aes(label=sum.quantity), hjust=1.6, color="white", size=3.5)+
+  theme(axis.title.y = element_blank()) +
+  labs( x="Total quantity", y = "Product name",
+        title="Top 5 Product Sold Online")
+```
+
+
+```{r}
+online %>% group_by(Product.Category) %>% summarise(sum.quantity = sum(Quantity.online)) %>% arrange(desc(sum.quantity))%>% head(5) %>%
+  ggplot(aes(x=reorder(Product.Category,sum.quantity), y= sum.quantity)) +
+  geom_bar(stat="identity",fill="steelblue") +
+  coord_flip() +
+  geom_text(aes(label=sum.quantity), hjust=1.6, color="white", size=3.5)+
+  theme(axis.title.y = element_blank()) +
+  labs( x="Total quantity", y = "Product Category",
+        title="Top 5 Product Category Sold Online")
+```
+
+```{r}
+online %>% group_by(Transaction.ID) %>% summarise(total_amount_spend = sum(amount_spend)) %>% arrange(desc(total_amount_spend)) %>% head(5) %>%
+  ggplot(aes(x=reorder(Transaction.ID,total_amount_spend), y= total_amount_spend)) +
+  geom_bar(stat="identity",fill="steelblue") +
+  coord_flip() +
+  geom_text(aes(label=total_amount_spend), hjust=1.6, color="white", size=3.5)+
+  labs( x="Total amount spend per transaction", y = "Total amount spend per transaction",
+        title="Top 5 Total amount spend per transaction ID")
+```
+
+
+### Prediction model per day
+```{r}
+transaction.perday <- online[,c("Transaction.ID","Revenue","Tax","Delivery","workday","yday")]
+transaction.unique <- transaction.perday[!duplicated(transaction.perday$Transaction.ID),]
+sum.per.day <- transaction.unique %>% group_by(yday) %>% summarise(sum.rev = sum(Revenue), sum.tax = sum(Tax), sum.delivery=sum(Delivery))
+sum.quan.per.day <- online %>% group_by(yday) %>%summarise(sum.quan = sum(Quantity.online))
+per.day.online <- merge(sum.per.day, sum.quan.per.day, by="yday")
+data.per.day <- merge(per.day.online,marketing_spend[,c("yday","Online.Spend")], by="yday")
+
+my_fn <- function(data, mapping, method="loess", ...){
+  p <- ggplot(data = data, mapping = mapping) +
+    geom_point() +
+    geom_smooth(method=method, ...)
+  p
+}
+```
+
+Correlation matrix between variable of interest.
+```{r}
+ggpairs(data.per.day[,-1], lower = list(continuous = my_fn))
+```
+
+```{r}
+
+df.res.rev <- data.frame(predictor = c("quan","tax","deli","spend","quan.tax","quan.deli","quan.spend","tax.deli","tax.spend","deli.spend","quan.tax.deli","quan.tax.spend","quan.deli.spend","tax.deli.spend","quan.tax.deli.spend"),
+           r.squared = c(
+summary(lm(sum.rev~sum.quan, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.tax, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.delivery, data = data.per.day))$r.squared,
+summary(lm(sum.rev~Online.Spend, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.quan + sum.tax, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.quan + sum.delivery, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.quan + Online.Spend, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.tax + sum.delivery, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.tax + Online.Spend, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.delivery + Online.Spend, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.quan + sum.tax + sum.delivery, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.quan + sum.tax + Online.Spend, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.quan + sum.delivery + Online.Spend, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.tax + sum.delivery + Online.Spend, data = data.per.day))$r.squared,
+summary(lm(sum.rev~sum.quan + sum.tax + sum.delivery + Online.Spend, data = data.per.day))$r.squared
+))
+
+df.res.rev[order(df.res.rev$r.squared,decreasing = TRUE),]
+
+```
+
+```{r}
+df.res.quan <- data.frame(predictor = c("tax","deli","spend","tax.deli","tax.spend","deli.spend","tax.deli.spend"),
+           r.squared = c(
+summary(lm(sum.quan~sum.tax, data = data.per.day))$r.squared,
+summary(lm(sum.quan~sum.delivery, data = data.per.day))$r.squared,
+summary(lm(sum.quan~Online.Spend, data = data.per.day))$r.squared,
+summary(lm(sum.quan~sum.tax + sum.delivery, data = data.per.day))$r.squared,
+summary(lm(sum.quan~sum.tax + Online.Spend, data = data.per.day))$r.squared,
+summary(lm(sum.quan~sum.delivery + Online.Spend, data = data.per.day))$r.squared,
+summary(lm(sum.quan~sum.tax + sum.delivery + Online.Spend, data = data.per.day))$r.squared
+))
+
+df.res.quan[order(df.res.quan$r.squared,decreasing = TRUE),]
+```
+
+```{r}
+fitControl <- trainControl(method = "repeatedcv",
+                           number = 10,     # number of folds
+                           repeats = 10)    # repeated ten times
+
+model.rev.lm <- train(sum.rev~sum.quan + sum.tax ,
+                         data = data.per.day[,-1],
+                         method = "lm",  # now we're using the lm method
+                         trControl = fitControl)
+model.rev.lasso <- train(sum.rev~sum.quan + sum.tax ,
+                         data = data.per.day[,-1],
+                         method = "lasso",  # now we're using the lasso method
+                         trControl = fitControl)
+model.rev.ridge <- train(sum.rev~sum.quan + sum.tax ,
+                         data = data.per.day[,-1],
+                         method = "ridge",  # now we're using the ridge method
+                         trControl = fitControl)
+model.rev.enet <- train(sum.rev~sum.quan + sum.tax ,
+                         data = data.per.day[,-1],
+                         method = "enet",  # now we're using the enet method
+                         trControl = fitControl)
+model.rev.stepwise.backward <- train(sum.rev~. ,
+                                    data = data.per.day[,-1],
+                                    tuneGrid = data.frame(nvmax = 1:4),
+                                    method = "leapBackward",  # now we're using the nn method
+                                    trControl = fitControl)
+
+# lm, lasso, ridge, enet, neuralnet
+results.all.variable <- data.frame( method = c("LM","Lasso","Ridge","ElasticNet"), rbind(model.rev.lm$results[,2:4],
+model.rev.lasso$results[3,2:4], # used for multicolinearity penalised with absolute value, makes coefficient exactly zero
+model.rev.ridge$results[2,2:4], # used for multicolinearity penalised with square of regression coef. beta coef shrink
+model.rev.enet$results[8,3:5])) # used for multicolinearity (hybrid lasso and ridge)
+
+results.all.variable
+
+```
+
+```{r}
+summary(model.rev.stepwise.backward$finalModel)# tax and quantity
+```
+
+### Modeling product recomendation
+```{r}
+productmat <- dcast(online, Transaction.ID~Product.SKU, value.var = "Quantity.online", na.rm=FALSE)
+productmat[1:5,1:5]
+# first user transactionID = 16679
+productmat <- as.matrix(productmat[,-1]) #remove TransactionID
+
+#Convert rating matrix into a recommenderlab sparse matrix
+productmat <- as(productmat, "realRatingMatrix")
+
+#Normalize the data
+productmat_norm <- normalize(productmat)
+
+#Create Recommender Model. "UBCF" stands for User-Based Collaborative Filtering
+recommender_model <- Recommender(productmat_norm, method = "UBCF", param=list(method="Cosine",nn=10))
+recom <- predict(recommender_model, productmat[3], n=5) # Obtain top 5 recommendations for 1st user in dataset
+recom_list <- as(recom, "list") # convert recommenderlab object to readable list
+
+#Obtain top 5 recommendations for transactionID 1:
+list_recom <- online[which(online$Product.SKU %in% unlist(recom_list)),c("Product.SKU","Product","Product.Category")]
+list_recom[!duplicated(list_recom$Product.SKU),]
+```
