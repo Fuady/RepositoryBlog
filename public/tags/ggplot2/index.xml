@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ggplot2 on Angga Fuady Blog</title>
+    <link>/tags/ggplot2/</link>
+    <description>Recent content in ggplot2 on Angga Fuady Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/ggplot2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Visualisasi dengan ggplot2</title>
+      <link>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</link>
+      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</guid>
+      <description>Tulisan ini akan membahas mengenai bagaimana cara menyajikan data secara visual menggunakan package ggplot2. R memiliki beberapa system untuk membuat visualisasi, namun ggplot2 merupakan salah satu package yang sering digunakan untuk menyajikan data.
+Sebelum kita mulai, dalam tulisan kali ini saya akan menggunakan dataset mpg yang berada di package ggplot2. Dataset ini memuat kumpulan observasi dari 38 model mobil. Tentunya kita juga perlu memuat package ggplot2 sebagai berikut:
+# install package bila diperlukan#install.</description>
+    </item>
+    
+  </channel>
+</rss>

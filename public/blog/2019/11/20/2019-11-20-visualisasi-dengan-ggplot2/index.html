@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Visualisasi dengan ggplot2</title>
+  <meta name="author" content="A.M.Fuady" />
+  
+  
+  
+  
+  <meta name="keywords" content="R, ggplot2, visualization">
+  
+  
+  <meta name="description" content="">
+
+  <meta name="generator" content="Hugo 0.59.1" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.green.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Angga Fuady Blog">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="en_us">
+  <meta property="og:site_name" content="Angga Fuady Blog">
+  <meta property="og:title" content="Visualisasi dengan ggplot2">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/" />
+  <meta property="og:description" content="">
+  <meta property="og:image" content="/img/banners/Rplot_ggplot2.png">
+  <meta property="og:image:type" content="image/png">
+  
+  
+  
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="486">
+  
+  
+  <meta property="og:updated_time" content="2019-11-20T00:00:00Z">
+  
+    
+    
+    <meta property="article:section" content="R">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="ggplot2">
+    <meta property="article:tag" content="visualization">
+    
+    
+    <meta property="article:published_time" content="2019-11-20T00:00:00Z">
+    <meta property="article:modified_time" content="2019-11-20T00:00:00Z">
+  
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <meta name="twitter:title" content="Visualisasi dengan ggplot2">
+  
+  <meta name="twitter:image" content="/img/banners/Rplot_ggplot2.png">
+  
+  <meta name="twitter:description" content="">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header>
+
+          <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
+
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/amf_logo.png" alt="Visualisasi dengan ggplot2 logo" class="hidden-xs hidden-sm">
+                    <img src="/img/amf_smalllogo.png" alt="Visualisasi dengan ggplot2 logo" class="visible-xs visible-sm">
+                    <span class="sr-only">Visualisasi dengan ggplot2 - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">Home</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown active">
+                    
+                    <a href="/blog/">Blog</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="tentang">Tentang Penulis</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">
+
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+
+                </span>
+                    </div>
+                </form>
+
+            </div>
+            
+
+        </div>
+    </div>
+    
+
+</div>
+
+
+
+
+        </header>
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Visualisasi dengan ggplot2</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        <p class="text-muted text-uppercase mb-small text-right">By <a href="#">A.M.Fuady</a> | November 20, 2019</p>
+
+                        <div id="post-content">
+                          
+
+
+<p>Tulisan ini akan membahas mengenai bagaimana cara menyajikan data secara visual menggunakan package <strong>ggplot2</strong>. R memiliki beberapa system untuk membuat visualisasi, namun <strong>ggplot2</strong> merupakan salah satu package yang sering digunakan untuk menyajikan data.</p>
+<p>Sebelum kita mulai, dalam tulisan kali ini saya akan menggunakan dataset <em>mpg</em> yang berada di package <strong>ggplot2</strong>. Dataset ini memuat kumpulan observasi dari 38 model mobil. Tentunya kita juga perlu memuat package <strong>ggplot2</strong> sebagai berikut:</p>
+<pre class="r"><code># install package bila diperlukan
+#install.packages(&quot;ggplot2&quot;)
+
+# load package
+library(ggplot2)</code></pre>
+<p>Berikut ini adalah enam observasi teratas dan ringkasan dari data <em>mpg</em>:</p>
+<pre class="r"><code>head(mpg)</code></pre>
+<pre><code>## # A tibble: 6 x 11
+##   manufacturer model displ  year   cyl trans  drv     cty   hwy fl    class
+##   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;
+## 1 audi         a4      1.8  1999     4 auto(~ f        18    29 p     comp~
+## 2 audi         a4      1.8  1999     4 manua~ f        21    29 p     comp~
+## 3 audi         a4      2    2008     4 manua~ f        20    31 p     comp~
+## 4 audi         a4      2    2008     4 auto(~ f        21    30 p     comp~
+## 5 audi         a4      2.8  1999     6 auto(~ f        16    26 p     comp~
+## 6 audi         a4      2.8  1999     6 manua~ f        18    26 p     comp~</code></pre>
+<pre class="r"><code>summary(mpg)</code></pre>
+<pre><code>##  manufacturer          model               displ            year     
+##  Length:234         Length:234         Min.   :1.600   Min.   :1999  
+##  Class :character   Class :character   1st Qu.:2.400   1st Qu.:1999  
+##  Mode  :character   Mode  :character   Median :3.300   Median :2004  
+##                                        Mean   :3.472   Mean   :2004  
+##                                        3rd Qu.:4.600   3rd Qu.:2008  
+##                                        Max.   :7.000   Max.   :2008  
+##       cyl           trans               drv                 cty       
+##  Min.   :4.000   Length:234         Length:234         Min.   : 9.00  
+##  1st Qu.:4.000   Class :character   Class :character   1st Qu.:14.00  
+##  Median :6.000   Mode  :character   Mode  :character   Median :17.00  
+##  Mean   :5.889                                         Mean   :16.86  
+##  3rd Qu.:8.000                                         3rd Qu.:19.00  
+##  Max.   :8.000                                         Max.   :35.00  
+##       hwy             fl               class          
+##  Min.   :12.00   Length:234         Length:234        
+##  1st Qu.:18.00   Class :character   Class :character  
+##  Median :24.00   Mode  :character   Mode  :character  
+##  Mean   :23.44                                        
+##  3rd Qu.:27.00                                        
+##  Max.   :44.00</code></pre>
+<p>Berikut adalah deskripsi dari setiap variable dalam data <em>mpg</em>:</p>
+<table style="width:97%;">
+<colgroup>
+<col width="20%" />
+<col width="13%" />
+<col width="27%" />
+<col width="34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Type</th>
+<th>Deskripsi</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>manufacturer</code></td>
+<td>String</td>
+<td>Pabrikan mobil</td>
+<td>15 Pabrikan</td>
+</tr>
+<tr class="even">
+<td><code>model</code></td>
+<td>String</td>
+<td>Model mobil</td>
+<td>38 Model</td>
+</tr>
+<tr class="odd">
+<td><code>displ</code></td>
+<td>Numeric</td>
+<td>Ukuran mesin</td>
+<td>1.6 - 7.0 liter</td>
+</tr>
+<tr class="even">
+<td><code>year</code></td>
+<td>Integer</td>
+<td>Tahun pembuatan</td>
+<td>1999, 2008</td>
+</tr>
+<tr class="odd">
+<td><code>cyl</code></td>
+<td>Integer</td>
+<td>Jumlah silinder</td>
+<td>4,5,6,8</td>
+</tr>
+<tr class="even">
+<td><code>trans</code></td>
+<td>String</td>
+<td>Type transmisi</td>
+<td>automatic, manual</td>
+</tr>
+<tr class="odd">
+<td><code>drv</code></td>
+<td>String</td>
+<td>Pergerakan roda</td>
+<td>f (front-wheel drive), r (rear wheel drive), 4 (4wd)</td>
+</tr>
+<tr class="even">
+<td><code>cty</code></td>
+<td>Integer</td>
+<td>Efisiensi bahan bakar di dalam kota</td>
+<td>miles per galon</td>
+</tr>
+<tr class="odd">
+<td><code>hwy</code></td>
+<td>Integer</td>
+<td>Efisiensi bahan bakar di tol</td>
+<td>miles per galon</td>
+</tr>
+<tr class="even">
+<td><code>fl</code></td>
+<td>String</td>
+<td>Type bahan bakar</td>
+<td>5 Type</td>
+</tr>
+<tr class="odd">
+<td><code>class</code></td>
+<td>String</td>
+<td>Type mobil</td>
+<td>7 Type</td>
+</tr>
+</tbody>
+</table>
+<div id="scatterplot" class="section level2">
+<h2>Scatterplot</h2>
+<p>Pada bagian ini, kita akan membuat scatterplot antara <code>displ</code> dan <code>hwy</code>.</p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Pembuatan plot dimulai dari membentuk kordinat sistem dengan menggunakan fungsi <code>ggplot()</code>, lalu ditumpuk dengan beberapa lapisan/layer. Dalam contoh diatas, <code>ggplot(data = mpg)</code> berarti kita akan membuat kordinat sistem menggunakan dataset <em>mpg</em> (masih grafik kosong). Lalu kita menambahkan lapisan <code>geom_point()</code> untuk membuat scatterplot. Setiap fungsi geom di ggplot2 memiliki argumen <code>mapping</code> yang selalu berpasangan dengan <code>aes()</code> atau aesthetic yang memetakan <code>displ</code> ke sumbu-x dan <code>hwy</code>ke sumbu-y.</p>
+<p>Kita bisa menambahkan beberapa variable ke dalam scatterplot diatas, misalnya kita ingin mengetahui type mobil (<code>class</code>) mana saja yang ada di scatterplot diatas dan tiap type mobil dibedakan berdasarkan warna. Maka kita bisa menambahkan <code>color=class</code> ke dalam <code>aes()</code>, menjadi sebagai berikut</p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class))</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Jika kita mengganti <code>color=class</code> dengan <code>size=class</code>, maka pembedaan type mobil divisualkan dengan ukuran plotnya</p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, size = class))</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Jika kita mengganti <code>color=class</code> dengan <code>shape=class</code>, maka type mobil dibedakan dengan bentuk plotnya</p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, shape = class))</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<div id="facets" class="section level3">
+<h3>Facets</h3>
+<p>Selain dengan menambahkan variable ke dalam <code>aes()</code>, khusus untuk categorical variable, kita bisa membagi scatterplot untuk tiap type mobil dengan menggunakan <code>facet</code>. Untuk membagi scatterplot dengan satu variable, kita bisa menggunakan <code>facet_wrap()</code> sebagai berikut</p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class)) +
+  facet_wrap(~class, ncol = 4)</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Pada plot diatas, scatterplot dibagi untuk tiap type mobil berdasarkan <code>class</code>. Disini, subplot disajikan dengan maksimum 4 kolom.</p>
+<p>Facet juga bisa digunakan untuk dua categorical variable, misal kita ingin melihat scatterplot berdasarkan jumlah silinder <code>cyl</code> dan pergerakan roda <code>drv</code>. Hal ini bisa dilakukan dengan menambahkan <code>facet_grid()</code> sebagai berikut</p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+  facet_grid(cyl ~ drv)</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="penambahan-garis" class="section level3">
+<h3>Penambahan garis</h3>
+<p>Misal, kita ingin menambahkan smooth line ke dalam scatterplot yang telah dibuat diatas. Hal ini bisa dilakukan dengan menambah lapisan <code>geom_smooth()</code> ke fungsi <code>ggplot()</code>.</p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = &quot;blue&quot;) +
+  geom_smooth(mapping = aes(x = displ, y = hwy), method = &quot;loess&quot;, se=FALSE, color=&quot;blue&quot; )</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = &quot;darkgreen&quot;) +
+  geom_smooth(mapping = aes(x = displ, y = hwy), method = &quot;lm&quot;, se=TRUE, color=&quot;darkgreen&quot; )</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-9-2.png" width="672" /></p>
+<p>Pada panel pertama, smooth line dengan methode loess <code>method=loess</code> digunakan untuk fit data, untuk plot ini confidence interval tidak ditampilkan <code>se=FALSE</code>. Untuk panel kedua, kita menggunakan metode linear model <code>method=lm</code>dan confidence interval ditampilkan <code>se=TRUE</code>. Kita juga bisa memilih warna secara manual dengan mengeset <code>color=&quot;blue&quot;</code> atau <code>color=&quot;darkgreen&quot;</code>.</p>
+<p><code>geom_smooth()</code>dapat juga digunakan untuk group yang berbeda, misal kita ingin melihat smooth line dari mobil berdasarkan type pergerakan roda</p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = &quot;steelblue&quot;) +
+  geom_smooth(mapping = aes(x = displ, y = hwy, color = drv), method = &quot;loess&quot;, se=TRUE) </code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Gambar diatas menampilkan scatterplot beserta smooth line untuk tiap type pergerakan roda.</p>
+</div>
+</div>
+<div id="bar-chart" class="section level2">
+<h2>Bar chart</h2>
+<p>Pada bagian ini, kita akan membuat bar chart untuk jumlah mobil pada tiap pabrikan dengan menggunakan <code>geom_bar()</code></p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_bar(mapping = aes(x=manufacturer, fill = class)) +
+  coord_flip()</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-11-1.png" width="672" /> Barchart diatas menampilkan jumlah mobil untuk tiap pabrikan. Kita bisa mewarnai isi dari bar nya dengan menggunakan <code>fill=class</code>. Untuk grafik diatas warna berdasarkan type mobilnya. Setingan awal untuk barchart diatas adalah manufacturer berada di sumbu-x, namun kita putar 90 derajat agar nama dari tiap pabrikan terbaca jelas. Flip grafik ini diakomodasi oleh <code>coord_flip()</code>. Jika tidak di flip maka tulisan pabrikan akan saling menumpuk.</p>
+</div>
+<div id="label" class="section level2">
+<h2>Label</h2>
+<pre class="r"><code>ggplot(mpg) +
+  geom_point(aes(x = displ, y = hwy, color = class)) +
+  geom_smooth(aes(x = displ, y = hwy), se = TRUE) +
+  labs(
+    title = &quot;Efisiensi bahan bakar menurun sesuai dengan ukuran mesin&quot;,
+    subtitle = &quot;Pengecualian untuk two seaters (sports cars) karena bobot yang ringan&quot;,
+    caption = &quot;Data dari fueleconomy.gov&quot;,
+    x = &quot;Ukuran mesin (L)&quot;,
+    y = &quot;Efisiensi bahan bakar di dalam tol (mpg)&quot;,
+    colour = &quot;Type mobil&quot;)</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Kita bisa mengubah dan juga menambahkan beberapa label ke dalam suatu plot dengan menggunakan <code>labs()</code>. Untuk grafik diatas, kita menambahkan judul (<code>title</code>), subjudul (<code>subtitle</code>) yang memiliki ukuran huruf lebih kecil dari judul, serta <code>caption</code> yang berada di kanan bawah plot biasanya digunakan untuk mencantumkan sumber data. Selain itu kita juga mengubah beberapa label seperti label sumbu-x, sumbu-y, dan warna label type mobil.</p>
+<p>Kita juga bisa mengganti label plot dengan menggunakan persamaan matematika. hal ini bisa dilakukan dengan mengganti <code>&quot;&quot;</code> dengan <code>quote()</code> seperti contoh dibawah ini. Info lebih lanjut bisa dilihat di <code>?plotmath</code>.</p>
+<pre class="r"><code>df &lt;- data.frame(
+  x = runif(50),
+  y = runif(50)
+)
+ggplot(df) +
+  geom_point(aes(x, y)) +
+  labs(
+    x = quote(sum(x[i] ^ 2, i == 1, n)),
+    y = quote(alpha + beta + frac(delta, theta))
+  )</code></pre>
+<p><img src="/blog/2019-11-20-visualisasi-dengan-ggplot2_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+</div>
+<div id="penutup" class="section level2">
+<h2>Penutup</h2>
+<p>Tulisan ini memuat langkah awal dalam menyajikan data secara visual dengan menggunakan R package <strong>ggplot2</strong>. Penyajian data berupa scatterplot dan barplot dibahas dalam tulisan ini. Selain itu, pembahasan tentang penyajian data khusus untuk categorical variable juga dilakukan. Penambahan serta pengubahan label untuk sebuah plot juga disajikan. Tulisan ini hanya sebagai dasar untuk membuat visualisasi dengan <strong>ggplot2</strong>, tentunya masih banyak lagi fungsi dan grafik yang bisa digunakan.</p>
+<p>Terimakasih telah membaca tulisan ini!</p>
+<div id="cheat-sheet" class="section level3">
+<h3>Cheat sheet</h3>
+<p>Teman-teman bisa melihat <a href="https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf">cheatsheet</a> dari <strong>ggplot2</strong> untuk informasi yang lebih lengkap.</p>
+</div>
+<div id="referensi" class="section level3">
+<h3>Referensi</h3>
+<p><strong>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. Hadley Wickham and Garrett Grolemund</strong></p>
+</div>
+</div>
+
+                        </div>
+                        
+                        
+                        <div id="comments">
+                            <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "amfuady" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                        </div>
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            
+            <li>
+                <a href="/categories/analysis-data">analysis-data (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/r">r (2)</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+<div class="panel sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Tags</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="tag-cloud">
+            
+            
+            <li>
+                <a href="/tags/ggplot2"><i class="fas fa-tags"></i> ggplot2</a>
+            </li>
+            
+            <li>
+                <a href="/tags/plot"><i class="fas fa-tags"></i> plot</a>
+            </li>
+            
+            <li>
+                <a href="/tags/programming"><i class="fas fa-tags"></i> programming</a>
+            </li>
+            
+            <li>
+                <a href="/tags/r"><i class="fas fa-tags"></i> r</a>
+            </li>
+            
+            <li>
+                <a href="/tags/r-markdown"><i class="fas fa-tags"></i> r-markdown</a>
+            </li>
+            
+            <li>
+                <a href="/tags/regression"><i class="fas fa-tags"></i> regression</a>
+            </li>
+            
+            <li>
+                <a href="/tags/visualization"><i class="fas fa-tags"></i> visualization</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/">
+                          
+                            <img src="/img/banners/Rplot_ggplot2.png" class="img-responsive" alt="Visualisasi dengan ggplot2">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/">Visualisasi dengan ggplot2</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/11/19/2019-11-19-e-commerce-data-analysis/">
+                          
+                            <img src="/img/banners/banner-1.jpg" class="img-responsive" alt="E-commerce data analysis">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/11/19/2019-11-19-e-commerce-data-analysis/">E-commerce data analysis</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/07/23/2015-07-23-r-rmarkdown/">
+                          
+                            <img src="/img/banners/banner-2.jpg" class="img-responsive" alt="Hello R Markdown">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/07/23/2015-07-23-r-rmarkdown/">Hello R Markdown</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2019</p>
+            
+            <p class="pull-right">
+              Template by <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              Ported to Hugo by <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-150402048-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script src="/js/hpneo.gmaps.js"></script>
+<script src="/js/gmaps.init.js"></script>
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+  </body>
+</html>

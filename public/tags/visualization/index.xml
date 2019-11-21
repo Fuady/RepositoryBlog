@@ -6,10 +6,21 @@
     <description>Recent content in visualization on Angga Fuady Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/visualization/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Visualisasi dengan ggplot2</title>
+      <link>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</link>
+      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</guid>
+      <description>Tulisan ini akan membahas mengenai bagaimana cara menyajikan data secara visual menggunakan package ggplot2. R memiliki beberapa system untuk membuat visualisasi, namun ggplot2 merupakan salah satu package yang sering digunakan untuk menyajikan data.
+Sebelum kita mulai, dalam tulisan kali ini saya akan menggunakan dataset mpg yang berada di package ggplot2. Dataset ini memuat kumpulan observasi dari 38 model mobil. Tentunya kita juga perlu memuat package ggplot2 sebagai berikut:
+# install package bila diperlukan#install.</description>
+    </item>
     
     <item>
       <title>E-commerce data analysis</title>
