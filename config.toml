@@ -62,17 +62,17 @@ paginate = 10
     url = "mailto:your@email.com"
     pre = "<i class='fa fa-2x fa-envelope'></i>"
 
-[[menu.topbar]]
-    weight = 4
-    name = "Facebook"
-    url = "https://www.facebook.com/angga.m.fuady"
-    pre = "<i class='fab fa-2x fa-facebook'></i>"
+#[[menu.topbar]]
+#    weight = 4
+#    name = "Facebook"
+#    url = "https://www.facebook.com/angga.m.fuady"
+#    pre = "<i class='fab fa-2x fa-facebook'></i>"
 
-[[menu.topbar]]
-    weight = 5
-    name = "Instagram"
-    url = "https://www.instagram.com/amfuady/"
-    pre = "<i class='fab  fa-2x fa-instagram'></i>"
+#[[menu.topbar]]
+#    weight = 5
+#    name = "Instagram"
+#    url = "https://www.instagram.com/amfuady/"
+#    pre = "<i class='fab  fa-2x fa-instagram'></i>"
     
 [params]
     viewMorePostLink = "/blog/"
