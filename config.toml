@@ -33,7 +33,7 @@ paginate = 10
 [[menu.main]]
     identifier = "about"
     name = "Tentang Penulis"
-    url  = "tentang"
+    url  = "/tentang"
     weight = 3
 
 #[[menu.main]]
@@ -59,7 +59,7 @@ paginate = 10
 [[menu.topbar]]
     weight = 3
     name = "Email"
-    url = "a.m.fuady@gmail.com"
+    url = "mailto:a.m.fuady@gmail.com"
     pre = "<i class='fa fa-2x fa-envelope'></i>"
 
 #[[menu.topbar]]
