@@ -1,9 +1,9 @@
 ---
-title: Visualisasi dengan ggplot2
-banner: img/banners/Rplot_ggplot2.png
+title: Data visualization using ggplot2
+banner: img/banners/SAM_0931.jpg
 author: A.M.Fuady
 date: '2019-11-20'
-slug: visualisasi-dengan-ggplot2
+slug: data-visualization-using-ggplot2
 categories: 
   - R
 tags:
@@ -13,9 +13,9 @@ tags:
 ---
 
 
-Tulisan ini akan membahas mengenai bagaimana cara menyajikan data secara visual menggunakan package __ggplot2__. R memiliki beberapa system untuk membuat visualisasi, namun __ggplot2__ merupakan salah satu package yang sering digunakan untuk menyajikan data.
+This post will discuss how to visualize data using the __ggplot2__ package. R has several systems for creating visualizations, but __ggplot2__ is a package that is often used to present data.
 
-Sebelum kita mulai, dalam tulisan kali ini saya akan menggunakan dataset *mpg* yang berada di package __ggplot2__. Dataset ini memuat kumpulan observasi dari 38 model mobil. Tentunya kita juga perlu memuat package __ggplot2__ sebagai berikut:
+Before we begin, in this article I will use the *mpg* dataset in the __ggplot2__ package. This dataset contains a collection of observations from 38 car models. Of course, first of all, we need to load the __ggplot2__ package as follows:
 
 ```{r, warning=FALSE}
 # install package bila diperlukan
@@ -25,56 +25,56 @@ Sebelum kita mulai, dalam tulisan kali ini saya akan menggunakan dataset *mpg* y
 library(ggplot2)
 ```
 
-Berikut ini adalah enam observasi teratas dan ringkasan dari data *mpg*:
+The top six observations and summaries of * mpg * data are presented as follows:
 
 ```{r}
 head(mpg)
 summary(mpg)
 ```
 
-Berikut adalah deskripsi dari setiap variable dalam data *mpg*:
+Following is a description of each variable in the *mpg* data:
 
-Variable       | Type      | Deskripsi       | Detail
--------------- | --------- | ------------------- | ------------------------
-`manufacturer` | String    | Pabrikan mobil  | 15 Pabrikan
-`model`        | String    | Model mobil     | 38 Model
-`displ`        | Numeric   | Ukuran mesin    | 1.6 - 7.0 liter
-`year`         | Integer   | Tahun pembuatan | 1999, 2008
-`cyl`          | Integer   | Jumlah silinder | 4,5,6,8
-`trans`        | String    | Type transmisi  | automatic, manual
-`drv`          | String    | Pergerakan roda | f (front-wheel drive), r (rear wheel drive), 4 (4wd) 
-`cty`          | Integer   |Efisiensi bahan bakar di dalam kota | miles per galon
-`hwy`          | Integer   | Efisiensi bahan bakar di tol | miles per galon
-`fl`           | String    | Type bahan bakar| 5 Type
-`class`        | String    | Type mobil      | 7 Type
+Variable       | Type      | Descriptions               | Detail
+-------------- | --------- | -------------------------- | ------------------------
+`manufacturer` | String    | Car manufacturer           | 15 manufacturers
+`model`        | String    | Car model                  | 38 Models
+`displ`        | Numeric   | Engine displacement        | 1.6 - 7.0 liter
+`year`         | Integer   | Year of manufacture        | 1999, 2008
+`cyl`          | Integer   | Number of cylinders        | 4,5,6,8
+`trans`        | String    | Type of transmission       | automatic, manual
+`drv`          | String    | Drivetrain                 | f (front-wheel drive), r (rear wheel drive), 4 (4wd) 
+`cty`          | Integer   | Fuel efficiency in city    | miles per galon
+`hwy`          | Integer   | Fuel efficiency in highway | miles per galon
+`fl`           | String    | Fuel type                  | 5 Type
+`class`        | String    | Car type                   | 7 Type
 
 
 ## Scatterplot
 
-Pada bagian ini, kita akan membuat scatterplot antara `displ` dan `hwy`. 
+In this section, we will create a scatterplot between `displ` and` hwy`.
 
 ```{r}
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy))
 ```
 
-Pembuatan plot dimulai dari membentuk kordinat sistem dengan menggunakan fungsi `ggplot()`, lalu ditumpuk dengan beberapa lapisan/layer. Dalam contoh diatas, `ggplot(data = mpg)` berarti kita akan membuat kordinat sistem menggunakan dataset *mpg* (masih grafik kosong). Lalu kita menambahkan lapisan `geom_point()` untuk membuat scatterplot. Setiap fungsi geom di ggplot2 memiliki argumen `mapping` yang selalu berpasangan dengan `aes()` atau aesthetic yang memetakan `displ` ke sumbu-x dan `hwy`ke sumbu-y.
+Plotting begins by creating the system coordinate using the `ggplot ()` function, then stacking it with several layers. In the example above, `ggplot (data = mpg)` means we will make the system coordinates using the * mpg * dataset (still an empty graph). Then we add the `geom_point ()` layer to create a scatterplot. Each geom function in ggplot2 has a `mapping` argument which is always paired with `aes ()` or aesthetic which maps` displ` to the x-axis and `hwy` to the y-axis.
 
-Kita bisa menambahkan beberapa variable ke dalam scatterplot diatas, misalnya kita ingin mengetahui type mobil (`class`) mana saja yang ada di scatterplot diatas dan tiap type mobil dibedakan berdasarkan warna. Maka kita bisa menambahkan `color=class` ke dalam `aes()`, menjadi sebagai berikut
+We can add several variables to the scatterplot above, for example, we want to find out which type of car (`class`) is in the scatterplot above and each type of car is distinguished by color. Then we can add `color = class` to `aes()`, as follows
 
 ```{r}
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy, color = class))
 ```
 
-Jika kita mengganti `color=class` dengan `size=class`, maka pembedaan type mobil divisualkan dengan ukuran plotnya
+If we replace `color = class` with` size = class`, then the difference in car type is visualized by the plot size
 
 ```{r, warning=FALSE}
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy, size = class))
 ```
 
-Jika kita mengganti `color=class` dengan `shape=class`, maka type mobil dibedakan dengan bentuk plotnya
+If we replace `color = class` with` shape = class`, then the type of car is distinguished by the shape of the plot
 
 ```{r, warning=FALSE}
 ggplot(data = mpg) + 
@@ -82,7 +82,7 @@ ggplot(data = mpg) +
 ```
 
 ### Facets
-Selain dengan menambahkan variable ke dalam `aes()`, khusus untuk categorical variable, kita bisa membagi scatterplot untuk tiap type mobil dengan menggunakan `facet`. Untuk membagi scatterplot dengan satu variable, kita bisa menggunakan `facet_wrap()` sebagai berikut
+Besides adding variables to `aes ()`, specifically for categorical variables, we can divide scatterplots for each type of car using `facet`. To divide a scatterplot with one variable, we can use `facet_wrap()` as follows
 
 ```{r, warning=FALSE}
 ggplot(data = mpg) + 
@@ -90,9 +90,9 @@ ggplot(data = mpg) +
   facet_wrap(~class, ncol = 4)
 ```
 
-Pada plot diatas, scatterplot dibagi untuk tiap type mobil berdasarkan `class`. Disini, subplot disajikan dengan maksimum 4 kolom. 
+In the plot above, scatterplots are divided for each type of car based on `class`. Here, subplots are presented with a maximum of 4 columns.
 
-Facet juga bisa digunakan untuk dua categorical variable, misal kita ingin melihat scatterplot berdasarkan jumlah silinder `cyl` dan pergerakan roda `drv`. Hal ini bisa dilakukan dengan menambahkan `facet_grid()` sebagai berikut
+Facets can also be used for two categorical variables, for example, we want to see scatterplots based on the number of cylinders `cyl` and the movement of the` drv` wheels. This can be done by adding `facet_grid ()` as follows
 
 ```{r, warning=FALSE}
 ggplot(data = mpg) + 
@@ -100,8 +100,8 @@ ggplot(data = mpg) +
   facet_grid(cyl ~ drv)
 ```
 
-### Penambahan garis
-Misal, kita ingin menambahkan smooth line ke dalam scatterplot yang telah dibuat diatas. Hal ini bisa dilakukan dengan menambah lapisan `geom_smooth()` ke fungsi `ggplot()`. 
+### Addition of lines
+Suppose, we want to add a smooth line to the scatterplot that was created above. This can be done by adding the `geom_smooth ()` layer to the `ggplot ()` function.
 
 ```{r}
 
@@ -115,9 +115,9 @@ ggplot(data = mpg) +
 
 ```
 
-Pada panel pertama, smooth line dengan methode loess `method=loess` digunakan untuk fit data, untuk plot ini confidence interval tidak ditampilkan `se=FALSE`. Untuk panel kedua, kita menggunakan metode linear model `method=lm`dan confidence interval ditampilkan `se=TRUE`. Kita juga bisa memilih warna secara manual dengan mengeset `color="blue"` atau `color="darkgreen"`. 
+In the first panel, the smooth line with the method loess `method = loess` is used to fit data, for this plot the confidence interval is not displayed `se = FALSE`. For the second panel, we use the linear model `method = lm` method and the confidence interval is displayed `se = TRUE`. We can also choose colors manually by setting `color = "blue"` or `color = "darkgreen"`.
 
-`geom_smooth()`dapat juga digunakan untuk group yang berbeda, misal kita ingin melihat smooth line dari mobil berdasarkan type pergerakan roda
+`geom_smooth ()` can also be used for different groups, for instance, we want to see the smooth line of the car based on the type of wheel movement.
 
 ```{r}
 ggplot(data = mpg) + 
@@ -125,39 +125,40 @@ ggplot(data = mpg) +
   geom_smooth(mapping = aes(x = displ, y = hwy, color = drv), method = "loess", se=TRUE) 
 ```
 
-Gambar diatas menampilkan scatterplot beserta smooth line untuk tiap type pergerakan roda. 
+The picture above shows a scatterplot along with a smooth line for each type of wheel movement.
 
 
-## Bar chart
+## bar chart
 
-Pada bagian ini, kita akan membuat bar chart untuk jumlah mobil pada tiap pabrikan dengan menggunakan `geom_bar()`
+In this section, we will create a bar chart for the number of cars in each manufacturer by using `geom_bar ()`
 
 ```{r}
 ggplot(data = mpg) + 
   geom_bar(mapping = aes(x=manufacturer, fill = class)) +
   coord_flip()
 ```
-Barchart diatas menampilkan jumlah mobil untuk tiap pabrikan. Kita bisa mewarnai isi dari bar nya dengan menggunakan `fill=class`. Untuk grafik diatas warna berdasarkan type mobilnya. Setingan awal untuk barchart diatas adalah manufacturer berada di sumbu-x, namun kita putar 90 derajat agar nama dari tiap pabrikan terbaca jelas. Flip grafik ini diakomodasi oleh `coord_flip()`. Jika tidak di flip maka tulisan pabrikan akan saling menumpuk.
+
+The bar chart above shows the number of cars for each manufacturer. We can color the contents of the bar using `fill = class`. For the above color chart based on the type of car, The initial setting for the bar chart above is the manufacturer is on the x-axis, but we rotate it 90 degrees so that the name of each manufacturer can be read clearly. This flip graph is accommodated by `coord_flip ()`. If it is not folded, the manufacturer's writing will overlap.
 
 
 ## Label
 
 ```{r, message = FALSE}
-ggplot(mpg) +
-  geom_point(aes(x = displ, y = hwy, color = class)) +
-  geom_smooth(aes(x = displ, y = hwy), se = TRUE) +
-  labs(
-    title = "Efisiensi bahan bakar menurun sesuai dengan ukuran mesin",
-    subtitle = "Pengecualian untuk two seaters (sports cars) karena bobot yang ringan",
-    caption = "Data dari fueleconomy.gov",
-    x = "Ukuran mesin (L)",
-    y = "Efisiensi bahan bakar di dalam tol (mpg)",
-    colour = "Type mobil")
+ggplot (mpg) +
+  geom_point (aes (x = displ, y = hwy, color = class)) +
+  geom_smooth (aes (x = displ, y = hwy), se = FALSE) +
+  labs (
+    title = "Fuel efficiency decreases according to engine size",
+    subtitle = "Exceptions for two seaters (sports cars) because of their light weight",
+    caption = "Data from fueleconomy.gov",
+    x = "Engine displacement (L)",
+    y = "Fuel efficiency in highway (mpg)",
+    color = "Car type")
 ```
 
-Kita bisa mengubah dan juga menambahkan beberapa label ke dalam suatu plot dengan menggunakan `labs()`. Untuk grafik diatas, kita menambahkan judul (`title`), subjudul (`subtitle`) yang memiliki ukuran huruf lebih kecil dari judul, serta `caption` yang berada di kanan bawah plot biasanya digunakan untuk mencantumkan sumber data. Selain itu kita juga mengubah beberapa label seperti label sumbu-x, sumbu-y, dan warna label type mobil. 
+We can change and also add labels to a plot using `labs()`. For the graph above, we add a title (`title`), a subtitle (` subtitle`) that has a smaller font size than the title, and `caption` located at the bottom right of the plot is usually used to specify the data source. In addition, we also changed some labels such as the x-axis, y-axis, and car type label colors.
 
-Kita juga bisa mengganti label plot dengan menggunakan persamaan matematika. hal ini bisa dilakukan dengan mengganti `""` dengan `quote()` seperti contoh dibawah ini. Info lebih lanjut bisa dilihat di `?plotmath`.  
+We can also replace plot labels by using mathematical equations. this can be done by replacing `""` with `quote ()` as in the example below. More information can be seen in `?Plotmath`.
 
 ```{r}
 df <- data.frame(
@@ -173,15 +174,14 @@ ggplot(df) +
 ```
 
 
+## Conclusion
 
+This post contains the initial steps in presenting data visually using the R package **ggplot2**. Presentation of data in the form of scatterplots and bar charts are discussed in this post. In addition, visualization of categorical data is also presented. Adding and changing labels for a plot is discussed. This post is only as a basis for making visualizations with ** ggplot2 **, of course there are many more functions and graphics that can be used.
 
-## Penutup
-Tulisan ini memuat langkah awal dalam menyajikan data secara visual dengan menggunakan R package **ggplot2**. Penyajian data berupa scatterplot dan barplot dibahas dalam tulisan ini. Selain itu, pembahasan tentang penyajian data khusus untuk categorical variable juga dilakukan. Penambahan serta pengubahan label untuk sebuah plot juga disajikan. Tulisan ini hanya sebagai dasar untuk membuat visualisasi dengan **ggplot2**, tentunya masih banyak lagi fungsi dan grafik yang bisa digunakan. 
-
-Terimakasih telah membaca tulisan ini!
+Thank you for reading this article!
 
 ### Cheat sheet
-Teman-teman bisa melihat [cheatsheet](https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) dari **ggplot2** untuk informasi yang lebih lengkap. 
+You can see [cheatsheet](https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) from **ggplot2** for more complete information.
 
-### Referensi 
-**R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. Hadley Wickham and Garrett Grolemund**
+### References
+** R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. Hadley Wickham and Garrett Grolemund **

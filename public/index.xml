@@ -12,14 +12,33 @@
     
     
     <item>
-      <title>Visualisasi dengan ggplot2</title>
+      <title>Data visualization using ggplot2</title>
       <link>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</link>
       <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</guid>
-      <description>Tulisan ini akan membahas mengenai bagaimana cara menyajikan data secara visual menggunakan package ggplot2. R memiliki beberapa system untuk membuat visualisasi, namun ggplot2 merupakan salah satu package yang sering digunakan untuk menyajikan data.
-Sebelum kita mulai, dalam tulisan kali ini saya akan menggunakan dataset mpg yang berada di package ggplot2. Dataset ini memuat kumpulan observasi dari 38 model mobil. Tentunya kita juga perlu memuat package ggplot2 sebagai berikut:
-# install package bila diperlukan#install.</description>
+      <description>This post will discuss how to visualize data using the ggplot2 package. R has several systems for creating visualizations, but ggplot2 is a package that is often used to present data.
+Before we begin, in this article I will use the mpg dataset in the ggplot2 package. This dataset contains a collection of observations from 38 car models. Of course, first of all, we need to load the ggplot2 package as follows:</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/about_me.nb/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/about_me.nb/</guid>
+      <description>about_mecode{white-space: pre;}pre:not([class]) {background-color: white;}if (window.hljs) {hljs.configure({languages: []});hljs.initHighlightingOnLoad();if (document.readyState &amp;&amp; document.readyState === &#34;complete&#34;) {window.setTimeout(function() { hljs.initHighlighting(); }, 0);}}h1 {font-size: 34px;}h1.title {font-size: 38px;}h2 {font-size: 30px;}h3 {font-size: 24px;}h4 {font-size: 18px;}h5 {font-size: 16px;}h6 {font-size: 12px;}.</description>
+    </item>
+    
+    <item>
+      <title>About Me</title>
+      <link>/about_me/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/about_me/</guid>
+      <description>Hi, I&amp;rsquo;m Angga Fuady. Welcome to my blog!
+Currently, I am a PhD student in statistics at The Department of Biomedical Data Sciences, Leiden University Medical Center, the Netherlands. My research mainly focuses on the development of statistical models to analyze omics data measured by multiple technologies, such as genomics, transcriptomics, and glycomics. Previously, I studied Mathematics for my Bachelor&amp;rsquo;s and Master&amp;rsquo;s degree at Bandung Institute of Technology, Indonesia.
+However, this blog is not intended to contain anything about my research.</description>
     </item>
     
     <item>

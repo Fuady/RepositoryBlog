@@ -12,14 +12,13 @@
     
     
     <item>
-      <title>Visualisasi dengan ggplot2</title>
+      <title>Data visualization using ggplot2</title>
       <link>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</link>
       <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
       
       <guid>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</guid>
-      <description>Tulisan ini akan membahas mengenai bagaimana cara menyajikan data secara visual menggunakan package ggplot2. R memiliki beberapa system untuk membuat visualisasi, namun ggplot2 merupakan salah satu package yang sering digunakan untuk menyajikan data.
-Sebelum kita mulai, dalam tulisan kali ini saya akan menggunakan dataset mpg yang berada di package ggplot2. Dataset ini memuat kumpulan observasi dari 38 model mobil. Tentunya kita juga perlu memuat package ggplot2 sebagai berikut:
-# install package bila diperlukan#install.</description>
+      <description>This post will discuss how to visualize data using the ggplot2 package. R has several systems for creating visualizations, but ggplot2 is a package that is often used to present data.
+Before we begin, in this article I will use the mpg dataset in the ggplot2 package. This dataset contains a collection of observations from 38 car models. Of course, first of all, we need to load the ggplot2 package as follows:</description>
     </item>
     
   </channel>
