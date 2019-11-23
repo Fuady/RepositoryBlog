@@ -2,7 +2,7 @@
 title: Data visualization using ggplot2
 banner: img/banners/SAM_0931.jpg
 author: A.M.Fuady
-date: '2019-11-20'
+date: '2019-10-06'
 slug: data-visualization-using-ggplot2
 categories: 
   - R

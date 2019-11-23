@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Data transformation and manipulation using dplyr</title>
+  <meta name="author" content="A.M.Fuady" />
+  
+  
+  
+  
+  <meta name="keywords" content="R, dplyr">
+  
+  
+  <meta name="description" content="">
+
+  <meta name="generator" content="Hugo 0.59.1" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.green.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Angga Fuady Blog">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="en_us">
+  <meta property="og:site_name" content="Angga Fuady Blog">
+  <meta property="og:title" content="Data transformation and manipulation using dplyr">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="/blog/2019/11/23/2019-11-23-data-transformation-and-manipulation-using-dplyr/" />
+  <meta property="og:description" content="">
+  <meta property="og:image" content="/img/banners/SAM_0499.jpg">
+  <meta property="og:image:type" content="image/jpg">
+  
+  
+  
+    <meta property="og:image:width" content="5472">
+    <meta property="og:image:height" content="3648">
+  
+  
+  <meta property="og:updated_time" content="2019-11-23T00:00:00Z">
+  
+    
+    
+    <meta property="article:section" content="R">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="dplyr">
+    
+    
+    <meta property="article:published_time" content="2019-11-23T00:00:00Z">
+    <meta property="article:modified_time" content="2019-11-23T00:00:00Z">
+  
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <meta name="twitter:title" content="Data transformation and manipulation using dplyr">
+  
+  <meta name="twitter:image" content="/img/banners/SAM_0499.jpg">
+  
+  <meta name="twitter:description" content="">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header>
+
+          <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
+
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/amf_logo_psd.png" alt="Data transformation and manipulation using dplyr logo" class="hidden-xs hidden-sm">
+                    <img src="/img/amf_logo_small_psd.png" alt="Data transformation and manipulation using dplyr logo" class="visible-xs visible-sm">
+                    <span class="sr-only">Data transformation and manipulation using dplyr - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">Home</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown active">
+                    
+                    <a href="/blog/">Blog</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/about_me">About Me</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">
+
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+
+                </span>
+                    </div>
+                </form>
+
+            </div>
+            
+
+        </div>
+    </div>
+    
+
+</div>
+
+
+
+
+        </header>
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Data transformation and manipulation using dplyr</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        <p class="text-muted text-uppercase mb-small text-right">By <a href="#">A.M.Fuady</a> | November 23, 2019</p>
+
+                        <div id="post-content">
+                          
+
+
+<p>This time we will discuss on how to transform and manipulate data using the <strong>dplyr</strong> package. Specifically, here are some topics that will be covered</p>
+<ul>
+<li>Filter observations based on their values using <code>filter()</code>.</li>
+<li>Reorder lines using <code>arrange()</code>.</li>
+<li>Selecting variables using <code>select()</code>.</li>
+<li>Create a new variable from an existing variable using <code>mutate()</code>.</li>
+<li>Make a group summary of variables using <code>summarise()</code>.</li>
+<li>Combining several datasets using various <code>join</code> functions.</li>
+</ul>
+<p>In this post, we use <em>nycflights13</em> datasets which contains all flights that depaeted from New York City (eg EWR, JFK, and LGA) to destinations in the United States, Puerto Rico and the American Virgin Islands) in 2013 with total of 336,776 flights.</p>
+<pre class="r"><code># install package if needed
+# install.packages(&quot;dplyr&quot;, &quot;nycflights13&quot;, &quot;ggplot2&quot;)
+
+# load packages
+library(dplyr)
+library(nycflights13)
+library(ggplot2)</code></pre>
+<p>There are five datasets available in the <strong>nycflights13</strong> package, they are:</p>
+<ul>
+<li><code>nycflights13::airlines</code> contains the name of the airline</li>
+<li><code>nycflights13::airports</code> contains information about the airport</li>
+<li><code>nycflights13::flights</code> contains data on-time flights from NYC in 2013</li>
+<li><code>nycflights13::planes</code> contains information about the plane</li>
+<li><code>nycflights13::weather</code> Hourly weather data at NYC airports (EWK, JFK and LGA)</li>
+</ul>
+<p>The relationships of the five datasets are:</p>
+<ul>
+<li><p><code>flights</code> are connected to <code>planes</code> via the <code>tailnum</code> variable.</p></li>
+<li><p><code>flights</code> are connected to <code>airlines</code> via the <code>carrier</code> variable.</p></li>
+<li><p><code>flights</code> are connected to<code>airports</code> via <code>origin</code> and <code>dest</code> variables.</p></li>
+<li><p><code>flights</code> are connected to<code>weather</code> via <code>origin</code> (location), and <code>year</code>,<code>month</code>, <code>day</code> and<code>hour</code> (time).</p></li>
+</ul>
+<div id="filtering-observation-using-filter" class="section level2">
+<h2>Filtering observation using <code>filter()</code></h2>
+<p>The <code>filter()</code> function is used to subset the dataset based on its observation value. Dataframe becomes the first argumen while the second argument is the expression of filtering, the result of this filtering will be a dataframe. For example, we want to know the flight on January 10 and create a new variable named <code>jan10</code> as follows:</p>
+<pre class="r"><code>jan10 &lt;- filter(flights, month == 1, day == 10)
+head(jan10)</code></pre>
+<pre><code>## # A tibble: 6 x 19
+##    year month   day dep_time sched_dep_time dep_delay arr_time
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+## 1  2013     1    10        3           2359         4      426
+## 2  2013     1    10       16           2359        17      447
+## 3  2013     1    10      450            500       -10      634
+## 4  2013     1    10      520            525        -5      813
+## 5  2013     1    10      530            530         0      824
+## 6  2013     1    10      531            540        -9      832
+## # ... with 12 more variables: sched_arr_time &lt;int&gt;, arr_delay &lt;dbl&gt;,
+## #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;,
+## #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;,
+## #   time_hour &lt;dttm&gt;</code></pre>
+<p>In the code above, we only display the first six observations of <code>Jan10</code> dataframe.</p>
+<div id="comparison" class="section level3">
+<h3>Comparison</h3>
+<p>R provides several expressions for comparison such as: <code>&gt;</code>, <code>&gt; =</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>! =</code> (Not equal), and <code>==</code> (equal). We can use this expression to filter observations, for example we want to create a dataframe containing flights in January the 1st and the 2nd, as follows</p>
+<pre class="r"><code>filter(flights,month==1, day&lt;=2)</code></pre>
+<pre><code>## # A tibble: 1,785 x 19
+##     year month   day dep_time sched_dep_time dep_delay arr_time
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+##  1  2013     1     1      517            515         2      830
+##  2  2013     1     1      533            529         4      850
+##  3  2013     1     1      542            540         2      923
+##  4  2013     1     1      544            545        -1     1004
+##  5  2013     1     1      554            600        -6      812
+##  6  2013     1     1      554            558        -4      740
+##  7  2013     1     1      555            600        -5      913
+##  8  2013     1     1      557            600        -3      709
+##  9  2013     1     1      557            600        -3      838
+## 10  2013     1     1      558            600        -2      753
+## # ... with 1,775 more rows, and 12 more variables: sched_arr_time &lt;int&gt;,
+## #   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;</code></pre>
+</div>
+<div id="logical-operator" class="section level3">
+<h3>Logical operator</h3>
+<p>In addition to comparisons, we can also filter with a number of combinations using Boolean operators: <code>&amp;</code> for “and”, <code>|</code> for “or”, and <code>!</code> For “not”. For example, we want to search for flights in November or December, as follows:</p>
+<p>{r, eval = FALSE} filter (flights, month == 11 | month == 12) ``</p>
+<p>The code above will display all flights made in November and December. The same expression with <code>filter (flights, month == 11 | month == 12)</code> is <code>filter (flights, month% in% c (11, 12))</code>, where <code>%in%</code> selects rows from <code>month</code> which has a value of<code>11</code> or <code>12</code>.</p>
+</div>
+</div>
+<div id="reorder-rows-with-arrange" class="section level2">
+<h2>Reorder rows with <code>arrange()</code></h2>
+<p><code>arrange()</code> functions to sort observations from smallest to largest or vice versa. The first argument is the dataframe and the next is the variable you want to sort. More than one variable can be sorted. The default is to sort from the smallest value to the largest value. We can change the order to the opposite (downward) using <code>desc()</code>. For example, we will sort by departure delay variable (<code>dep_delay</code>):</p>
+<pre class="r"><code>head( arrange( flights, dep_delay ) )</code></pre>
+<pre><code>## # A tibble: 6 x 19
+##    year month   day dep_time sched_dep_time dep_delay arr_time
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+## 1  2013    12     7     2040           2123       -43       40
+## 2  2013     2     3     2022           2055       -33     2240
+## 3  2013    11    10     1408           1440       -32     1549
+## 4  2013     1    11     1900           1930       -30     2233
+## 5  2013     1    29     1703           1730       -27     1947
+## 6  2013     8     9      729            755       -26     1002
+## # ... with 12 more variables: sched_arr_time &lt;int&gt;, arr_delay &lt;dbl&gt;,
+## #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;,
+## #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;,
+## #   time_hour &lt;dttm&gt;</code></pre>
+<pre class="r"><code>head( arrange( flights, desc( dep_delay ) ) )</code></pre>
+<pre><code>## # A tibble: 6 x 19
+##    year month   day dep_time sched_dep_time dep_delay arr_time
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+## 1  2013     1     9      641            900      1301     1242
+## 2  2013     6    15     1432           1935      1137     1607
+## 3  2013     1    10     1121           1635      1126     1239
+## 4  2013     9    20     1139           1845      1014     1457
+## 5  2013     7    22      845           1600      1005     1044
+## 6  2013     4    10     1100           1900       960     1342
+## # ... with 12 more variables: sched_arr_time &lt;int&gt;, arr_delay &lt;dbl&gt;,
+## #   carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;, origin &lt;chr&gt;, dest &lt;chr&gt;,
+## #   air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;, minute &lt;dbl&gt;,
+## #   time_hour &lt;dttm&gt;</code></pre>
+<p>If there is a missing value, then it will be sorted last, for example:</p>
+<pre class="r"><code>df &lt;- data.frame(x = c(5, 2, NA))
+arrange(df, x)</code></pre>
+<pre><code>##    x
+## 1  2
+## 2  5
+## 3 NA</code></pre>
+<pre class="r"><code>arrange(df, desc(x))</code></pre>
+<pre><code>##    x
+## 1  5
+## 2  2
+## 3 NA</code></pre>
+</div>
+<div id="select-columns-with-select" class="section level2">
+<h2>Select columns with <code>select()</code></h2>
+<p>We can select single or multiple columns of interest using <code>select()</code>. For instance, we only want to select <code>year</code>, <code>month</code> and <code>day</code>, then we can write the following code.</p>
+<pre class="r"><code>select(flights, year, month, day)</code></pre>
+<pre><code>## # A tibble: 336,776 x 3
+##     year month   day
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;
+##  1  2013     1     1
+##  2  2013     1     1
+##  3  2013     1     1
+##  4  2013     1     1
+##  5  2013     1     1
+##  6  2013     1     1
+##  7  2013     1     1
+##  8  2013     1     1
+##  9  2013     1     1
+## 10  2013     1     1
+## # ... with 336,766 more rows</code></pre>
+<p>The same results will be obtained by writing <code>select(flights, year: day)</code> which means select the variable column from <code>year</code> to <code>day</code>. If we want to select columns other than <code>year</code>,<code>month</code> and <code>day</code>, then we write <code>select(flights, - (year: day))</code>, by only adding the<code>-</code> notation before <code>year:day</code>.</p>
+<p>There are also many ways to select variables in the <code>select ()</code> function, such as:</p>
+<ul>
+<li><p><code>starts_with(&quot;abc&quot;)</code>: select the column whose column name has the “abc” prefix.</p></li>
+<li><p><code>ends_with(&quot;xyz&quot;)</code>: select the column whose column name has the suffix “xyz”.</p></li>
+<li><p><code>contains(&quot;ijk &quot;)</code>: select the column whose column name contains “ijk”.</p></li>
+</ul>
+</div>
+<div id="add-a-new-variable-with-mutate" class="section level2">
+<h2>Add a new variable with <code>mutate()</code></h2>
+<p>If we want to add a new variable to an existing dataframe, we can use <code>mutate()</code>. This function will add a new variable at the end of the dataframe. For example we want to add the variable <code>speed</code> with the definition<code>speed = distance / air_time * 60</code>, then we can write</p>
+<pre class="r"><code>flights_sml &lt;- select(flights, 
+  distance, 
+  air_time
+)
+
+mutate(flights_sml,
+  speed = distance / air_time * 60
+)</code></pre>
+<pre><code>## # A tibble: 336,776 x 3
+##    distance air_time speed
+##       &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+##  1     1400      227  370.
+##  2     1416      227  374.
+##  3     1089      160  408.
+##  4     1576      183  517.
+##  5      762      116  394.
+##  6      719      150  288.
+##  7     1065      158  404.
+##  8      229       53  259.
+##  9      944      140  405.
+## 10      733      138  319.
+## # ... with 336,766 more rows</code></pre>
+<p>If we only want to display the newly created variable, we can use <code>transmute()</code>:</p>
+<pre class="r"><code>transmute(flights,
+  gain = dep_delay - arr_delay,
+  hours = air_time / 60,
+  gain_per_hour = gain / hours
+)</code></pre>
+<pre><code>## # A tibble: 336,776 x 3
+##     gain hours gain_per_hour
+##    &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;
+##  1    -9 3.78          -2.38
+##  2   -16 3.78          -4.23
+##  3   -31 2.67         -11.6 
+##  4    17 3.05           5.57
+##  5    19 1.93           9.83
+##  6   -16 2.5           -6.4 
+##  7   -24 2.63          -9.11
+##  8    11 0.883         12.5 
+##  9     5 2.33           2.14
+## 10   -10 2.3           -4.35
+## # ... with 336,766 more rows</code></pre>
+<p>Some functions that are often used to create new variables are:</p>
+<ul>
+<li><p>Arithmetic functions: <code>+</code>, <code>-</code>,<code>*</code>,<code>/</code>,<code>^</code>. For example <code>hours = air_time / 60</code>.</p></li>
+<li><p>Modular arithmetic: <code>%/%</code> (integer divisor) and <code>%%</code> (remainder), where <code>x == y * (x %/% y) + (x %% y)</code>, this is useful for dividing integer into several pieces, such as the <code>hour</code> and<code>minute</code> calculations of <code>dep_time</code>.</p></li>
+</ul>
+<pre class="r"><code>    transmute(flights,
+      dep_time,
+      hour = dep_time %/% 100,
+      minute = dep_time %% 100
+    )</code></pre>
+<pre><code>## # A tibble: 336,776 x 3
+##    dep_time  hour minute
+##       &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1      517     5     17
+##  2      533     5     33
+##  3      542     5     42
+##  4      544     5     44
+##  5      554     5     54
+##  6      554     5     54
+##  7      555     5     55
+##  8      557     5     57
+##  9      557     5     57
+## 10      558     5     58
+## # ... with 336,766 more rows</code></pre>
+<ul>
+<li>Logarithms: <code>log()</code>, <code>log2()</code>, <code>log10()</code>. Logarithms function are used for data transformation.</li>
+</ul>
+</div>
+<div id="summarizing-grouped-variable-with-summarise" class="section level2">
+<h2>Summarizing grouped variable with <code>summarise()</code></h2>
+<p><code>summarise()</code> functions to encapsulate dataframes into a single row. For example, we want to calculate the average of departure delays as follows:</p>
+<pre class="r"><code>summarise(flights, delay = mean(dep_delay, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   delay
+##   &lt;dbl&gt;
+## 1  12.6</code></pre>
+<p><code>summarise()</code> is usually paired with <code>group_by()</code>. This is done to make a summary of each group that has been collected by <code>group_by()</code>. For example, we want to calculate the average delay per date, then</p>
+<pre class="r"><code>by_day &lt;- group_by(flights, year, month, day)
+summarise(by_day, delay = mean(dep_delay, na.rm = TRUE))</code></pre>
+<pre><code>## # A tibble: 365 x 4
+## # Groups:   year, month [12]
+##     year month   day delay
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+##  1  2013     1     1 11.5 
+##  2  2013     1     2 13.9 
+##  3  2013     1     3 11.0 
+##  4  2013     1     4  8.95
+##  5  2013     1     5  5.73
+##  6  2013     1     6  7.15
+##  7  2013     1     7  5.42
+##  8  2013     1     8  2.55
+##  9  2013     1     9  2.28
+## 10  2013     1    10  2.84
+## # ... with 355 more rows</code></pre>
+<p><code>na.rm</code> function is used to omit the missing value in that variable.</p>
+<div id="combining-multiple-instruction-with-pipe" class="section level3">
+<h3>Combining multiple instruction with pipe</h3>
+<p>For example, we want to know the relationship between distance and average delay for each location. We can write the following code:</p>
+<pre class="r"><code>by_dest &lt;- group_by(flights, dest)
+delay &lt;- summarise(by_dest,
+  count = n(),
+  dist = mean(distance, na.rm = TRUE),
+  delay = mean(arr_delay, na.rm = TRUE)
+)
+delay &lt;- filter(delay, count &gt; 20, dest != &quot;HNL&quot;)
+
+ggplot(data = delay, mapping = aes(x = dist, y = delay)) +
+  geom_point(aes(size = count), alpha = 1/3) +
+  geom_smooth(se = FALSE)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="/blog/2019-11-23-data-transformation-and-manipulation-using-dplyr_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+<p>From the graphic above, we see that the delay has an increasing trend of until 750 miles, and then it decreased. We can breakdown the code into three stages, (1) Group flights based on destination, (2) calculate distance, average delay and number of flights, (3) Filter from noise and Honolulu Airport. Code writing can be shortened by using the pipe <code>%&gt;%</code>.</p>
+<pre class="r"><code>delays &lt;- flights %&gt;% 
+  group_by(dest) %&gt;% 
+  summarise(
+    count = n(),
+    dist = mean(distance, na.rm = TRUE),
+    delay = mean(arr_delay, na.rm = TRUE)
+  ) %&gt;% 
+  filter(count &gt; 20, dest != &quot;HNL&quot;)</code></pre>
+<p>We may read the above code in accordance with the order formed, namely the group, then summarize, then filter. <code>%&gt;%</code> can be read as “then”. Mathematically, the notation <code>x %&gt;% f(y)</code> means <code>f(x,y)</code>, and <code>x %&gt;% f(y) %&gt;% g(z)</code> means <code>g(f(x,y),z)</code>, etc. When we combine observations, it is better to add count (<code>n ()</code>) or count of non-missing values (<code>sum (! Is.na (x))</code>).</p>
+</div>
+<div id="some-functions-that-are-often-used" class="section level3">
+<h3>Some functions that are often used</h3>
+<ul>
+<li><p>Location: mean: <code>mean(x)</code> or median: <code>median(x)</code>.</p></li>
+<li><p>Spread: Standard deviation: <code>sd(x)</code>, interquartile range: <code>IQR(x)</code>, median absolute deviation: <code>mad (x)</code></p></li>
+<li><p>Ranking: Minimum: <code>min(x)</code>, Maximum: <code>max(x)</code>, quantile: <code>quantile (x)</code>.</p></li>
+<li><p>Position: <code>first(x)</code>, <code>nth(x, 2)</code>, <code>last(x)</code>.</p></li>
+</ul>
+</div>
+<div id="ungrouping" class="section level3">
+<h3>Ungrouping</h3>
+<p>Ungrouping can be done using <code>ungroup ()</code>.</p>
+<pre class="r"><code>daily &lt;- flights %&gt;% group_by(year, month, day) 
+
+# Summary flight per day
+(per_day   &lt;- summarise(daily, flights = n()))</code></pre>
+<pre><code>## # A tibble: 365 x 4
+## # Groups:   year, month [12]
+##     year month   day flights
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;
+##  1  2013     1     1     842
+##  2  2013     1     2     943
+##  3  2013     1     3     914
+##  4  2013     1     4     915
+##  5  2013     1     5     720
+##  6  2013     1     6     832
+##  7  2013     1     7     933
+##  8  2013     1     8     899
+##  9  2013     1     9     902
+## 10  2013     1    10     932
+## # ... with 355 more rows</code></pre>
+<pre class="r"><code># ungroup and total flights
+daily %&gt;% 
+  ungroup() %&gt;%             # no longer grouped by date
+  summarise(flights = n())  # all flights</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   flights
+##     &lt;int&gt;
+## 1  336776</code></pre>
+</div>
+</div>
+<div id="mutating-joins" class="section level2">
+<h2>Mutating joins</h2>
+<p><strong>mutating join</strong> enable use to combine variables from two dataframe. First, it matches the observations and then copies across variables from one table to the other. Normally, the join functions add variables to the right.</p>
+<p>As an example, suppose we want to add the airline name into the subset of flights dataframe. Here we only include the time departure and <code>carrier</code>. <code>flights</code>and <code>airlines</code> are connected via <code>carrier</code> as follows:</p>
+<pre class="r"><code>  flights %&gt;% 
+    select(year:day, carrier) %&gt;% 
+    left_join(airlines, by=&quot;carrier&quot;) %&gt;%
+    head()</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##    year month   day carrier name                  
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;                 
+## 1  2013     1     1 UA      United Air Lines Inc. 
+## 2  2013     1     1 UA      United Air Lines Inc. 
+## 3  2013     1     1 AA      American Airlines Inc.
+## 4  2013     1     1 B6      JetBlue Airways       
+## 5  2013     1     1 DL      Delta Air Lines Inc.  
+## 6  2013     1     1 UA      United Air Lines Inc.</code></pre>
+<p>Here we use <code>left_join</code> to combine <code>flights</code> and <code>airlines</code>. In the final dataframe, there is and additional variable namely <code>name</code>comes from <code>airlines</code> dataset.</p>
+<div id="how-joins-work" class="section level3">
+<h3>How joins work</h3>
+<p>Here we want to illustrate how joins work, suppose there are two dataframe, namely <code>x</code> and <code>y</code> as follow</p>
+<pre class="r"><code>x &lt;- data.frame( key = 1:3, val_x = c(&quot;x1&quot;,&quot;x2&quot;,&quot;x3&quot;) )
+y &lt;- data.frame( key = c(1,2,4), val_y = c(&quot;y1&quot;,&quot;y2&quot;,&quot;y3&quot;) )</code></pre>
+<p>key variable is used to match the rows between <code>x</code> and <code>y</code>. To connect each row in <code>x</code> to zero, one or multiple rows in <code>y</code>, we use join. Here are some function used in join.</p>
+</div>
+<div id="inner-join" class="section level3">
+<h3>Inner join</h3>
+<p>Inner join only select observation where the key values are presented in both dataframe. Here is what we get from <code>inner_join</code> of <code>x</code>and <code>y</code>.</p>
+<pre class="r"><code>  inner_join(x, y, by = &quot;key&quot;)</code></pre>
+<pre><code>##   key val_x val_y
+## 1   1    x1    y1
+## 2   2    x2    y2</code></pre>
+</div>
+<div id="outer-joins" class="section level3">
+<h3>Outer joins</h3>
+<p>Outer join is the opposite of inner join. It keeps observations that appear in at least one of the tables. There are three types of outer joins:</p>
+<ul>
+<li>A <strong>left join</strong> keeps all observations in <code>x</code>.</li>
+<li>A <strong>right join</strong> keeps all observations in <code>y</code>.</li>
+<li>A <strong>full join</strong> keeps all observations in <code>x</code> and <code>y</code>.</li>
+</ul>
+<p>These joins work by adding new observation to each table with value <code>NA</code></p>
+<pre class="r"><code>  left_join(x, y, by = &quot;key&quot;)</code></pre>
+<pre><code>##   key val_x val_y
+## 1   1    x1    y1
+## 2   2    x2    y2
+## 3   3    x3  &lt;NA&gt;</code></pre>
+<pre class="r"><code>  right_join(x, y, by = &quot;key&quot;)</code></pre>
+<pre><code>##   key val_x val_y
+## 1   1    x1    y1
+## 2   2    x2    y2
+## 3   4  &lt;NA&gt;    y3</code></pre>
+<pre class="r"><code>  full_join(x, y, by = &quot;key&quot;)</code></pre>
+<pre><code>##   key val_x val_y
+## 1   1    x1    y1
+## 2   2    x2    y2
+## 3   3    x3  &lt;NA&gt;
+## 4   4  &lt;NA&gt;    y3</code></pre>
+</div>
+<div id="other-implementations" class="section level3">
+<h3>Other implementations</h3>
+<p><code>base::merge()</code> can perform all four types of mutating join:</p>
+<table>
+<thead>
+<tr class="header">
+<th>dplyr</th>
+<th>merge</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>inner_join(x, y)</code></td>
+<td><code>merge(x, y)</code></td>
+</tr>
+<tr class="even">
+<td><code>left_join(x, y)</code></td>
+<td><code>merge(x, y, all.x = TRUE)</code></td>
+</tr>
+<tr class="odd">
+<td><code>right_join(x, y)</code></td>
+<td><code>merge(x, y, all.y = TRUE)</code>,</td>
+</tr>
+<tr class="even">
+<td><code>full_join(x, y)</code></td>
+<td><code>merge(x, y, all.x = TRUE, all.y = TRUE)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="filtering-joins" class="section level2">
+<h2>Filtering joins</h2>
+<p>Filtering joins match observations in the same way as mutating joins, but affect the observations, not the variables. There are two types:</p>
+<ul>
+<li><code>semi_join(x, y)</code> <strong>keeps</strong> all observations in <code>x</code> that have a match in <code>y</code>.</li>
+<li><code>anti_join(x, y)</code> <strong>drops</strong> all observations in <code>x</code> that have a match in <code>y</code>.</li>
+</ul>
+<p>Semi-joins are useful for matching filtered summary tables back to the original rows. While, anti-joins are useful for diagnosing join mismatches.</p>
+<pre class="r"><code>  semi_join(x, y, by = &quot;key&quot;)</code></pre>
+<pre><code>##   key val_x
+## 1   1    x1
+## 2   2    x2</code></pre>
+<pre class="r"><code>  anti_join(x, y, by = &quot;key&quot;)</code></pre>
+<pre><code>##   key val_x
+## 1   3    x3</code></pre>
+</div>
+<div id="set-operations" class="section level2">
+<h2>Set operations</h2>
+<ul>
+<li><code>intersect(x, y)</code>: return only observations in both <code>x</code> and <code>y</code>.</li>
+<li><code>union(x, y)</code>: return unique observations in <code>x</code> and <code>y</code>.</li>
+<li><code>setdiff(x, y)</code>: return observations in <code>x</code>, but not in <code>y</code>.</li>
+</ul>
+<p>Given this simple data:</p>
+<pre class="r"><code>df1 &lt;- data.frame(x=1:2, y=c(1,1))
+df2 &lt;- data.frame(x=c(1,1), y=c(1,2))</code></pre>
+<p>The four possibilities are:</p>
+<pre class="r"><code>intersect(df1, df2)</code></pre>
+<pre><code>##   x y
+## 1 1 1</code></pre>
+<pre class="r"><code>union(df1, df2)</code></pre>
+<pre><code>##   x y
+## 1 1 1
+## 2 2 1
+## 3 1 2</code></pre>
+<pre class="r"><code>setdiff(df1, df2)</code></pre>
+<pre><code>##   x y
+## 1 2 1</code></pre>
+<pre class="r"><code>setdiff(df2, df1)</code></pre>
+<pre><code>##   x y
+## 1 1 2</code></pre>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This post contains the initial steps of wrangling dataset using the R package <strong>dplyr</strong>. We use <em>nycflights13</em> datasets to illustrate some function in this package. This post covers filtering observations, reordering values within a dataset, selecting variables, creating new variable, summaries group variables and finally combining two datasets. Of course, there are still many functions that are available within this package and are not covered in this post.</p>
+<p>Thank you for reading this article!</p>
+<div id="cheat-sheet" class="section level3">
+<h3>Cheat sheet</h3>
+<p>You can see <a href="https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">cheatsheet</a> from <strong>dplyr</strong> for more complete information.</p>
+</div>
+<div id="referensi" class="section level3">
+<h3>Referensi</h3>
+<p><strong>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. Hadley Wickham and Garrett Grolemund</strong></p>
+</div>
+</div>
+
+                        </div>
+                        
+                        
+                        <div id="comments">
+                            <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "amfuady" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                        </div>
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            
+            <li>
+                <a href="/categories/r">r (2)</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+<div class="panel sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Tags</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="tag-cloud">
+            
+            
+            <li>
+                <a href="/tags/dplyr"><i class="fas fa-tags"></i> dplyr</a>
+            </li>
+            
+            <li>
+                <a href="/tags/ggplot2"><i class="fas fa-tags"></i> ggplot2</a>
+            </li>
+            
+            <li>
+                <a href="/tags/r"><i class="fas fa-tags"></i> r</a>
+            </li>
+            
+            <li>
+                <a href="/tags/visualization"><i class="fas fa-tags"></i> visualization</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/11/23/2019-11-23-data-transformation-and-manipulation-using-dplyr/">
+                          
+                            <img src="/img/banners/SAM_0499.jpg" class="img-responsive" alt="Data transformation and manipulation using dplyr">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/11/23/2019-11-23-data-transformation-and-manipulation-using-dplyr/">Data transformation and manipulation using dplyr</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/">
+                          
+                            <img src="/img/banners/SAM_0931.jpg" class="img-responsive" alt="Data visualization using ggplot2">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/">Data visualization using ggplot2</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2019</p>
+            
+            <p class="pull-right">
+              Template by <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              Ported to Hugo by <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-150402048-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script src="/js/hpneo.gmaps.js"></script>
+<script src="/js/gmaps.init.js"></script>
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,357 @@
+---
+title: Data transformation and manipulation using dplyr
+banner: img/banners/SAM_0499.jpg
+author: A.M.Fuady
+date: '2019-10-13'
+slug: data-transformation-and-manipulation-using-dplyr
+categories:
+  - R
+tags:
+  - R
+  - dplyr
+---
+
+This time we will discuss on how to transform and manipulate data using the __dplyr__ package. Specifically, here are some topics that will be covered
+
+* Filter observations based on their values using `filter()`.
+* Reorder lines using `arrange()`.
+* Selecting variables using `select()`.
+* Create a new variable from an existing variable using `mutate()`.
+* Make a group summary of variables using `summarise()`.
+* Combining several datasets using various `join` functions.
+
+In this post, we use *nycflights13* datasets which contains all flights that depaeted from New York City (eg EWR, JFK, and LGA) to destinations in the United States, Puerto Rico and the American Virgin Islands) in 2013 with total of 336,776 flights.
+
+```{r, warning=FALSE, message=FALSE}
+# install package if needed
+# install.packages("dplyr", "nycflights13", "ggplot2")
+
+# load packages
+library(dplyr)
+library(nycflights13)
+library(ggplot2)
+```
+
+There are five datasets available in the __nycflights13__ package, they are:
+
+* `nycflights13::airlines` contains the name of the airline
+* `nycflights13::airports` contains information about the airport
+* `nycflights13::flights` contains data on-time flights from NYC in 2013
+* `nycflights13::planes` contains information about the plane
+* `nycflights13::weather` Hourly weather data at NYC airports (EWK, JFK and LGA)
+
+The relationships of the five datasets are:
+
+* `flights` are connected to `planes` via the `tailnum` variable.
+
+* `flights` are connected to `airlines` via the `carrier` variable.
+
+* `flights` are connected to` airports` via `origin` and `dest` variables.
+
+* `flights` are connected to` weather` via `origin` (location), and `year`,` month`, `day` and` hour` (time).
+
+## Filtering observation using `filter()`
+
+The `filter()` function is used to subset the dataset based on its observation value. Dataframe becomes the first argumen while the second argument is the expression of filtering, the result of this filtering will be a dataframe. For example, we want to know the flight on January 10 and create a new variable named `jan10` as follows:
+
+```{r}
+jan10 <- filter(flights, month == 1, day == 10)
+head(jan10)
+```
+
+In the code above, we only display the first six observations of `Jan10` dataframe.
+
+### Comparison
+
+R provides several expressions for comparison such as: `>`, `> =`, `<`, `<=`, `! =` (Not equal), and `==` (equal). We can use this expression to filter observations, for example we want to create a dataframe containing flights in January the 1st and the 2nd, as follows
+
+```{r}
+filter(flights,month==1, day<=2)
+```
+
+
+### Logical operator
+
+In addition to comparisons, we can also filter with a number of combinations using Boolean operators: `&` for "and", `|` for "or", and `!` For "not". For example, we want to search for flights in November or December, as follows:
+
+{r, eval = FALSE}
+filter (flights, month == 11 | month == 12)
+``
+
+The code above will display all flights made in November and December. The same expression with `filter (flights, month == 11 | month == 12)` is `filter (flights, month% in% c (11, 12))`, where `%in%` selects rows from `month` which has a value of` 11` or `12`.
+
+## Reorder rows with `arrange()`
+
+`arrange()` functions to sort observations from smallest to largest or vice versa. The first argument is the dataframe and the next is the variable you want to sort. More than one variable can be sorted. The default is to sort from the smallest value to the largest value. We can change the order to the opposite (downward) using `desc()`. For example, we will sort by departure delay variable (`dep_delay`):
+
+```{r}
+head( arrange( flights, dep_delay ) )
+head( arrange( flights, desc( dep_delay ) ) )
+```
+
+If there is a missing value, then it will be sorted last, for example:
+
+```{r}
+df <- data.frame(x = c(5, 2, NA))
+arrange(df, x)
+arrange(df, desc(x))
+```
+
+## Select columns with `select()`
+
+We can select single or multiple columns of interest using `select()`. For instance, we only want to select `year`, `month` and `day`, then we can write the following code.
+
+```{r}
+select(flights, year, month, day)
+```
+
+The same results will be obtained by writing `select(flights, year: day)` which means select the variable column from `year` to `day`. If we want to select columns other than `year`,` month` and `day`, then we write `select(flights, - (year: day))`, by only adding the` -` notation before `year:day `.
+
+There are also many ways to select variables in the `select ()` function, such as:
+
+* `starts_with("abc")`: select the column whose column name has the "abc" prefix.
+
+* `ends_with("xyz")`: select the column whose column name has the suffix "xyz".
+
+* `contains("ijk ")`: select the column whose column name contains "ijk".
+
+## Add a new variable with `mutate()`
+
+If we want to add a new variable to an existing dataframe, we can use `mutate()`. This function will add a new variable at the end of the dataframe. For example we want to add the variable `speed` with the definition` speed = distance / air_time * 60`,
+then we can write
+
+```{r}
+flights_sml <- select(flights, 
+  distance, 
+  air_time
+)
+
+mutate(flights_sml,
+  speed = distance / air_time * 60
+)
+```
+
+If we only want to display the newly created variable, we can use `transmute()`:
+
+```{r}
+transmute(flights,
+  gain = dep_delay - arr_delay,
+  hours = air_time / 60,
+  gain_per_hour = gain / hours
+)
+```
+
+Some functions that are often used to create new variables are:
+
+* Arithmetic functions: `+`, `-`,` * `,` / `,` ^ `. For example `hours = air_time / 60`.
+
+* Modular arithmetic: `%/%` (integer divisor) and `%%` (remainder), where `x == y * (x %/% y) + (x %% y)`, this is useful for dividing integer into several pieces, such as the `hour` and` minute` calculations of `dep_time`.
+
+```{r}
+    transmute(flights,
+      dep_time,
+      hour = dep_time %/% 100,
+      minute = dep_time %% 100
+    )
+```
+    
+* Logarithms: `log()`, `log2()`, `log10()`. Logarithms function are used for data transformation.
+
+
+
+## Summarizing grouped variable with `summarise()`
+
+`summarise()` functions to encapsulate dataframes into a single row. For example, we want to calculate the average of departure delays as follows:
+
+```{r}
+summarise(flights, delay = mean(dep_delay, na.rm = TRUE))
+```
+
+`summarise()` is usually paired with `group_by()`. This is done to make a summary of each group that has been collected by `group_by()`. For example, we want to calculate the average delay per date, then
+
+```{r}
+by_day <- group_by(flights, year, month, day)
+summarise(by_day, delay = mean(dep_delay, na.rm = TRUE))
+```
+
+`na.rm` function is used to omit the missing value in that variable.
+
+### Combining multiple instruction with pipe
+
+For example, we want to know the relationship between distance and average delay for each location. We can write the following code:
+
+```{r, fig.width = 6}
+by_dest <- group_by(flights, dest)
+delay <- summarise(by_dest,
+  count = n(),
+  dist = mean(distance, na.rm = TRUE),
+  delay = mean(arr_delay, na.rm = TRUE)
+)
+delay <- filter(delay, count > 20, dest != "HNL")
+
+ggplot(data = delay, mapping = aes(x = dist, y = delay)) +
+  geom_point(aes(size = count), alpha = 1/3) +
+  geom_smooth(se = FALSE)
+```
+
+From the graphic above, we see that the delay has an increasing trend of until 750 miles, and then it decreased. We can breakdown the code into three stages, (1) Group flights based on destination, (2) calculate distance, average delay and number of flights, (3) Filter from noise and Honolulu Airport. Code writing can be shortened by using the pipe `%>%`. 
+
+```{r}
+delays <- flights %>% 
+  group_by(dest) %>% 
+  summarise(
+    count = n(),
+    dist = mean(distance, na.rm = TRUE),
+    delay = mean(arr_delay, na.rm = TRUE)
+  ) %>% 
+  filter(count > 20, dest != "HNL")
+```
+
+We may read the above code in accordance with the order formed, namely the group, then summarize, then filter. `%>%` can be read as "then". Mathematically, the notation `x %>% f(y)` means `f(x,y)`, and `x %>% f(y) %>% g(z)` means `g(f(x,y),z) `, etc. When we combine observations, it is better to add count (`n ()`) or count of non-missing values (`sum (! Is.na (x))`).
+
+
+### Some functions that are often used
+
+* Location: mean: `mean(x)` or median: `median(x)`.
+
+* Spread: Standard deviation: `sd(x)`, interquartile range: `IQR(x)`, median absolute deviation: `mad (x)`
+
+* Ranking: Minimum: `min(x)`, Maximum: `max(x)`, quantile: `quantile (x)`.
+
+* Position: `first(x)`, `nth(x, 2)`, `last(x)`.
+
+
+### Ungrouping
+
+Ungrouping can be done using `ungroup ()`.
+
+```{r}
+daily <- flights %>% group_by(year, month, day) 
+
+# Summary flight per day
+(per_day   <- summarise(daily, flights = n()))
+
+# ungroup and total flights
+daily %>% 
+  ungroup() %>%             # no longer grouped by date
+  summarise(flights = n())  # all flights
+```
+
+
+## Mutating joins
+
+__mutating join__ enable use to combine variables from two dataframe. First, it matches the observations and then copies across variables from one table to the other. Normally, the join functions add variables to the right. 
+
+As an example, suppose we want to add the airline name into the subset of flights dataframe. Here we only include the time departure and `carrier`. `flights`and `airlines` are connected via `carrier` as follows:
+
+```{r}
+  flights %>% 
+    select(year:day, carrier) %>% 
+    left_join(airlines, by="carrier") %>%
+    head()
+```
+
+Here we use `left_join` to combine `flights` and `airlines`. In the final dataframe, there is and additional variable namely `name`comes from `airlines` dataset. 
+
+### How joins work
+
+Here we want to illustrate how joins work, suppose there are two dataframe, namely `x` and `y` as follow
+
+```{r}
+x <- data.frame( key = 1:3, val_x = c("x1","x2","x3") )
+y <- data.frame( key = c(1,2,4), val_y = c("y1","y2","y3") )
+```
+
+key variable is used to match the rows between `x` and `y`. To connect each row in `x` to zero, one or multiple rows in `y`, we use join. Here are some function used in join.
+
+### Inner join 
+
+Inner join only select observation where the key values are presented in both dataframe. Here is what we get from `inner_join` of `x`and `y`.
+
+```{r}
+  inner_join(x, y, by = "key")
+```
+
+### Outer joins
+
+Outer join is the opposite of inner join. It keeps observations that appear in at least one of the tables. There are three types of outer joins:
+
+* A __left join__ keeps all observations in `x`.
+* A __right join__ keeps all observations in `y`.
+* A __full join__ keeps all observations in `x` and `y`.
+
+These joins work by adding new observation to each table with value `NA`
+
+```{r}
+  left_join(x, y, by = "key")
+  right_join(x, y, by = "key")
+  full_join(x, y, by = "key")
+```
+
+### Other implementations
+
+`base::merge()` can perform all four types of mutating join:
+
+dplyr              | merge
+-------------------|-------------------------------------------
+`inner_join(x, y)` | `merge(x, y)`
+`left_join(x, y)`  | `merge(x, y, all.x = TRUE)`
+`right_join(x, y)` | `merge(x, y, all.y = TRUE)`,
+`full_join(x, y)`  | `merge(x, y, all.x = TRUE, all.y = TRUE)`
+
+
+## Filtering joins 
+
+Filtering joins match observations in the same way as mutating joins, but affect the observations, not the variables. There are two types:
+
+* `semi_join(x, y)` __keeps__ all observations in `x` that have a match in `y`.
+* `anti_join(x, y)` __drops__ all observations in `x` that have a match in `y`.
+
+Semi-joins are useful for matching filtered summary tables back to the original rows. While, anti-joins are useful for diagnosing join mismatches. 
+
+```{r}
+  semi_join(x, y, by = "key")
+  anti_join(x, y, by = "key")
+```
+
+
+## Set operations
+
+* `intersect(x, y)`: return only observations in both `x` and `y`.
+* `union(x, y)`: return unique observations in `x` and `y`.
+* `setdiff(x, y)`: return observations in `x`, but not in `y`.
+
+Given this simple data:
+
+```{r}
+df1 <- data.frame(x=1:2, y=c(1,1))
+df2 <- data.frame(x=c(1,1), y=c(1,2))
+```
+
+The four possibilities are:
+
+```{r}
+intersect(df1, df2)
+
+union(df1, df2)
+
+setdiff(df1, df2)
+
+setdiff(df2, df1)
+```
+
+
+## Conclusion
+
+This post contains the initial steps of wrangling dataset using the R package **dplyr**. We use *nycflights13* datasets to illustrate some function in this package. This post covers filtering observations, reordering values within a dataset, selecting variables, creating new variable, summaries group variables and finally combining two datasets. Of course, there are still many functions that are available within this package and are not covered in this post.
+
+Thank you for reading this article!
+
+### Cheat sheet
+You can see [cheatsheet](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) from **dplyr** for more complete information.
+
+### Referensi 
+**R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. Hadley Wickham and Garrett Grolemund**
+
+
+

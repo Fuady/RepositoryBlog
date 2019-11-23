@@ -6,17 +6,17 @@
     <description>Recent content in ggplot2 on Angga Fuady Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 06 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/ggplot2/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Data visualization using ggplot2</title>
-      <link>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</link>
-      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      <link>/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/</link>
+      <pubDate>Sun, 06 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</guid>
+      <guid>/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/</guid>
       <description>This post will discuss how to visualize data using the ggplot2 package. R has several systems for creating visualizations, but ggplot2 is a package that is often used to present data.
 Before we begin, in this article I will use the mpg dataset in the ggplot2 package. This dataset contains a collection of observations from 38 car models. Of course, first of all, we need to load the ggplot2 package as follows:</description>
     </item>

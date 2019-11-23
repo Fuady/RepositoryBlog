@@ -6,17 +6,27 @@
     <description>Recent content on Angga Fuady Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 20 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 13 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Data visualization using ggplot2</title>
-      <link>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</link>
-      <pubDate>Wed, 20 Nov 2019 00:00:00 +0000</pubDate>
+      <title>Data transformation and manipulation using dplyr</title>
+      <link>/blog/2019/10/13/2019-11-23-data-transformation-and-manipulation-using-dplyr/</link>
+      <pubDate>Sun, 13 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/blog/2019/11/20/2019-11-20-visualisasi-dengan-ggplot2/</guid>
+      <guid>/blog/2019/10/13/2019-11-23-data-transformation-and-manipulation-using-dplyr/</guid>
+      <description>This time we will discuss on how to transform and manipulate data using the dplyr package. Specifically, here are some topics that will be covered
+Filter observations based on their values using filter().Reorder lines using arrange().Selecting variables using select().Create a new variable from an existing variable using mutate().Make a group summary of variables using summarise().Combining several datasets using various join functions.In this post, we use nycflights13 datasets which contains all flights that depaeted from New York City (eg EWR, JFK, and LGA) to destinations in the United States, Puerto Rico and the American Virgin Islands) in 2013 with total of 336,776 flights.</description>
+    </item>
+    
+    <item>
+      <title>Data visualization using ggplot2</title>
+      <link>/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/</link>
+      <pubDate>Sun, 06 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/</guid>
       <description>This post will discuss how to visualize data using the ggplot2 package. R has several systems for creating visualizations, but ggplot2 is a package that is often used to present data.
 Before we begin, in this article I will use the mpg dataset in the ggplot2 package. This dataset contains a collection of observations from 38 car models. Of course, first of all, we need to load the ggplot2 package as follows:</description>
     </item>
@@ -37,8 +47,8 @@ Before we begin, in this article I will use the mpg dataset in the ggplot2 packa
       
       <guid>/about_me/</guid>
       <description>Hi, I&amp;rsquo;m Angga Fuady. Welcome to my blog!
-Currently, I am a PhD student in statistics at The Department of Biomedical Data Sciences, Leiden University Medical Center, the Netherlands. My research mainly focuses on the development of statistical models to analyze omics data measured by multiple technologies, such as genomics, transcriptomics, and glycomics. Previously, I studied Mathematics for my Bachelor&amp;rsquo;s and Master&amp;rsquo;s degree at Bandung Institute of Technology, Indonesia.
-However, this blog is not intended to contain anything about my research.</description>
+Currently, I am a PhD student in statistics at The Department of Biomedical Data Sciences, Leiden University Medical Center, the Netherlands. My research mainly focuses on the development of statistical models to analyze omics data, such as transcriptomics, and glycomics that measured by multiple technologies. Previously, I studied mathematics for my Bachelor&amp;rsquo;s and Master&amp;rsquo;s degree at Bandung Institute of Technology, Indonesia.
+This blog is not intended to contain anything about my research.</description>
     </item>
     
     <item>
