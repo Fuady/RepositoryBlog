@@ -350,7 +350,7 @@ Thank you for reading this article!
 ### Cheat sheet
 You can see [cheatsheet](https://rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) from **dplyr** for more complete information.
 
-### Referensi 
+### References
 **R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. Hadley Wickham and Garrett Grolemund**
 
 
