@@ -1,0 +1,198 @@
+---
+title: Set date and time using lubridate
+banner: img/banners/time.jpg
+author: A.M. Fuady
+date: '2019-10-20'
+slug: set-date-and-time-using-lubridate
+categories:
+  - R
+tags:
+  - R
+  - lubridate
+  - ggplot2
+  - dplyr
+  - date-time
+---
+
+
+
+<p>This post will discuss how to work with date/time data. Here, we will use the R package <code>lubridate</code> and use the NYC flight data <code>nycflights13</code>. There are two types of date/time data that will be covered in this post, namely <strong>date</strong> (print date only) and <strong>date-time</strong> (print date and time).</p>
+<pre class="r"><code># install packages if needed
+#install.packages(&quot;lubridate&quot;, &quot;nycflights13&quot;, &quot;ggplot2&quot;)
+
+# load libraries
+library(lubridate)
+library(nycflights13)
+library(ggplot2)
+library(dplyr)</code></pre>
+<div id="extracting-current-date-or-date-time" class="section level2">
+<h2>Extracting current date or date-time</h2>
+<p>We can print the current date or date-time information using <code>today()</code> or <code>now()</code> function. <code>today()</code> contains the information on date only, while <code>now()</code> prints date and time. Here is the example</p>
+<pre class="r"><code>today()</code></pre>
+<pre><code>## [1] &quot;2019-11-28&quot;</code></pre>
+<pre class="r"><code>now()</code></pre>
+<pre><code>## [1] &quot;2019-11-28 09:21:14 CET&quot;</code></pre>
+</div>
+<div id="creating-date" class="section level2">
+<h2>Creating date</h2>
+<div id="creating-date-from-a-string" class="section level3">
+<h3>Creating date from a string</h3>
+<p>To create a date from a string, we have to identify the year <code>y</code>, month <code>m</code> and day <code>d</code> of the string that we want to use. For example, we want to create the date of <code>2019-09-03</code> or <code>September, 3rd 2019</code> or <code>03-Sep-2019</code> or <code>20190903</code>. three functions can be used depends on the position of the year, month and day, as follows</p>
+<pre class="r"><code>ymd(&#39;2019-09-03&#39;)</code></pre>
+<pre><code>## [1] &quot;2019-09-03&quot;</code></pre>
+<pre class="r"><code>mdy(&#39;September, 3rd 2019&#39;)</code></pre>
+<pre><code>## [1] &quot;2019-09-03&quot;</code></pre>
+<pre class="r"><code>dmy(&#39;03-Sep-2019&#39;)</code></pre>
+<pre><code>## [1] &quot;2019-09-03&quot;</code></pre>
+<pre class="r"><code>ymd(&#39;20190903&#39;)</code></pre>
+<pre><code>## [1] &quot;2019-09-03&quot;</code></pre>
+<p>To create date-time, add underscore and add more <code>h</code> for hour <code>m</code> for minutes and <code>s</code> for second into the <code>ymd()</code> function, as follows</p>
+<pre class="r"><code>ymd_hms(&quot;2018-01-31 22:11:59&quot;)</code></pre>
+<pre><code>## [1] &quot;2018-01-31 22:11:59 UTC&quot;</code></pre>
+</div>
+<div id="creating-date-from-dataframe" class="section level3">
+<h3>Creating date from dataframe</h3>
+<p>Suppose, we have columns of day, month and year in the dataframe, and we want to make a date out of it. This can be done by using <code>make_date()</code> for creating dates, or <code>make_datetime()</code> for creating date-times. To illustrate this, we use flight data as follow</p>
+<pre class="r"><code>flights %&gt;% 
+  select(year, month, day, hour, minute) %&gt;%
+  mutate(date_departure = make_date(year = year, month = month, day = day)) %&gt;%
+  head()</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##    year month   day  hour minute date_departure
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;date&gt;        
+## 1  2013     1     1     5     15 2013-01-01    
+## 2  2013     1     1     5     29 2013-01-01    
+## 3  2013     1     1     5     40 2013-01-01    
+## 4  2013     1     1     5     45 2013-01-01    
+## 5  2013     1     1     6      0 2013-01-01    
+## 6  2013     1     1     5     58 2013-01-01</code></pre>
+</div>
+</div>
+<div id="date-time-components" class="section level2">
+<h2>Date-time components</h2>
+<p>In this section, we will discuss how to get and set individual components of a date. Some functions that often used are :</p>
+<ul>
+<li><code>year()</code> and <code>month()</code> to get the year and month components, respectively.</li>
+<li><code>mday()</code> to obtain the day of the month</li>
+<li><code>yday()</code> to obtain the day of the year</li>
+<li><code>wday()</code> to obtain the day of the week,</li>
+<li><code>hour()</code>, <code>minute()</code>, and <code>second()</code> to obtain component of hour, minute and second, respectively.</li>
+</ul>
+<p>The following code are some examples</p>
+<pre class="r"><code>datetime &lt;- ymd_hms(&quot;2019-08-12 15:24:16&quot;)
+
+year(datetime)</code></pre>
+<pre><code>## [1] 2019</code></pre>
+<pre class="r"><code>month(datetime)</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre class="r"><code>mday(datetime)</code></pre>
+<pre><code>## [1] 12</code></pre>
+<pre class="r"><code>yday(datetime)</code></pre>
+<pre><code>## [1] 224</code></pre>
+<pre class="r"><code>wday(datetime)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>We can set <code>label = TRUE</code> for <code>month()</code> and <code>wday()</code> to return the abbreviated name of the month or day of the week. Set <code>abbr = FALSE</code> to return the full name.</p>
+<pre class="r"><code>month(ymd(20190805), label = TRUE)</code></pre>
+<pre><code>## [1] Aug
+## 12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec</code></pre>
+<pre class="r"><code>wday(ymd(20190805), label = TRUE, abbr = FALSE)</code></pre>
+<pre><code>## [1] Monday
+## 7 Levels: Sunday &lt; Monday &lt; Tuesday &lt; Wednesday &lt; Thursday &lt; ... &lt; Saturday</code></pre>
+<div id="rounding-date" class="section level3">
+<h3>Rounding date</h3>
+<p>It is possible to round the date to a nearby unit of time by <code>floor_date()</code>, <code>round_date()</code>, and <code>ceiling_date()</code>. Each function takes a vector of dates to adjust and then the name of the unit round down (floor), round up (ceiling), or round to. This, for example, allows us to plot the number of flights per week:</p>
+<pre class="r"><code>flights %&gt;% 
+    select(year, month, day, hour, minute) %&gt;%
+    mutate(date_departure = make_date(year = year, month = month, day = day)) %&gt;%
+    count(week = floor_date(date_departure, &quot;week&quot;)) %&gt;% 
+    ggplot(aes(x=week, y=n)) + geom_point() + geom_line()</code></pre>
+<p><img src="/blog/2019-10-20-set-date-and-time-using-lubridate_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="change-date-components" class="section level3">
+<h3>Change date components</h3>
+<p>We can change the date component using accessor function, such as <code>year()</code>, <code>month()</code> and <code>hour()</code>. Besides that, creating/updating date can be done using <code>update()</code> function. Here are some examples:</p>
+<pre class="r"><code>(datetime &lt;- ymd_hms(&quot;2018-02-18 09:24:26&quot;))</code></pre>
+<pre><code>## [1] &quot;2018-02-18 09:24:26 UTC&quot;</code></pre>
+<pre class="r"><code>year(datetime) &lt;- 2019
+datetime</code></pre>
+<pre><code>## [1] &quot;2019-02-18 09:24:26 UTC&quot;</code></pre>
+<pre class="r"><code>month(datetime) &lt;- 04
+datetime</code></pre>
+<pre><code>## [1] &quot;2019-04-18 09:24:26 UTC&quot;</code></pre>
+<pre class="r"><code>hour(datetime) &lt;- hour(datetime) + 4
+datetime</code></pre>
+<pre><code>## [1] &quot;2019-04-18 13:24:26 UTC&quot;</code></pre>
+<p>Updating date using <code>update()</code>:</p>
+<pre class="r"><code>update(datetime, year = 2019, month = 7, mday = 4, hour = 2)</code></pre>
+<pre><code>## [1] &quot;2019-07-04 02:24:26 UTC&quot;</code></pre>
+</div>
+</div>
+<div id="time-spans-classes-duration-and-period" class="section level2">
+<h2>Time spans classes: <code>duration</code> and <code>period</code></h2>
+<p>The exact number of second can be computed using <code>duration</code>, while <code>period</code> will compute the time span based on units, such as weeks and months. Here we can add, subtract or divide two dates.</p>
+<div id="durations" class="section level3">
+<h3>Durations</h3>
+<p>To know the duration, first, we have to make the <code>difftime</code> which is a class object that records a time span by time unit. For instance, we want to know the difftime from january 10th, 2017 to March 8th, 2017, then the difftime will be</p>
+<pre class="r"><code>(difftime_example &lt;- (ymd(20170308)- ymd(20170110)))</code></pre>
+<pre><code>## Time difference of 57 days</code></pre>
+<pre class="r"><code>as.duration(difftime_example)</code></pre>
+<pre><code>## [1] &quot;4924800s (~8.14 weeks)&quot;</code></pre>
+<p>Here, the <code>difftime_example</code> compute how many days duration between two dates. <code>as.duration()</code> converts the information into seconds and approximate weeks.</p>
+<p>There are other functions for durations:</p>
+<pre class="r"><code>dseconds(15)</code></pre>
+<pre><code>## [1] &quot;15s&quot;</code></pre>
+<pre class="r"><code>dminutes(10)</code></pre>
+<pre><code>## [1] &quot;600s (~10 minutes)&quot;</code></pre>
+<pre class="r"><code>dhours(9)</code></pre>
+<pre><code>## [1] &quot;32400s (~9 hours)&quot;</code></pre>
+<pre class="r"><code>ddays(0:2)</code></pre>
+<pre><code>## [1] &quot;0s&quot;                &quot;86400s (~1 days)&quot;  &quot;172800s (~2 days)&quot;</code></pre>
+<pre class="r"><code>dweeks(3)</code></pre>
+<pre><code>## [1] &quot;1814400s (~3 weeks)&quot;</code></pre>
+<pre class="r"><code>dyears(1)</code></pre>
+<pre><code>## [1] &quot;31536000s (~52.14 weeks)&quot;</code></pre>
+<p>Although time unit is always in seconds, larger units in durations are converted by standard rules namely 1 minute = 60 seconds, 1 hour = 60 minutes, 1 day = 24 hours, 1 week = 7 days and 1 year = 365 days.</p>
+<p>We can add, multiply and subtract durations as follow</p>
+<pre class="r"><code>3 * dyears(1)</code></pre>
+<pre><code>## [1] &quot;94608000s (~3 years)&quot;</code></pre>
+<pre class="r"><code>dyears(1) + dweeks(4) + dhours(12)</code></pre>
+<pre><code>## [1] &quot;33998400s (~1.08 years)&quot;</code></pre>
+<pre class="r"><code>today() - ddays(1)</code></pre>
+<pre><code>## [1] &quot;2019-11-27&quot;</code></pre>
+</div>
+<div id="periods" class="section level3">
+<h3>Periods</h3>
+<p><code>Periods</code> work with time units such as days and months. Here are some examples:</p>
+<pre class="r"><code>seconds(10)</code></pre>
+<pre><code>## [1] &quot;10S&quot;</code></pre>
+<pre class="r"><code>minutes(30)</code></pre>
+<pre><code>## [1] &quot;30M 0S&quot;</code></pre>
+<pre class="r"><code>hours(9)</code></pre>
+<pre><code>## [1] &quot;9H 0M 0S&quot;</code></pre>
+<pre class="r"><code>days(3)</code></pre>
+<pre><code>## [1] &quot;3d 0H 0M 0S&quot;</code></pre>
+<pre class="r"><code>months(2:4)</code></pre>
+<pre><code>## [1] &quot;2m 0d 0H 0M 0S&quot; &quot;3m 0d 0H 0M 0S&quot; &quot;4m 0d 0H 0M 0S&quot;</code></pre>
+<pre class="r"><code>weeks(4)</code></pre>
+<pre><code>## [1] &quot;28d 0H 0M 0S&quot;</code></pre>
+<pre class="r"><code>years(2)</code></pre>
+<pre><code>## [1] &quot;2y 0m 0d 0H 0M 0S&quot;</code></pre>
+<p>Similar to <code>durations</code>, we can add, multiply and subtract <code>periods</code> as well. Below are some examples</p>
+<pre class="r"><code>2 * (days(3))</code></pre>
+<pre><code>## [1] &quot;6d 0H 0M 0S&quot;</code></pre>
+<pre class="r"><code>days(10) + hours(2) + minutes(20)</code></pre>
+<pre><code>## [1] &quot;10d 2H 20M 0S&quot;</code></pre>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This post contains a glance at how to work with date and time in R. We use the R package <em>lubridate</em>. This post covers creating date, changing or assign date and time component and finally the time spans.</p>
+<p>Thank you for reading this article!</p>
+<div id="references" class="section level3">
+<h3>References</h3>
+<ul>
+<li><p><strong>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. Hadley Wickham and Garrett Grolemund</strong></p></li>
+<li><p><strong>Photo by Lukas Blazek on Unsplash</strong></p></li>
+</ul>
+</div>
+</div>

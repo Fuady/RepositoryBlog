@@ -6,10 +6,20 @@
     <description>Recent content in dplyr on Angga Fuady Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 13 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 20 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/dplyr/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Set date and time using lubridate</title>
+      <link>/blog/2019/10/20/2019-10-20-set-date-and-time-using-lubridate/</link>
+      <pubDate>Sun, 20 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/10/20/2019-10-20-set-date-and-time-using-lubridate/</guid>
+      <description>This post will discuss how to work with date/time data. Here, we will use the R package lubridate and use the NYC flight data nycflights13. There are two types of date/time data that will be covered in this post, namely date (print date only) and date-time (print date and time).
+# install packages if needed#install.packages(&amp;quot;lubridate&amp;quot;, &amp;quot;nycflights13&amp;quot;, &amp;quot;ggplot2&amp;quot;)# load librarieslibrary(lubridate)library(nycflights13)library(ggplot2)library(dplyr)Extracting current date or date-timeWe can print the current date or date-time information using today() or now() function.</description>
+    </item>
     
     <item>
       <title>Data transformation and manipulation using dplyr</title>

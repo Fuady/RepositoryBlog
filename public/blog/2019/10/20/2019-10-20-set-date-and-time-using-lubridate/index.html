@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Set date and time using lubridate</title>
+  <meta name="author" content="A.M. Fuady" />
+  
+  
+  
+  
+  <meta name="keywords" content="R, lubridate, ggplot2, dplyr, date-time">
+  
+  
+  <meta name="description" content="">
+
+  <meta name="generator" content="Hugo 0.59.1" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.green.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Angga Fuady Blog">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="en_us">
+  <meta property="og:site_name" content="Angga Fuady Blog">
+  <meta property="og:title" content="Set date and time using lubridate">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="/blog/2019/10/20/2019-10-20-set-date-and-time-using-lubridate/" />
+  <meta property="og:description" content="">
+  <meta property="og:image" content="/img/banners/time.jpg">
+  <meta property="og:image:type" content="image/jpg">
+  
+  
+  
+    <meta property="og:image:width" content="6144">
+    <meta property="og:image:height" content="4069">
+  
+  
+  <meta property="og:updated_time" content="2019-10-20T00:00:00Z">
+  
+    
+    
+    <meta property="article:section" content="R">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="lubridate">
+    <meta property="article:tag" content="ggplot2">
+    <meta property="article:tag" content="dplyr">
+    <meta property="article:tag" content="date-time">
+    
+    
+    <meta property="article:published_time" content="2019-10-20T00:00:00Z">
+    <meta property="article:modified_time" content="2019-10-20T00:00:00Z">
+  
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <meta name="twitter:title" content="Set date and time using lubridate">
+  
+  <meta name="twitter:image" content="/img/banners/time.jpg">
+  
+  <meta name="twitter:description" content="">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header>
+
+          <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
+
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/amf_logo_psd.png" alt="Set date and time using lubridate logo" class="hidden-xs hidden-sm">
+                    <img src="/img/amf_logo_small_psd.png" alt="Set date and time using lubridate logo" class="visible-xs visible-sm">
+                    <span class="sr-only">Set date and time using lubridate - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">Home</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown active">
+                    
+                    <a href="/blog/">Blog</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/about_me">About Me</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">
+
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+
+                </span>
+                    </div>
+                </form>
+
+            </div>
+            
+
+        </div>
+    </div>
+    
+
+</div>
+
+
+
+
+        </header>
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Set date and time using lubridate</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        <p class="text-muted text-uppercase mb-small text-right">By <a href="#">A.M. Fuady</a> | October 20, 2019</p>
+
+                        <div id="post-content">
+                          
+
+
+<p>This post will discuss how to work with date/time data. Here, we will use the R package <code>lubridate</code> and use the NYC flight data <code>nycflights13</code>. There are two types of date/time data that will be covered in this post, namely <strong>date</strong> (print date only) and <strong>date-time</strong> (print date and time).</p>
+<pre class="r"><code># install packages if needed
+#install.packages(&quot;lubridate&quot;, &quot;nycflights13&quot;, &quot;ggplot2&quot;)
+
+# load libraries
+library(lubridate)
+library(nycflights13)
+library(ggplot2)
+library(dplyr)</code></pre>
+<div id="extracting-current-date-or-date-time" class="section level2">
+<h2>Extracting current date or date-time</h2>
+<p>We can print the current date or date-time information using <code>today()</code> or <code>now()</code> function. <code>today()</code> contains the information on date only, while <code>now()</code> prints date and time. Here is the example</p>
+<pre class="r"><code>today()</code></pre>
+<pre><code>## [1] &quot;2019-11-28&quot;</code></pre>
+<pre class="r"><code>now()</code></pre>
+<pre><code>## [1] &quot;2019-11-28 09:21:14 CET&quot;</code></pre>
+</div>
+<div id="creating-date" class="section level2">
+<h2>Creating date</h2>
+<div id="creating-date-from-a-string" class="section level3">
+<h3>Creating date from a string</h3>
+<p>To create a date from a string, we have to identify the year <code>y</code>, month <code>m</code> and day <code>d</code> of the string that we want to use. For example, we want to create the date of <code>2019-09-03</code> or <code>September, 3rd 2019</code> or <code>03-Sep-2019</code> or <code>20190903</code>. three functions can be used depends on the position of the year, month and day, as follows</p>
+<pre class="r"><code>ymd(&#39;2019-09-03&#39;)</code></pre>
+<pre><code>## [1] &quot;2019-09-03&quot;</code></pre>
+<pre class="r"><code>mdy(&#39;September, 3rd 2019&#39;)</code></pre>
+<pre><code>## [1] &quot;2019-09-03&quot;</code></pre>
+<pre class="r"><code>dmy(&#39;03-Sep-2019&#39;)</code></pre>
+<pre><code>## [1] &quot;2019-09-03&quot;</code></pre>
+<pre class="r"><code>ymd(&#39;20190903&#39;)</code></pre>
+<pre><code>## [1] &quot;2019-09-03&quot;</code></pre>
+<p>To create date-time, add underscore and add more <code>h</code> for hour <code>m</code> for minutes and <code>s</code> for second into the <code>ymd()</code> function, as follows</p>
+<pre class="r"><code>ymd_hms(&quot;2018-01-31 22:11:59&quot;)</code></pre>
+<pre><code>## [1] &quot;2018-01-31 22:11:59 UTC&quot;</code></pre>
+</div>
+<div id="creating-date-from-dataframe" class="section level3">
+<h3>Creating date from dataframe</h3>
+<p>Suppose, we have columns of day, month and year in the dataframe, and we want to make a date out of it. This can be done by using <code>make_date()</code> for creating dates, or <code>make_datetime()</code> for creating date-times. To illustrate this, we use flight data as follow</p>
+<pre class="r"><code>flights %&gt;% 
+  select(year, month, day, hour, minute) %&gt;%
+  mutate(date_departure = make_date(year = year, month = month, day = day)) %&gt;%
+  head()</code></pre>
+<pre><code>## # A tibble: 6 x 6
+##    year month   day  hour minute date_departure
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;date&gt;        
+## 1  2013     1     1     5     15 2013-01-01    
+## 2  2013     1     1     5     29 2013-01-01    
+## 3  2013     1     1     5     40 2013-01-01    
+## 4  2013     1     1     5     45 2013-01-01    
+## 5  2013     1     1     6      0 2013-01-01    
+## 6  2013     1     1     5     58 2013-01-01</code></pre>
+</div>
+</div>
+<div id="date-time-components" class="section level2">
+<h2>Date-time components</h2>
+<p>In this section, we will discuss how to get and set individual components of a date. Some functions that often used are :</p>
+<ul>
+<li><code>year()</code> and <code>month()</code> to get the year and month components, respectively.</li>
+<li><code>mday()</code> to obtain the day of the month</li>
+<li><code>yday()</code> to obtain the day of the year</li>
+<li><code>wday()</code> to obtain the day of the week,</li>
+<li><code>hour()</code>, <code>minute()</code>, and <code>second()</code> to obtain component of hour, minute and second, respectively.</li>
+</ul>
+<p>The following code are some examples</p>
+<pre class="r"><code>datetime &lt;- ymd_hms(&quot;2019-08-12 15:24:16&quot;)
+
+year(datetime)</code></pre>
+<pre><code>## [1] 2019</code></pre>
+<pre class="r"><code>month(datetime)</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre class="r"><code>mday(datetime)</code></pre>
+<pre><code>## [1] 12</code></pre>
+<pre class="r"><code>yday(datetime)</code></pre>
+<pre><code>## [1] 224</code></pre>
+<pre class="r"><code>wday(datetime)</code></pre>
+<pre><code>## [1] 2</code></pre>
+<p>We can set <code>label = TRUE</code> for <code>month()</code> and <code>wday()</code> to return the abbreviated name of the month or day of the week. Set <code>abbr = FALSE</code> to return the full name.</p>
+<pre class="r"><code>month(ymd(20190805), label = TRUE)</code></pre>
+<pre><code>## [1] Aug
+## 12 Levels: Jan &lt; Feb &lt; Mar &lt; Apr &lt; May &lt; Jun &lt; Jul &lt; Aug &lt; Sep &lt; ... &lt; Dec</code></pre>
+<pre class="r"><code>wday(ymd(20190805), label = TRUE, abbr = FALSE)</code></pre>
+<pre><code>## [1] Monday
+## 7 Levels: Sunday &lt; Monday &lt; Tuesday &lt; Wednesday &lt; Thursday &lt; ... &lt; Saturday</code></pre>
+<div id="rounding-date" class="section level3">
+<h3>Rounding date</h3>
+<p>It is possible to round the date to a nearby unit of time by <code>floor_date()</code>, <code>round_date()</code>, and <code>ceiling_date()</code>. Each function takes a vector of dates to adjust and then the name of the unit round down (floor), round up (ceiling), or round to. This, for example, allows us to plot the number of flights per week:</p>
+<pre class="r"><code>flights %&gt;% 
+    select(year, month, day, hour, minute) %&gt;%
+    mutate(date_departure = make_date(year = year, month = month, day = day)) %&gt;%
+    count(week = floor_date(date_departure, &quot;week&quot;)) %&gt;% 
+    ggplot(aes(x=week, y=n)) + geom_point() + geom_line()</code></pre>
+<p><img src="/blog/2019-10-20-set-date-and-time-using-lubridate_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="change-date-components" class="section level3">
+<h3>Change date components</h3>
+<p>We can change the date component using accessor function, such as <code>year()</code>, <code>month()</code> and <code>hour()</code>. Besides that, creating/updating date can be done using <code>update()</code> function. Here are some examples:</p>
+<pre class="r"><code>(datetime &lt;- ymd_hms(&quot;2018-02-18 09:24:26&quot;))</code></pre>
+<pre><code>## [1] &quot;2018-02-18 09:24:26 UTC&quot;</code></pre>
+<pre class="r"><code>year(datetime) &lt;- 2019
+datetime</code></pre>
+<pre><code>## [1] &quot;2019-02-18 09:24:26 UTC&quot;</code></pre>
+<pre class="r"><code>month(datetime) &lt;- 04
+datetime</code></pre>
+<pre><code>## [1] &quot;2019-04-18 09:24:26 UTC&quot;</code></pre>
+<pre class="r"><code>hour(datetime) &lt;- hour(datetime) + 4
+datetime</code></pre>
+<pre><code>## [1] &quot;2019-04-18 13:24:26 UTC&quot;</code></pre>
+<p>Updating date using <code>update()</code>:</p>
+<pre class="r"><code>update(datetime, year = 2019, month = 7, mday = 4, hour = 2)</code></pre>
+<pre><code>## [1] &quot;2019-07-04 02:24:26 UTC&quot;</code></pre>
+</div>
+</div>
+<div id="time-spans-classes-duration-and-period" class="section level2">
+<h2>Time spans classes: <code>duration</code> and <code>period</code></h2>
+<p>The exact number of second can be computed using <code>duration</code>, while <code>period</code> will compute the time span based on units, such as weeks and months. Here we can add, subtract or divide two dates.</p>
+<div id="durations" class="section level3">
+<h3>Durations</h3>
+<p>To know the duration, first, we have to make the <code>difftime</code> which is a class object that records a time span by time unit. For instance, we want to know the difftime from january 10th, 2017 to March 8th, 2017, then the difftime will be</p>
+<pre class="r"><code>(difftime_example &lt;- (ymd(20170308)- ymd(20170110)))</code></pre>
+<pre><code>## Time difference of 57 days</code></pre>
+<pre class="r"><code>as.duration(difftime_example)</code></pre>
+<pre><code>## [1] &quot;4924800s (~8.14 weeks)&quot;</code></pre>
+<p>Here, the <code>difftime_example</code> compute how many days duration between two dates. <code>as.duration()</code> converts the information into seconds and approximate weeks.</p>
+<p>There are other functions for durations:</p>
+<pre class="r"><code>dseconds(15)</code></pre>
+<pre><code>## [1] &quot;15s&quot;</code></pre>
+<pre class="r"><code>dminutes(10)</code></pre>
+<pre><code>## [1] &quot;600s (~10 minutes)&quot;</code></pre>
+<pre class="r"><code>dhours(9)</code></pre>
+<pre><code>## [1] &quot;32400s (~9 hours)&quot;</code></pre>
+<pre class="r"><code>ddays(0:2)</code></pre>
+<pre><code>## [1] &quot;0s&quot;                &quot;86400s (~1 days)&quot;  &quot;172800s (~2 days)&quot;</code></pre>
+<pre class="r"><code>dweeks(3)</code></pre>
+<pre><code>## [1] &quot;1814400s (~3 weeks)&quot;</code></pre>
+<pre class="r"><code>dyears(1)</code></pre>
+<pre><code>## [1] &quot;31536000s (~52.14 weeks)&quot;</code></pre>
+<p>Although time unit is always in seconds, larger units in durations are converted by standard rules namely 1 minute = 60 seconds, 1 hour = 60 minutes, 1 day = 24 hours, 1 week = 7 days and 1 year = 365 days.</p>
+<p>We can add, multiply and subtract durations as follow</p>
+<pre class="r"><code>3 * dyears(1)</code></pre>
+<pre><code>## [1] &quot;94608000s (~3 years)&quot;</code></pre>
+<pre class="r"><code>dyears(1) + dweeks(4) + dhours(12)</code></pre>
+<pre><code>## [1] &quot;33998400s (~1.08 years)&quot;</code></pre>
+<pre class="r"><code>today() - ddays(1)</code></pre>
+<pre><code>## [1] &quot;2019-11-27&quot;</code></pre>
+</div>
+<div id="periods" class="section level3">
+<h3>Periods</h3>
+<p><code>Periods</code> work with time units such as days and months. Here are some examples:</p>
+<pre class="r"><code>seconds(10)</code></pre>
+<pre><code>## [1] &quot;10S&quot;</code></pre>
+<pre class="r"><code>minutes(30)</code></pre>
+<pre><code>## [1] &quot;30M 0S&quot;</code></pre>
+<pre class="r"><code>hours(9)</code></pre>
+<pre><code>## [1] &quot;9H 0M 0S&quot;</code></pre>
+<pre class="r"><code>days(3)</code></pre>
+<pre><code>## [1] &quot;3d 0H 0M 0S&quot;</code></pre>
+<pre class="r"><code>months(2:4)</code></pre>
+<pre><code>## [1] &quot;2m 0d 0H 0M 0S&quot; &quot;3m 0d 0H 0M 0S&quot; &quot;4m 0d 0H 0M 0S&quot;</code></pre>
+<pre class="r"><code>weeks(4)</code></pre>
+<pre><code>## [1] &quot;28d 0H 0M 0S&quot;</code></pre>
+<pre class="r"><code>years(2)</code></pre>
+<pre><code>## [1] &quot;2y 0m 0d 0H 0M 0S&quot;</code></pre>
+<p>Similar to <code>durations</code>, we can add, multiply and subtract <code>periods</code> as well. Below are some examples</p>
+<pre class="r"><code>2 * (days(3))</code></pre>
+<pre><code>## [1] &quot;6d 0H 0M 0S&quot;</code></pre>
+<pre class="r"><code>days(10) + hours(2) + minutes(20)</code></pre>
+<pre><code>## [1] &quot;10d 2H 20M 0S&quot;</code></pre>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This post contains a glance at how to work with date and time in R. We use the R package <em>lubridate</em>. This post covers creating date, changing or assign date and time component and finally the time spans.</p>
+<p>Thank you for reading this article!</p>
+<div id="references" class="section level3">
+<h3>References</h3>
+<ul>
+<li><p><strong>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. Hadley Wickham and Garrett Grolemund</strong></p></li>
+<li><p><strong>Photo by Lukas Blazek on Unsplash</strong></p></li>
+</ul>
+</div>
+</div>
+
+                        </div>
+                        
+                        
+                        <div id="comments">
+                            <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "amfuady" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                        </div>
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            
+            <li>
+                <a href="/categories/r">r (3)</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+<div class="panel sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Tags</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="tag-cloud">
+            
+            
+            <li>
+                <a href="/tags/date-time"><i class="fas fa-tags"></i> date-time</a>
+            </li>
+            
+            <li>
+                <a href="/tags/dplyr"><i class="fas fa-tags"></i> dplyr</a>
+            </li>
+            
+            <li>
+                <a href="/tags/ggplot2"><i class="fas fa-tags"></i> ggplot2</a>
+            </li>
+            
+            <li>
+                <a href="/tags/lubridate"><i class="fas fa-tags"></i> lubridate</a>
+            </li>
+            
+            <li>
+                <a href="/tags/r"><i class="fas fa-tags"></i> r</a>
+            </li>
+            
+            <li>
+                <a href="/tags/visualization"><i class="fas fa-tags"></i> visualization</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/10/20/2019-10-20-set-date-and-time-using-lubridate/">
+                          
+                            <img src="/img/banners/time.jpg" class="img-responsive" alt="Set date and time using lubridate">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/10/20/2019-10-20-set-date-and-time-using-lubridate/">Set date and time using lubridate</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/10/13/2019-11-23-data-transformation-and-manipulation-using-dplyr/">
+                          
+                            <img src="/img/banners/SAM_0499.jpg" class="img-responsive" alt="Data transformation and manipulation using dplyr">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/10/13/2019-11-23-data-transformation-and-manipulation-using-dplyr/">Data transformation and manipulation using dplyr</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/">
+                          
+                            <img src="/img/banners/SAM_0931.jpg" class="img-responsive" alt="Data visualization using ggplot2">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/">Data visualization using ggplot2</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2019</p>
+            
+            <p class="pull-right">
+              Template by <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              Ported to Hugo by <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-150402048-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script src="/js/hpneo.gmaps.js"></script>
+<script src="/js/gmaps.init.js"></script>
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+  </body>
+</html>

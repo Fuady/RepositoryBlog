@@ -1,0 +1,205 @@
+---
+title: Set date and time using lubridate
+banner: img/banners/time.jpg
+author: A.M. Fuady
+date: '2019-10-20'
+slug: set-date-and-time-using-lubridate
+categories:
+  - R
+tags:
+  - R
+  - lubridate
+  - ggplot2
+  - dplyr
+  - date-time
+---
+
+
+This post will discuss how to work with date/time data. Here, we will use the R package `lubridate` and use the NYC flight data `nycflights13`. There are two types of date/time data that will be covered in this post, namely __date__ (print date only) and __date-time__ (print date and time).
+
+```{r, warning=FALSE, message=FALSE}
+# install packages if needed
+#install.packages("lubridate", "nycflights13", "ggplot2")
+
+# load libraries
+library(lubridate)
+library(nycflights13)
+library(ggplot2)
+library(dplyr)
+```
+
+
+## Extracting current date or date-time
+We can print the current date or date-time information using `today()` or `now()` function. `today()` contains the information on date only, while `now()` prints date and time. Here is the example
+
+```{r}
+today()
+now()
+```
+
+## Creating date 
+
+### Creating date from a string
+To create a date from a string, we have to identify the year `y`, month `m` and day `d` of the string that we want to use. For example, we want to create the date of `2019-09-03` or `September, 3rd 2019` or `03-Sep-2019` or `20190903`. three functions can be used depends on the position of the year, month and day, as follows  
+
+```{r}
+ymd('2019-09-03')
+mdy('September, 3rd 2019')
+dmy('03-Sep-2019')
+ymd('20190903')
+```
+
+To create date-time, add underscore and add more `h` for hour `m` for minutes and `s` for second into the `ymd()` function, as follows 
+
+```{r}
+ymd_hms("2018-01-31 22:11:59")
+```
+
+### Creating date from dataframe 
+Suppose, we have columns of day, month and year in the dataframe, and we want to make a date out of it. This can be done by using  `make_date()` for creating dates, or `make_datetime()` for creating date-times. To illustrate this, we use flight data as follow
+
+
+
+```{r}
+flights %>% 
+  select(year, month, day, hour, minute) %>%
+  mutate(date_departure = make_date(year = year, month = month, day = day)) %>%
+  head()
+```
+
+
+## Date-time components
+
+In this section, we will discuss how to get and set individual components of a date. Some functions that often used are :
+
+* `year()` and `month()` to get the year and month components, respectively.
+* `mday()` to obtain the day of the month 
+* `yday()` to obtain the day of the year 
+* `wday()` to obtain the day of the week, 
+* `hour()`, `minute()`, and `second()` to obtain component of hour, minute and second, respectively. 
+
+The following code are some examples
+```{r}
+datetime <- ymd_hms("2019-08-12 15:24:16")
+
+year(datetime)
+month(datetime)
+mday(datetime)
+
+yday(datetime)
+wday(datetime)
+```
+
+We can set `label = TRUE` for `month()` and `wday()` to return the abbreviated name of the month or day of the week. Set `abbr = FALSE` to return the full name.
+
+```{r}
+month(ymd(20190805), label = TRUE)
+wday(ymd(20190805), label = TRUE, abbr = FALSE)
+```
+
+### Rounding date
+
+It is possible to round the date to a nearby unit of time by `floor_date()`, `round_date()`, and `ceiling_date()`. Each function takes a vector of dates to adjust and then the name of the unit round down (floor), round up (ceiling), or round to. This, for example, allows us to plot the number of flights per week:
+
+```{r}
+flights %>% 
+    select(year, month, day, hour, minute) %>%
+    mutate(date_departure = make_date(year = year, month = month, day = day)) %>%
+    count(week = floor_date(date_departure, "week")) %>% 
+    ggplot(aes(x=week, y=n)) + geom_point() + geom_line()
+```
+
+### Change date components
+
+We can change the date component  using accessor function, such as `year()`, `month()` and `hour()`. Besides that, creating/updating date can be done using `update()` function. Here are some examples: 
+
+```{r}
+(datetime <- ymd_hms("2018-02-18 09:24:26"))
+
+year(datetime) <- 2019
+datetime
+month(datetime) <- 04
+datetime
+hour(datetime) <- hour(datetime) + 4
+datetime
+
+```
+
+Updating date using `update()`:
+
+```{r}
+update(datetime, year = 2019, month = 7, mday = 4, hour = 2)
+```
+
+
+## Time spans classes: `duration` and `period`
+
+The exact number of second can be computed using `duration`, while `period` will compute the time span based on units, such as weeks and months. Here we can add, subtract or divide two dates. 
+
+### Durations
+
+To know the duration, first, we have to make the `difftime` which is a class object that records a time span by time unit. For instance, we want to know the difftime from january 10th, 2017 to March 8th, 2017, then the difftime will be
+
+```{r}
+(difftime_example <- (ymd(20170308)- ymd(20170110)))
+as.duration(difftime_example)
+```
+
+Here, the `difftime_example` compute how many days duration between two dates. `as.duration()` converts the information into seconds and approximate weeks. 
+
+There are other functions for durations:  
+
+```{r}
+dseconds(15)
+dminutes(10)
+dhours(9)
+ddays(0:2)
+dweeks(3)
+dyears(1)
+```
+
+Although time unit is always in seconds, larger units in durations are converted by standard rules namely 1 minute = 60 seconds, 1 hour = 60 minutes, 1 day = 24 hours, 1 week = 7 days and 1 year = 365 days.
+
+We can add, multiply and subtract durations as follow
+
+```{r}
+3 * dyears(1)
+dyears(1) + dweeks(4) + dhours(12)
+today() - ddays(1)
+```
+
+
+### Periods
+
+`Periods` work with time units such as days and months. Here are some examples:
+
+```{r}
+seconds(10)
+minutes(30)
+hours(9)
+days(3)
+months(2:4)
+weeks(4)
+years(2)
+```
+
+Similar to `durations`, we can add, multiply and subtract `periods` as well. Below are some examples
+
+```{r}
+2 * (days(3))
+days(10) + hours(2) + minutes(20)
+```
+
+
+## Conclusion
+
+This post contains a glance at how to work with date and time in R. We use the R package *lubridate*. This post covers creating date, changing or assign date and time component and finally the time spans. 
+
+Thank you for reading this article!
+
+### References
+* **R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. Hadley Wickham and Garrett Grolemund**
+
+* **Photo by Lukas Blazek on Unsplash**
+
+
