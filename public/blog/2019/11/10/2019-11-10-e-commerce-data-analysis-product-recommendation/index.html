@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>E-commerce Data Analysis: Product Recommendation</title>
+  <meta name="author" content="A.M.Fuady" />
+  
+  
+  
+  
+  <meta name="keywords" content="recommenderlab, R, dplyr, caret">
+  
+  
+  <meta name="description" content="">
+
+  <meta name="generator" content="Hugo 0.59.1" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.green.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Angga Fuady Blog">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="en_us">
+  <meta property="og:site_name" content="Angga Fuady Blog">
+  <meta property="og:title" content="E-commerce Data Analysis: Product Recommendation">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="/blog/2019/11/10/2019-11-10-e-commerce-data-analysis-product-recommendation/" />
+  <meta property="og:description" content="">
+  <meta property="og:image" content="/img/banners/ecommerce2.jpg">
+  <meta property="og:image:type" content="image/jpg">
+  
+  
+  
+    <meta property="og:image:width" content="5287">
+    <meta property="og:image:height" content="3525">
+  
+  
+  <meta property="og:updated_time" content="2019-11-10T00:00:00Z">
+  
+    
+    
+    <meta property="article:section" content="R">
+    <meta property="article:tag" content="recommenderlab">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="dplyr">
+    <meta property="article:tag" content="caret">
+    
+    
+    <meta property="article:published_time" content="2019-11-10T00:00:00Z">
+    <meta property="article:modified_time" content="2019-11-10T00:00:00Z">
+  
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <meta name="twitter:title" content="E-commerce Data Analysis: Product Recommendation">
+  
+  <meta name="twitter:image" content="/img/banners/ecommerce2.jpg">
+  
+  <meta name="twitter:description" content="">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header>
+
+          <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
+
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/amf_logo_psd.png" alt="E-commerce Data Analysis: Product Recommendation logo" class="hidden-xs hidden-sm">
+                    <img src="/img/amf_logo_small_psd.png" alt="E-commerce Data Analysis: Product Recommendation logo" class="visible-xs visible-sm">
+                    <span class="sr-only">E-commerce Data Analysis: Product Recommendation - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">Home</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown active">
+                    
+                    <a href="/blog/">Blog</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/about_me">About Me</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">
+
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+
+                </span>
+                    </div>
+                </form>
+
+            </div>
+            
+
+        </div>
+    </div>
+    
+
+</div>
+
+
+
+
+        </header>
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>E-commerce Data Analysis: Product Recommendation</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        <p class="text-muted text-uppercase mb-small text-right">By <a href="#">A.M.Fuady</a> | November 10, 2019</p>
+
+                        <div id="post-content">
+                          
+
+
+<div id="loading-libraries" class="section level2">
+<h2>Loading libraries</h2>
+<pre class="r"><code>library(dplyr)
+library(magrittr)
+library(Hmisc)
+library(lubridate)
+library(caret)
+library(GGally)
+library(reshape2)
+library(recommenderlab)</code></pre>
+</div>
+<div id="loading-data" class="section level2">
+<h2>Loading data</h2>
+<pre class="r"><code>online &lt;- read.csv(&quot;C:/Users/amfua/Documents/RepositoryBlog/data/Online.csv&quot;)
+
+# renaming
+names(online) &lt;- c(&quot;Transaction.ID&quot;, &quot;Date&quot;,&quot;Product.SKU&quot;,
+                   &quot;Product&quot;,&quot;Product.Category&quot;,&quot;Quantity.online&quot;,
+                   &quot;Avg.price&quot;,&quot;Revenue&quot;,&quot;Tax&quot;,&quot;Delivery&quot;)</code></pre>
+<pre class="r"><code>productmat &lt;- dcast(online, Transaction.ID~Product.SKU, value.var = &quot;Quantity.online&quot;, na.rm=FALSE)
+productmat[1:5,1:5]</code></pre>
+<pre><code>##   Transaction.ID GGOEA0CH077599 GGOEAAAB034813 GGOEAAAB034814
+## 1          16679             NA             NA             NA
+## 2          16680             NA             NA             NA
+## 3          16681             NA             NA             NA
+## 4          16682             NA             NA             NA
+## 5          16684             NA             NA             NA
+##   GGOEAAAB034815
+## 1             NA
+## 2             NA
+## 3             NA
+## 4             NA
+## 5             NA</code></pre>
+<p>First user transactionID = 16679</p>
+<pre class="r"><code>productmat &lt;- as.matrix(productmat[,-1]) #remove TransactionID</code></pre>
+<p>Convert rating matrix into a recommenderlab sparse matrix</p>
+<pre class="r"><code>productmat &lt;- as(productmat, &quot;realRatingMatrix&quot;)</code></pre>
+<p>Normalize the data</p>
+<pre class="r"><code>productmat_norm &lt;- normalize(productmat)</code></pre>
+<p>Create Recommender Model. “UBCF” stands for User-Based Collaborative Filtering</p>
+<pre class="r"><code>recommender_model &lt;- Recommender(productmat_norm, method = &quot;UBCF&quot;, param=list(method=&quot;Cosine&quot;,nn=10))</code></pre>
+<pre><code>## Warning in .local(x, ...): x was already normalized by row!</code></pre>
+<pre class="r"><code>recom &lt;- predict(recommender_model, productmat[3], n=5) # Obtain top 5 recommendations for 1st user in dataset
+recom_list &lt;- as(recom, &quot;list&quot;) # convert recommenderlab object to readable list</code></pre>
+<p>Obtain top 5 recommendations for transactionID 16679:</p>
+<pre class="r"><code>list_recom &lt;- online[which(online$Product.SKU %in% unlist(recom_list)),c(&quot;Product.SKU&quot;,&quot;Product&quot;,&quot;Product.Category&quot;)]
+list_recom[!duplicated(list_recom$Product.SKU),]</code></pre>
+<pre><code>##          Product.SKU                         Product     Product.Category
+## 3404  GGOEAAAB034814 Android BTTF Cosmos Graphic Tee              Apparel
+## 3628  GGOEAAAB034813 Android BTTF Cosmos Graphic Tee              Apparel
+## 5114  GGOEAAAB034816 Android BTTF Cosmos Graphic Tee              Apparel
+## 6403  GGOEAAAB034815 Android BTTF Cosmos Graphic Tee              Apparel
+## 13575 GGOEA0CH077599      Android Hard Cover Journal Notebooks &amp; Journals</code></pre>
+<div id="references" class="section level3">
+<h3>References</h3>
+<ul>
+<li><strong>Photo by Charles PH on Unsplash</strong></li>
+</ul>
+</div>
+</div>
+
+                        </div>
+                        
+                        
+                        <div id="comments">
+                            <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "amfuady" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                        </div>
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            
+            <li>
+                <a href="/categories/data-analysis">data-analysis (2)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/r">r (6)</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+<div class="panel sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Tags</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="tag-cloud">
+            
+            
+            <li>
+                <a href="/tags/caret"><i class="fas fa-tags"></i> caret</a>
+            </li>
+            
+            <li>
+                <a href="/tags/date-time"><i class="fas fa-tags"></i> date-time</a>
+            </li>
+            
+            <li>
+                <a href="/tags/dplyr"><i class="fas fa-tags"></i> dplyr</a>
+            </li>
+            
+            <li>
+                <a href="/tags/ggplot2"><i class="fas fa-tags"></i> ggplot2</a>
+            </li>
+            
+            <li>
+                <a href="/tags/gtrendsr"><i class="fas fa-tags"></i> gtrendsr</a>
+            </li>
+            
+            <li>
+                <a href="/tags/lubridate"><i class="fas fa-tags"></i> lubridate</a>
+            </li>
+            
+            <li>
+                <a href="/tags/maps"><i class="fas fa-tags"></i> maps</a>
+            </li>
+            
+            <li>
+                <a href="/tags/r"><i class="fas fa-tags"></i> r</a>
+            </li>
+            
+            <li>
+                <a href="/tags/recommenderlab"><i class="fas fa-tags"></i> recommenderlab</a>
+            </li>
+            
+            <li>
+                <a href="/tags/visualization"><i class="fas fa-tags"></i> visualization</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/11/10/2019-11-10-e-commerce-data-analysis-product-recommendation/">
+                          
+                            <img src="/img/banners/ecommerce2.jpg" class="img-responsive" alt="E-commerce Data Analysis: Product Recommendation">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/11/10/2019-11-10-e-commerce-data-analysis-product-recommendation/">E-commerce Data Analysis: Product Recommendation</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/11/03/2019-11-03-e-commerce-data-analysis-customer-behaviour/">
+                          
+                            <img src="/img/banners/ecommerce.jpg" class="img-responsive" alt="E-commerce data analysis: Customer Behaviour">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/11/03/2019-11-03-e-commerce-data-analysis-customer-behaviour/">E-commerce data analysis: Customer Behaviour</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/10/27/2019-10-27-google-trends-visualization-using-r/">
+                          
+                            <img src="/img/banners/olympics.jpg" class="img-responsive" alt="Google Trends Visualization using R">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/10/27/2019-10-27-google-trends-visualization-using-r/">Google Trends Visualization using R</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2019</p>
+            
+            <p class="pull-right">
+              Template by <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              Ported to Hugo by <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-150402048-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script src="/js/hpneo.gmaps.js"></script>
+<script src="/js/gmaps.init.js"></script>
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+  </body>
+</html>

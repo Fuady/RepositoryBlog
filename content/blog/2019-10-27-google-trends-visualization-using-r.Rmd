@@ -1,0 +1,105 @@
+---
+title: Google Trends Visualization using R
+banner: img/banners/olympics.jpg
+author: A.M.Fuady
+date: '2019-10-27'
+slug: google-trends-visualization-using-r
+categories:
+  - R
+tags:
+  - visualization
+  - ggplot2
+  - gtrendsr
+  - maps
+---
+
+In this post, we will visualize Google Trends search hits using R. We will combine the results of google trends with the world map figure. Here, we extract google search results on **Sea games** from 2004 in the Southeast Asia countries and plot the hits on the map. 
+
+First of all, we need some packages. For capturing the google search hits, we use `gtrendsR`. To get the world map, we use the R package called `maps`. `ggplot2` is used for visualizing the map. For installing and loading all packages needed, the code is as follows
+
+```{r, message=FALSE, warning=FALSE}
+# install.packages("maps", "ggplot2", "tidyverse", "devtools")
+# devtools::install_github('PMassicotte/gtrendsR')
+
+library(gtrendsR)
+library(maps)
+library(ggplot2)
+library(tidyverse)
+```
+
+## Construct World map and ASEAN map
+
+Here in this section, we will use `map_data` function from the `maps` package to extract the longitude and latitude position of each country. First, we get the world map as follows
+
+```{r}
+global <- map_data("world") #World longitude and latitude data 
+head(global) #view the data 
+```
+
+Then, we only interested in the country in Southeast Asia, namely: Brunei, Cambodia, Indonesia, Laos, Malaysia, Myanmar, Philippines, Singapore, Thailand, and Vietnam. We use `ggplot2` to visualize the selected countries. 
+
+```{r}
+AseanMap <- global[which(global$region %in% c("Brunei", "Cambodia", "Indonesia", "Laos", "Malaysia", "Myanmar", "Philippines", "Singapore", "Thailand", "Vietnam")),]
+
+ggplot() + 
+  geom_polygon(data = AseanMap, aes(x=long, y = lat, group=group), fill = "grey", color="black") +
+  theme(legend.position = "none") +
+  coord_fixed(0.8) 
+```
+
+## Extracting search hits from Google Trends
+After constructing maps figure, now its time to extract some information from google trends. Here, we use the `gtrendsR` package. Specifically, we search a term called `Sea Games` to see how many hits conducted since the beginning of Google Trend in 2004. If needed, we can search more terms by modifying `c("Sea Games")` into multiple terms, such as `c("Sea Games", "Olympics")`. We specify `time="all"` to capture all hits from 2004, but you can specify a certain date of interest as well. Here we change the column name of `region `into `location` to combine datasets.
+
+```{r}
+SeaGames <- gtrends(c("Sea Games"), gprop = "web", time = "all")
+
+SeaGamesInterestByRegion <- as_tibble(SeaGames$interest_by_country)
+SeaGamesInterestByRegion <- SeaGamesInterestByRegion %>% dplyr::mutate(region = stringr::str_to_lower(location))
+
+names(AseanMap)[5] <- c("location")
+```
+
+Now, we plot the intensity of search hits by date as follows
+```{r}
+time_trend_seagames = SeaGames$interest_over_time
+head(time_trend_seagames)
+
+ggplot(time_trend_seagames, aes(x=date, y=hits) ) +
+        geom_line(col="blue") + 
+        xlab('Time') + ylab('Search Hits') + 
+        theme_bw() +
+        theme(legend.title = element_blank(), legend.position="bottom", legend.text=element_text(size=12) ) + 
+  ggtitle("Google search interest over time for Sea Games")
+
+```
+
+We have now two datasets, the maps data `AseanMap` and the google trends data `SeaGames`, to combine these two datasets, we use `location` as a key variable. The code for merging two datasets is given by 
+
+```{r}
+SeaGamesMerged <- merge(AseanMap, SeaGames$interest_by_country, by = "location")
+SeaGamesMerged <- SeaGamesInterestByRegion %>% dplyr::left_join(x = .,  y = AseanMap, by = "location")
+```
+
+Finally, we can visualize search hits of `Sea Games` in the Southeast Asia country over time since 2004 as follows
+
+```{r, warning=FALSE}
+SeaGamesMerged %>% 
+  ggplot(aes(x = long, y = lat)) +
+  geom_polygon(aes(group = group, fill =  as.numeric(hits)), 
+               colour = "white") +
+  scale_colour_gradientn(colours = terrain.colors(5)) +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank()) +
+  theme(legend.background = element_blank()) +
+  theme(legend.key = element_blank()) +
+  theme(legend.title = element_blank()) +
+  labs(x="Longitude", y="Latitude") +
+  ggtitle("Google search interest for Sea Games \nin each ASEAN countries") 
+```
+
+## Conclusion
+In this post, we use `maps` and `gtrendsR` packages to construct intensity maps of search hits for specific terms, here we use the term "Sea Games". You can try with several combinations of multiple countries and multiple search terms.  
+
+### References
+* **Photo by Sam Balye on Unsplash**
+

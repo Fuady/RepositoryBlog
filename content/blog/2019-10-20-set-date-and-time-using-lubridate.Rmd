@@ -1,7 +1,7 @@
 ---
 title: Set date and time using lubridate
 banner: img/banners/time.jpg
-author: A.M. Fuady
+author: A.M.Fuady
 date: '2019-10-20'
 slug: set-date-and-time-using-lubridate
 categories:

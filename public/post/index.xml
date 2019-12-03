@@ -6,18 +6,21 @@
     <description>Recent content in Posts on Angga Fuady Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 19 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 27 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>E-commerce data analysis</title>
-      <link>/post/e-commerce-data-analysis/</link>
-      <pubDate>Tue, 19 Nov 2019 00:00:00 +0000</pubDate>
+      <title>Google Trends Visualization using R</title>
+      <link>/post/google-trends-visualization-using-r/</link>
+      <pubDate>Sun, 27 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/e-commerce-data-analysis/</guid>
-      <description>Loading librarieslibrary(dplyr)## Warning: package &amp;#39;dplyr&amp;#39; was built under R version 3.5.3## ## Attaching package: &amp;#39;dplyr&amp;#39;## The following objects are masked from &amp;#39;package:stats&amp;#39;:## ## filter, lag## The following objects are masked from &amp;#39;package:base&amp;#39;:## ## intersect, setdiff, setequal, unionlibrary(magrittr)library(Hmisc)## Warning: package &amp;#39;Hmisc&amp;#39; was built under R version 3.5.3## Loading required package: lattice## Warning: package &amp;#39;lattice&amp;#39; was built under R version 3.</description>
+      <guid>/post/google-trends-visualization-using-r/</guid>
+      <description>This post is about visualizing using maps.
+First of all, we need some packages. For capturing the google search hits, we use gtrendsR. To get the world map, we use R package called maps. ggplot2is used for visualizing the map.
+# install.packages(&amp;quot;maps&amp;quot;, &amp;quot;ggplot2&amp;quot;, &amp;quot;tidyverse&amp;quot;, &amp;quot;devtools&amp;quot;)# devtools::install_github(&amp;#39;PMassicotte/gtrendsR&amp;#39;)library(gtrendsR)library(maps)library(ggplot2)library(tidyverse)Obtain World Map InformationHere in this section, we
+global &amp;lt;- map_data(&amp;quot;world&amp;quot;) #World longitude and latitude data head(global) #view the data and notice the column of long, lat, and group## long lat group order region subregion## 1 -69.</description>
     </item>
     
   </channel>

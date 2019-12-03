@@ -1,0 +1,259 @@
+---
+title: 'E-commerce data analysis: Customer Behavior'
+banner: img/banners/ecommerce.jpg
+author: A.M.Fuady
+date: '2019-11-03'
+slug: e-commerce-data-analysis-customer-behavior
+categories:
+  - R
+  - data-analysis
+tags:
+  - date-time
+  - dplyr
+  - visualization
+  - ggplot2
+  - lubridate
+---
+
+We will perform e-commerce data analysis, more specifically on customer behavior. We are interested in some questions, such as what kind of product that mostly sold? or in which month customers buy more products? or how is the online purchasing trends? , etc. 
+
+The data in this post are based on keaggle datasets of e-commerce, you can download [here](https://www.kaggle.com/jpallard/google-store-ecommerce-data-fake-retail-data/). Four tables of datasets are available, namely, marketing spends, key SKU, online and retail. Marketing spends capture the daily spend of marketing online and offline. Key SKU data links the product SKU and the stock code. Online data consists of the transaction ID, date, product name, product SKU, online sales, tax, delivery cost, the average price per transactions and total revenue per transaction. Lastly, retail data consist of stock code, date, and retail quantity sales.
+
+## Loading libraries
+Some libraries needed in this analysis are as follow:
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(magrittr)
+library(Hmisc)
+library(lubridate)
+library(reshape2)
+```
+
+
+## Loading data
+The date is given by 
+```{r}
+marketing_spend <- read.csv("C:/Users/amfua/Documents/RepositoryBlog/data/Marketing_Spend.csv")
+key_sku <- read.csv("C:/Users/amfua/Documents/RepositoryBlog/data/KEY_SKU.csv")
+online <- read.csv("C:/Users/amfua/Documents/RepositoryBlog/data/Online.csv")
+retail <- read.csv("C:/Users/amfua/Documents/RepositoryBlog/data/Retail.csv")
+```
+
+Check for the dimension of each dataset:
+```{r}
+dim(marketing_spend)
+dim(key_sku)
+dim(online)
+dim(retail)
+
+```
+
+Renaming the column names of each dataset for easier combining multiple datasets
+```{r}
+names(marketing_spend)[1] <- c("Date") 
+names(key_sku)[1] <- c("Product.SKU")
+names(online) <- c("Transaction.ID", "Date","Product.SKU",
+                   "Product","Product.Category","Quantity.online",
+                   "Avg.price","Revenue","Tax","Delivery")
+names(retail) <- c("Transaction.ID","Date","StockCode","Quantity.retail")
+```
+
+### Marketing Spend dataset
+Adding extra variable which decompose Date into day, month and year. `yday` is the day count from the 1st of January. `wday` is the day of the week start form Sunday.
+```{r}
+marketing_spend$Date <- as.character(marketing_spend$Date)
+
+marketing_spend %<>% mutate(
+  day = substr(marketing_spend$Date, nchar(marketing_spend$Date)-1, nchar(marketing_spend$Date)),
+  month = substr(marketing_spend$Date, nchar(marketing_spend$Date)-4, nchar(marketing_spend$Date)-3),
+  year = substr(marketing_spend$Date, nchar(marketing_spend$Date)-9, nchar(marketing_spend$Date)-6),
+  yday = yday(marketing_spend$Date)
+)
+summary(marketing_spend)
+```
+
+### Key SKUs dataset
+```{r}
+key_sku$Product.SKU <- as.character(key_sku$Product.SKU)
+summary(key_sku)
+```
+
+### Retail dataset 
+```{r}
+## retail
+retail$Date <- as.character(retail$Date)  
+retail %<>% mutate(
+  day = substr(retail$Date, nchar(retail$Date)-1, nchar(retail$Date)),
+  month = substr(retail$Date, nchar(retail$Date)-4, nchar(retail$Date)-3),
+  year = substr(retail$Date, nchar(retail$Date)-9, nchar(retail$Date)-6),
+  yday = yday(retail$Date),
+  workday = wday(ymd(Date))
+)
+
+summary(retail)
+```
+
+### Online dataset
+```{r}
+online$Date <- as.character(online$Date)
+online %<>% mutate(
+  day = substr(online$Date, nchar(online$Date)-1, nchar(online$Date)),
+  month = substr(online$Date, nchar(online$Date)-3, nchar(online$Date)-2),
+  year = substr(online$Date, nchar(online$Date)-7, nchar(online$Date)-4),
+  yday = yday(ymd(online$Date)),
+  workday = wday(ymd(Date)),
+  amount_spend = Quantity.online*Avg.price
+)
+
+online$Product.SKU <- as.character(online$Product.SKU)
+online$Product <- as.character(online$Product)
+online$Product.Category <- as.character(online$Product.Category)
+
+summary(online)
+```
+
+We found some missing values in the `online` dataset, specifically in the `Quantity.online` and `Product.Category` variable. For the `Product.Category` variable, the missing information will be fill in with new category, namely `Uncategorized`.
+
+#### Removing missing value in `Product.Category` variable
+```{r}
+online[which(is.na(online$Product.Category)),"Product.Category"] <- c("Uncategorized")
+```
+
+
+#### Removing missing value in `Quantity.online` variable
+```{r}
+online <- online[-which(is.na(online$Quantity.online)),] # 5 missing removed
+```
+
+Adding stock code and product SKU for online and retail datasets. For these datasets, add other variable `store` to identify each products with either from an online or a retail store.
+```{r}
+online <- merge(online, key_sku, by="Product.SKU")
+retail <- merge(retail,key_sku,by="StockCode")
+
+online$store <- rep(c("online"), nrow(online))
+retail$store <- rep(c("retail"), nrow(retail))
+```
+
+
+Merge online and retail datasets.
+```{r}
+online_1 <- online[,c("Transaction.ID","Quantity.online","day","month","yday","workday","store")]
+retail_1 <- retail[,c("Transaction.ID","Quantity.retail","day","month","yday","workday","store")]
+names(online_1)[2] <- names(retail_1)[2] <- c("Quantity")
+
+merge.online.retail <- rbind(online_1,retail_1)
+```
+
+## The number of transactions
+Plot the number of transactions for each month. In this plot, we see the information about the total number of transactions every month. The highest transaction for both online and retail in December. The lowest transaction happens in February for online and in March for retail. In both datasets, the number of the transaction start to increase since September. 
+```{r}
+ggplot(merge.online.retail %>% 
+         group_by(Transaction.ID,month,store) %>% summarise(trans.n = n()) %>% 
+         group_by(month,store) %>% summarise(trans.n.month = n() ),
+       aes(month, trans.n.month,fill=store)) +
+  geom_bar(stat="identity", position=position_dodge()) +
+  facet_wrap(~store, nrow=2) +
+  theme_set(theme_bw()) +
+  theme(legend.position = "none") +
+  geom_text(aes(label=trans.n.month), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) +
+  scale_fill_brewer(palette="Paired") +
+  scale_x_discrete(name = "Month",
+                   labels=c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec")) + 
+  labs( y = "Number of Transaction",
+        title="Number of transactions for different Months")
+```
+
+### Transactions in December
+We investigate more on the date in December by plotting the number of transactions for each date. We see that the highest number of online transactions in December occur in about a week before Christmas, specifically in 18 of December. After that, the intensity of transactions is starting to decrease and being stagnant after Christmas. The same pattern also happens in the retail store. Start from the 21st of December, the number of the transaction start to decline.
+
+```{r}
+merge.dec <- merge.online.retail[which(merge.online.retail$month=="12"),] %>% 
+  group_by(Transaction.ID,day,store) %>% summarise(trans.n = n()) %>% 
+  group_by(day,store) %>% summarise(trans.n.month = n())
+
+add.merge.dec <- data.frame( day = c("04","11","18","25","30") , store= rep(c("retail"),5) ,  trans.n.month = rep(0,5))
+
+ggplot( rbind(as.data.frame(merge.dec), add.merge.dec),
+       aes(day, trans.n.month,fill=store)) +
+  geom_bar(stat="identity") +
+  facet_wrap(~store, nrow=2)+
+  theme_set(theme_bw()) +
+  geom_text(aes(label=trans.n.month), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) +
+  scale_fill_brewer(palette="Paired") +
+  theme(axis.ticks.x = element_blank(), legend.position = "none") +
+  labs( x="Date", y = "Number of Transaction",
+        title="Number of transactions for different Dates in December")
+```
+
+We plot the total sales and marketing spend online in December. Interestingly, the highest transaction on the 18th of December occurs with the smallest online marketing spend of the month. On the 24th of December, with the highest online marketing spend, the number of transactions is the lowest throughout the month. 
+
+```{r}
+data.december <- merge(merge.dec[which(merge.dec$store=="online"),], marketing_spend[which(marketing_spend$month=="12"),c("day","Online.Spend")],by="day")
+
+names(data.december)[3:4] <- c("Total sales","Marketing spend")
+ggplot(melt(data.december[,-2]) ,aes(day, value,fill= variable))+
+  geom_bar(stat="identity") +
+  facet_wrap(~variable, scale="free" ,nrow=2)+
+  theme_set(theme_bw()) +
+  geom_text(aes(label=value), vjust=1.6, color="white", size=3) +
+  scale_fill_brewer(palette="Paired") +
+  theme(axis.ticks.x = element_blank(), legend.position = "none") +
+  labs( x="Date",
+        title="Total sales and marketing spend Online in December")
+```
+
+## Number of transactions for each working day
+Now, we plot the total number of transactions for each working day. We want to see the customer preference on which day they will buy a product. The highest number of online transactions happens on Monday and then it starts to decrease. In the retail store, the highest number of transactions happen during the weekend.	
+
+```{r}
+ggplot(merge.online.retail %>% 
+         group_by(Transaction.ID,workday,store) %>% summarise(trans.n = n()) %>% 
+         group_by(workday,store) %>% summarise(trans.n.month = n() ),
+       aes(workday, trans.n.month,fill=store)) +
+  geom_bar(stat="identity") +
+  facet_wrap(~store, nrow=2) +
+  theme_set(theme_bw()) +
+  geom_text(aes(label=trans.n.month), vjust=1.6, color="white", size=3.5, position=position_dodge(0.8)) +
+  scale_fill_brewer(palette="Paired") +
+  theme(axis.ticks.x = element_blank(),legend.position = "none") +
+  scale_x_discrete(name = "Day" ,limits= seq(1:7), breaks=seq(1:7), labels=c("Sun","Mon","Tue","Wed","Thur","Fri","Sat")) +  
+  labs( y = "Number of Transaction",
+        title="Number of transactions for different Days")
+```
+
+
+## The most sold products
+The top 5 most sold products are presented in the code below. Here we see that Maze pen is the highest sold product with more than 16000 items. Then it follows by the google bottle and sports bag. When we see the product category, the office is the most sold category product follow by apparel and drinkware.
+
+```{r}
+online %>% group_by(Product.SKU,Product) %>% summarise(sum.quantity = sum(Quantity.online)) %>% arrange(desc(sum.quantity))%>% head(5) %>% 
+  ggplot(aes(x=reorder(Product,sum.quantity), y= sum.quantity)) + 
+    geom_bar(stat="identity",fill="steelblue") + 
+    coord_flip() + 
+  geom_text(aes(label=sum.quantity), hjust=1.6, color="white", size=3.5)+
+  theme(axis.title.y = element_blank()) +
+  labs( x="Total quantity", y = "Product name",
+        title="Top 5 Product Sold Online")
+```
+
+
+```{r}
+online %>% group_by(Product.Category) %>% summarise(sum.quantity = sum(Quantity.online)) %>% arrange(desc(sum.quantity))%>% head(5) %>% 
+  ggplot(aes(x=reorder(Product.Category,sum.quantity), y= sum.quantity)) + 
+  geom_bar(stat="identity",fill="steelblue") + 
+  coord_flip() + 
+  geom_text(aes(label=sum.quantity), hjust=1.6, color="white", size=3.5)+
+  theme(axis.title.y = element_blank()) +
+  labs( x="Total quantity", y = "Product Category",
+        title="Top 5 Product Category Sold Online")
+```
+
+
+
+## Conclusions
+In this post, we draw some behavior of customers when buying a product in an online and retail store. We discuss the date and time of customers buying a product from an online or a retail store. We also show the product and product category that mostly sold. We investigate a specific month to see how marketing spends and quantity sales interact. December is the month that most customers buy a product in both online and retail. The customer tends to do online shopping on Monday then the intensity is decreasing afterward. During the weekend is time for the customer to buy a product in the retail store. Within December, the highest transactions happen in the 18th and the lowest on the 24th.
+
+Thanks for reading this post! 
+
+### References
+* **Photo by Carlos Muza on Unsplash**

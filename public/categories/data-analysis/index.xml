@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>data-analysis on Angga Fuady Blog</title>
+    <link>/categories/data-analysis/</link>
+    <description>Recent content in data-analysis on Angga Fuady Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 03 Nov 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/data-analysis/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>E-commerce data analysis: Customer Behavior</title>
+      <link>/blog/2019/11/03/2019-11-03-e-commerce-data-analysis-customer-behaviour/</link>
+      <pubDate>Sun, 03 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/11/03/2019-11-03-e-commerce-data-analysis-customer-behaviour/</guid>
+      <description>We will perform e-commerce data analysis, more specifically on customer behavior. We are interested in some questions, such as what kind of product that mostly sold? or in which month customers buy more products? or how is the online purchasing trends? , etc.
+The data in this post are based on keaggle datasets of e-commerce, you can download here. Four tables of datasets are available, namely, marketing spends, key SKU, online and retail.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -4,37 +4,77 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-10-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/blog/</loc>
-    <lastmod>2019-10-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/categories/</loc>
-    <lastmod>2019-10-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/data-analysis/</loc>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/date-time/</loc>
-    <lastmod>2019-10-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/dplyr/</loc>
-    <lastmod>2019-10-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019/11/03/2019-11-03-e-commerce-data-analysis-customer-behaviour/</loc>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/ggplot2/</loc>
-    <lastmod>2019-10-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/lubridate/</loc>
-    <lastmod>2019-10-20T00:00:00+00:00</lastmod>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/r/</loc>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/visualization/</loc>
+    <lastmod>2019-11-03T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019/10/27/2019-10-27-google-trends-visualization-using-r/</loc>
+    <lastmod>2019-10-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/gtrendsr/</loc>
+    <lastmod>2019-10-27T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/maps/</loc>
+    <lastmod>2019-10-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -43,17 +83,7 @@
   </url>
   
   <url>
-    <loc>/categories/r/</loc>
-    <lastmod>2019-10-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>/blog/2019/10/20/2019-10-20-set-date-and-time-using-lubridate/</loc>
-    <lastmod>2019-10-20T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2019-10-20T00:00:00+00:00</lastmod>
   </url>
   
@@ -64,11 +94,6 @@
   
   <url>
     <loc>/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/</loc>
-    <lastmod>2019-10-06T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/visualization/</loc>
     <lastmod>2019-10-06T00:00:00+00:00</lastmod>
   </url>
   

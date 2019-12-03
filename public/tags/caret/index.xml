@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>caret on Angga Fuady Blog</title>
+    <link>/tags/caret/</link>
+    <description>Recent content in caret on Angga Fuady Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Nov 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/caret/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>E-commerce Data Analysis: Product Recommendation</title>
+      <link>/blog/2019/11/10/2019-11-10-e-commerce-data-analysis-product-recommendation/</link>
+      <pubDate>Sun, 10 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/11/10/2019-11-10-e-commerce-data-analysis-product-recommendation/</guid>
+      <description>Loading librarieslibrary(dplyr)library(magrittr)library(Hmisc)library(lubridate)library(caret)library(GGally)library(reshape2)library(recommenderlab)Loading dataonline &amp;lt;- read.csv(&amp;quot;C:/Users/amfua/Documents/RepositoryBlog/data/Online.csv&amp;quot;)# renamingnames(online) &amp;lt;- c(&amp;quot;Transaction.ID&amp;quot;, &amp;quot;Date&amp;quot;,&amp;quot;Product.SKU&amp;quot;,&amp;quot;Product&amp;quot;,&amp;quot;Product.Category&amp;quot;,&amp;quot;Quantity.online&amp;quot;,&amp;quot;Avg.price&amp;quot;,&amp;quot;Revenue&amp;quot;,&amp;quot;Tax&amp;quot;,&amp;quot;Delivery&amp;quot;)productmat &amp;lt;- dcast(online, Transaction.ID~Product.SKU, value.var = &amp;quot;Quantity.online&amp;quot;, na.rm=FALSE)productmat[1:5,1:5]## Transaction.ID GGOEA0CH077599 GGOEAAAB034813 GGOEAAAB034814## 1 16679 NA NA NA## 2 16680 NA NA NA## 3 16681 NA NA NA## 4 16682 NA NA NA## 5 16684 NA NA NA## GGOEAAAB034815## 1 NA## 2 NA## 3 NA## 4 NA## 5 NAFirst user transactionID = 16679</description>
+    </item>
+    
+  </channel>
+</rss>

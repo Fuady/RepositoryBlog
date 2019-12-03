@@ -6,10 +6,30 @@
     <description>Recent content on Angga Fuady Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 20 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 03 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>E-commerce data analysis: Customer Behavior</title>
+      <link>/blog/2019/11/03/2019-11-03-e-commerce-data-analysis-customer-behaviour/</link>
+      <pubDate>Sun, 03 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/11/03/2019-11-03-e-commerce-data-analysis-customer-behaviour/</guid>
+      <description>We will perform e-commerce data analysis, more specifically on customer behavior. We are interested in some questions, such as what kind of product that mostly sold? or in which month customers buy more products? or how is the online purchasing trends? , etc.
+The data in this post are based on keaggle datasets of e-commerce, you can download here. Four tables of datasets are available, namely, marketing spends, key SKU, online and retail.</description>
+    </item>
+    
+    <item>
+      <title>Google Trends Visualization using R</title>
+      <link>/blog/2019/10/27/2019-10-27-google-trends-visualization-using-r/</link>
+      <pubDate>Sun, 27 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/10/27/2019-10-27-google-trends-visualization-using-r/</guid>
+      <description>In this post, we will visualize Google Trends search hits using R. We will combine the results of google trends with the world map figure. Here, we extract google search results on Sea games from 2004 in the Southeast Asia countries and plot the hits on the map.
+First of all, we need some packages. For capturing the google search hits, we use gtrendsR. To get the world map, we use the R package called maps.</description>
+    </item>
     
     <item>
       <title>Set date and time using lubridate</title>

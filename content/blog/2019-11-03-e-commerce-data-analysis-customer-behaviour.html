@@ -1,0 +1,305 @@
+---
+title: 'E-commerce data analysis: Customer Behavior'
+banner: img/banners/ecommerce.jpg
+author: A.M.Fuady
+date: '2019-11-03'
+slug: e-commerce-data-analysis-customer-behavior
+categories:
+  - R
+  - data-analysis
+tags:
+  - date-time
+  - dplyr
+  - visualization
+  - ggplot2
+  - lubridate
+---
+
+
+
+<p>We will perform e-commerce data analysis, more specifically on customer behavior. We are interested in some questions, such as what kind of product that mostly sold? or in which month customers buy more products? or how is the online purchasing trends? , etc.</p>
+<p>The data in this post are based on keaggle datasets of e-commerce, you can download <a href="https://www.kaggle.com/jpallard/google-store-ecommerce-data-fake-retail-data/">here</a>. Four tables of datasets are available, namely, marketing spends, key SKU, online and retail. Marketing spends capture the daily spend of marketing online and offline. Key SKU data links the product SKU and the stock code. Online data consists of the transaction ID, date, product name, product SKU, online sales, tax, delivery cost, the average price per transactions and total revenue per transaction. Lastly, retail data consist of stock code, date, and retail quantity sales.</p>
+<div id="loading-libraries" class="section level2">
+<h2>Loading libraries</h2>
+<p>Some libraries needed in this analysis are as follow:</p>
+<pre class="r"><code>library(dplyr)
+library(magrittr)
+library(Hmisc)
+library(lubridate)
+library(reshape2)</code></pre>
+</div>
+<div id="loading-data" class="section level2">
+<h2>Loading data</h2>
+<p>The date is given by</p>
+<pre class="r"><code>marketing_spend &lt;- read.csv(&quot;C:/Users/amfua/Documents/RepositoryBlog/data/Marketing_Spend.csv&quot;)
+key_sku &lt;- read.csv(&quot;C:/Users/amfua/Documents/RepositoryBlog/data/KEY_SKU.csv&quot;)
+online &lt;- read.csv(&quot;C:/Users/amfua/Documents/RepositoryBlog/data/Online.csv&quot;)
+retail &lt;- read.csv(&quot;C:/Users/amfua/Documents/RepositoryBlog/data/Retail.csv&quot;)</code></pre>
+<p>Check for the dimension of each dataset:</p>
+<pre class="r"><code>dim(marketing_spend)</code></pre>
+<pre><code>## [1] 365   3</code></pre>
+<pre class="r"><code>dim(key_sku)</code></pre>
+<pre><code>## [1] 1178    2</code></pre>
+<pre class="r"><code>dim(online)</code></pre>
+<pre><code>## [1] 54144    10</code></pre>
+<pre class="r"><code>dim(retail)</code></pre>
+<pre><code>## [1] 181247      4</code></pre>
+<p>Renaming the column names of each dataset for easier combining multiple datasets</p>
+<pre class="r"><code>names(marketing_spend)[1] &lt;- c(&quot;Date&quot;) 
+names(key_sku)[1] &lt;- c(&quot;Product.SKU&quot;)
+names(online) &lt;- c(&quot;Transaction.ID&quot;, &quot;Date&quot;,&quot;Product.SKU&quot;,
+                   &quot;Product&quot;,&quot;Product.Category&quot;,&quot;Quantity.online&quot;,
+                   &quot;Avg.price&quot;,&quot;Revenue&quot;,&quot;Tax&quot;,&quot;Delivery&quot;)
+names(retail) &lt;- c(&quot;Transaction.ID&quot;,&quot;Date&quot;,&quot;StockCode&quot;,&quot;Quantity.retail&quot;)</code></pre>
+<div id="marketing-spend-dataset" class="section level3">
+<h3>Marketing Spend dataset</h3>
+<p>Adding extra variable which decompose Date into day, month and year. <code>yday</code> is the day count from the 1st of January. <code>wday</code> is the day of the week start form Sunday.</p>
+<pre class="r"><code>marketing_spend$Date &lt;- as.character(marketing_spend$Date)
+
+marketing_spend %&lt;&gt;% mutate(
+  day = substr(marketing_spend$Date, nchar(marketing_spend$Date)-1, nchar(marketing_spend$Date)),
+  month = substr(marketing_spend$Date, nchar(marketing_spend$Date)-4, nchar(marketing_spend$Date)-3),
+  year = substr(marketing_spend$Date, nchar(marketing_spend$Date)-9, nchar(marketing_spend$Date)-6),
+  yday = yday(marketing_spend$Date)
+)
+summary(marketing_spend)</code></pre>
+<pre><code>##      Date           Offline.Spend   Online.Spend        day           
+##  Length:365         Min.   : 500   Min.   : 320.2   Length:365        
+##  Class :character   1st Qu.:2500   1st Qu.:1258.6   Class :character  
+##  Mode  :character   Median :3000   Median :1881.9   Mode  :character  
+##                     Mean   :2844   Mean   :1905.9                     
+##                     3rd Qu.:3500   3rd Qu.:2435.1                     
+##                     Max.   :5000   Max.   :4556.9                     
+##     month               year                yday    
+##  Length:365         Length:365         Min.   :  1  
+##  Class :character   Class :character   1st Qu.: 92  
+##  Mode  :character   Mode  :character   Median :183  
+##                                        Mean   :183  
+##                                        3rd Qu.:274  
+##                                        Max.   :365</code></pre>
+</div>
+<div id="key-skus-dataset" class="section level3">
+<h3>Key SKUs dataset</h3>
+<pre class="r"><code>key_sku$Product.SKU &lt;- as.character(key_sku$Product.SKU)
+summary(key_sku)</code></pre>
+<pre><code>##  Product.SKU          StockCode    
+##  Length:1178        Min.   :10002  
+##  Class :character   1st Qu.:21041  
+##  Mode  :character   Median :21496  
+##                     Mean   :21145  
+##                     3rd Qu.:21946  
+##                     Max.   :22314</code></pre>
+</div>
+<div id="retail-dataset" class="section level3">
+<h3>Retail dataset</h3>
+<pre class="r"><code>## retail
+retail$Date &lt;- as.character(retail$Date)  
+retail %&lt;&gt;% mutate(
+  day = substr(retail$Date, nchar(retail$Date)-1, nchar(retail$Date)),
+  month = substr(retail$Date, nchar(retail$Date)-4, nchar(retail$Date)-3),
+  year = substr(retail$Date, nchar(retail$Date)-9, nchar(retail$Date)-6),
+  yday = yday(retail$Date),
+  workday = wday(ymd(Date))
+)
+
+summary(retail)</code></pre>
+<pre><code>##  Transaction.ID       Date             StockCode     Quantity.retail  
+##  Min.   :536598   Length:181247      Min.   :10002   Min.   :  1.000  
+##  1st Qu.:545700   Class :character   1st Qu.:21135   1st Qu.:  1.000  
+##  Median :557026   Mode  :character   Median :21672   Median :  1.000  
+##  Mean   :557388                      Mean   :21356   Mean   :  4.561  
+##  3rd Qu.:568703                      3rd Qu.:22055   3rd Qu.:  2.000  
+##  Max.   :580137                      Max.   :22314   Max.   :900.000  
+##      day               month               year                yday      
+##  Length:181247      Length:181247      Length:181247      Min.   :  1.0  
+##  Class :character   Class :character   Class :character   1st Qu.: 95.0  
+##  Mode  :character   Mode  :character   Mode  :character   Median :196.0  
+##                                                           Mean   :193.2  
+##                                                           3rd Qu.:300.0  
+##                                                           Max.   :365.0  
+##     workday     
+##  Min.   :1.000  
+##  1st Qu.:2.000  
+##  Median :5.000  
+##  Mean   :4.282  
+##  3rd Qu.:6.000  
+##  Max.   :7.000</code></pre>
+</div>
+<div id="online-dataset" class="section level3">
+<h3>Online dataset</h3>
+<pre class="r"><code>online$Date &lt;- as.character(online$Date)
+online %&lt;&gt;% mutate(
+  day = substr(online$Date, nchar(online$Date)-1, nchar(online$Date)),
+  month = substr(online$Date, nchar(online$Date)-3, nchar(online$Date)-2),
+  year = substr(online$Date, nchar(online$Date)-7, nchar(online$Date)-4),
+  yday = yday(ymd(online$Date)),
+  workday = wday(ymd(Date)),
+  amount_spend = Quantity.online*Avg.price
+)
+
+online$Product.SKU &lt;- as.character(online$Product.SKU)
+online$Product &lt;- as.character(online$Product)
+online$Product.Category &lt;- as.character(online$Product.Category)
+
+summary(online)</code></pre>
+<pre><code>##  Transaction.ID      Date           Product.SKU          Product         
+##  Min.   :16679   Length:54144       Length:54144       Length:54144      
+##  1st Qu.:25332   Class :character   Class :character   Class :character  
+##  Median :32548   Mode  :character   Mode  :character   Mode  :character  
+##  Mean   :32337                                                           
+##  3rd Qu.:39008                                                           
+##  Max.   :48497                                                           
+##                                                                          
+##  Product.Category   Quantity.online     Avg.price         Revenue        
+##  Length:54144       Min.   :  1.000   Min.   :  0.39   Min.   :    0.50  
+##  Class :character   1st Qu.:  1.000   1st Qu.:  5.59   1st Qu.:   53.17  
+##  Mode  :character   Median :  1.000   Median : 16.99   Median :  119.99  
+##                     Mean   :  4.538   Mean   : 51.48   Mean   :  277.01  
+##                     3rd Qu.:  2.000   3rd Qu.:100.91   3rd Qu.:  268.00  
+##                     Max.   :900.000   Max.   :355.74   Max.   :23945.56  
+##                     NA&#39;s   :5                                            
+##       Tax            Delivery          day               month          
+##  Min.   :  0.00   Min.   :  0.00   Length:54144       Length:54144      
+##  1st Qu.:  0.00   1st Qu.:  6.00   Class :character   Class :character  
+##  Median :  6.81   Median :  6.00   Mode  :character   Mode  :character  
+##  Mean   : 14.73   Mean   : 10.58                                        
+##  3rd Qu.: 17.84   3rd Qu.:  6.50                                        
+##  Max.   :754.14   Max.   :521.36                                        
+##                                                                         
+##      year                yday        workday       amount_spend     
+##  Length:54144       Min.   :  1   Min.   :1.000   Min.   :    0.40  
+##  Class :character   1st Qu.:101   1st Qu.:2.000   1st Qu.:   11.88  
+##  Mode  :character   Median :194   Median :4.000   Median :   30.38  
+##                     Mean   :186   Mean   :3.964   Mean   :   87.85  
+##                     3rd Qu.:269   3rd Qu.:5.000   3rd Qu.:  119.50  
+##                     Max.   :365   Max.   :7.000   Max.   :10512.39  
+##                                                   NA&#39;s   :5</code></pre>
+<p>We found some missing values in the <code>online</code> dataset, specifically in the <code>Quantity.online</code> and <code>Product.Category</code> variable. For the <code>Product.Category</code> variable, the missing information will be fill in with new category, namely <code>Uncategorized</code>.</p>
+<div id="removing-missing-value-in-product.category-variable" class="section level4">
+<h4>Removing missing value in <code>Product.Category</code> variable</h4>
+<pre class="r"><code>online[which(is.na(online$Product.Category)),&quot;Product.Category&quot;] &lt;- c(&quot;Uncategorized&quot;)</code></pre>
+</div>
+<div id="removing-missing-value-in-quantity.online-variable" class="section level4">
+<h4>Removing missing value in <code>Quantity.online</code> variable</h4>
+<pre class="r"><code>online &lt;- online[-which(is.na(online$Quantity.online)),] # 5 missing removed</code></pre>
+<p>Adding stock code and product SKU for online and retail datasets. For these datasets, add other variable <code>store</code> to identify each products with either from an online or a retail store.</p>
+<pre class="r"><code>online &lt;- merge(online, key_sku, by=&quot;Product.SKU&quot;)
+retail &lt;- merge(retail,key_sku,by=&quot;StockCode&quot;)
+
+online$store &lt;- rep(c(&quot;online&quot;), nrow(online))
+retail$store &lt;- rep(c(&quot;retail&quot;), nrow(retail))</code></pre>
+<p>Merge online and retail datasets.</p>
+<pre class="r"><code>online_1 &lt;- online[,c(&quot;Transaction.ID&quot;,&quot;Quantity.online&quot;,&quot;day&quot;,&quot;month&quot;,&quot;yday&quot;,&quot;workday&quot;,&quot;store&quot;)]
+retail_1 &lt;- retail[,c(&quot;Transaction.ID&quot;,&quot;Quantity.retail&quot;,&quot;day&quot;,&quot;month&quot;,&quot;yday&quot;,&quot;workday&quot;,&quot;store&quot;)]
+names(online_1)[2] &lt;- names(retail_1)[2] &lt;- c(&quot;Quantity&quot;)
+
+merge.online.retail &lt;- rbind(online_1,retail_1)</code></pre>
+</div>
+</div>
+</div>
+<div id="the-number-of-transactions" class="section level2">
+<h2>The number of transactions</h2>
+<p>Plot the number of transactions for each month. In this plot, we see the information about the total number of transactions every month. The highest transaction for both online and retail in December. The lowest transaction happens in February for online and in March for retail. In both datasets, the number of the transaction start to increase since September.</p>
+<pre class="r"><code>ggplot(merge.online.retail %&gt;% 
+         group_by(Transaction.ID,month,store) %&gt;% summarise(trans.n = n()) %&gt;% 
+         group_by(month,store) %&gt;% summarise(trans.n.month = n() ),
+       aes(month, trans.n.month,fill=store)) +
+  geom_bar(stat=&quot;identity&quot;, position=position_dodge()) +
+  facet_wrap(~store, nrow=2) +
+  theme_set(theme_bw()) +
+  theme(legend.position = &quot;none&quot;) +
+  geom_text(aes(label=trans.n.month), vjust=1.6, color=&quot;white&quot;, size=3.5, position=position_dodge(0.8)) +
+  scale_fill_brewer(palette=&quot;Paired&quot;) +
+  scale_x_discrete(name = &quot;Month&quot;,
+                   labels=c(&quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,&quot;Apr&quot;,&quot;May&quot;,&quot;Jun&quot;,&quot;Jul&quot;,&quot;Aug&quot;,&quot;Sept&quot;,&quot;Oct&quot;,&quot;Nov&quot;,&quot;Dec&quot;)) + 
+  labs( y = &quot;Number of Transaction&quot;,
+        title=&quot;Number of transactions for different Months&quot;)</code></pre>
+<p><img src="/blog/2019-11-03-e-commerce-data-analysis-customer-behaviour_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div id="transactions-in-december" class="section level3">
+<h3>Transactions in December</h3>
+<p>We investigate more on the date in December by plotting the number of transactions for each date. We see that the highest number of online transactions in December occur in about a week before Christmas, specifically in 18 of December. After that, the intensity of transactions is starting to decrease and being stagnant after Christmas. The same pattern also happens in the retail store. Start from the 21st of December, the number of the transaction start to decline.</p>
+<pre class="r"><code>merge.dec &lt;- merge.online.retail[which(merge.online.retail$month==&quot;12&quot;),] %&gt;% 
+  group_by(Transaction.ID,day,store) %&gt;% summarise(trans.n = n()) %&gt;% 
+  group_by(day,store) %&gt;% summarise(trans.n.month = n())
+
+add.merge.dec &lt;- data.frame( day = c(&quot;04&quot;,&quot;11&quot;,&quot;18&quot;,&quot;25&quot;,&quot;30&quot;) , store= rep(c(&quot;retail&quot;),5) ,  trans.n.month = rep(0,5))
+
+ggplot( rbind(as.data.frame(merge.dec), add.merge.dec),
+       aes(day, trans.n.month,fill=store)) +
+  geom_bar(stat=&quot;identity&quot;) +
+  facet_wrap(~store, nrow=2)+
+  theme_set(theme_bw()) +
+  geom_text(aes(label=trans.n.month), vjust=1.6, color=&quot;white&quot;, size=3.5, position=position_dodge(0.8)) +
+  scale_fill_brewer(palette=&quot;Paired&quot;) +
+  theme(axis.ticks.x = element_blank(), legend.position = &quot;none&quot;) +
+  labs( x=&quot;Date&quot;, y = &quot;Number of Transaction&quot;,
+        title=&quot;Number of transactions for different Dates in December&quot;)</code></pre>
+<p><img src="/blog/2019-11-03-e-commerce-data-analysis-customer-behaviour_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>We plot the total sales and marketing spend online in December. Interestingly, the highest transaction on the 18th of December occurs with the smallest online marketing spend of the month. On the 24th of December, with the highest online marketing spend, the number of transactions is the lowest throughout the month.</p>
+<pre class="r"><code>data.december &lt;- merge(merge.dec[which(merge.dec$store==&quot;online&quot;),], marketing_spend[which(marketing_spend$month==&quot;12&quot;),c(&quot;day&quot;,&quot;Online.Spend&quot;)],by=&quot;day&quot;)
+
+names(data.december)[3:4] &lt;- c(&quot;Total sales&quot;,&quot;Marketing spend&quot;)
+ggplot(melt(data.december[,-2]) ,aes(day, value,fill= variable))+
+  geom_bar(stat=&quot;identity&quot;) +
+  facet_wrap(~variable, scale=&quot;free&quot; ,nrow=2)+
+  theme_set(theme_bw()) +
+  geom_text(aes(label=value), vjust=1.6, color=&quot;white&quot;, size=3) +
+  scale_fill_brewer(palette=&quot;Paired&quot;) +
+  theme(axis.ticks.x = element_blank(), legend.position = &quot;none&quot;) +
+  labs( x=&quot;Date&quot;,
+        title=&quot;Total sales and marketing spend Online in December&quot;)</code></pre>
+<pre><code>## Using day as id variables</code></pre>
+<p><img src="/blog/2019-11-03-e-commerce-data-analysis-customer-behaviour_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+</div>
+<div id="number-of-transactions-for-each-working-day" class="section level2">
+<h2>Number of transactions for each working day</h2>
+<p>Now, we plot the total number of transactions for each working day. We want to see the customer preference on which day they will buy a product. The highest number of online transactions happens on Monday and then it starts to decrease. In the retail store, the highest number of transactions happen during the weekend.</p>
+<pre class="r"><code>ggplot(merge.online.retail %&gt;% 
+         group_by(Transaction.ID,workday,store) %&gt;% summarise(trans.n = n()) %&gt;% 
+         group_by(workday,store) %&gt;% summarise(trans.n.month = n() ),
+       aes(workday, trans.n.month,fill=store)) +
+  geom_bar(stat=&quot;identity&quot;) +
+  facet_wrap(~store, nrow=2) +
+  theme_set(theme_bw()) +
+  geom_text(aes(label=trans.n.month), vjust=1.6, color=&quot;white&quot;, size=3.5, position=position_dodge(0.8)) +
+  scale_fill_brewer(palette=&quot;Paired&quot;) +
+  theme(axis.ticks.x = element_blank(),legend.position = &quot;none&quot;) +
+  scale_x_discrete(name = &quot;Day&quot; ,limits= seq(1:7), breaks=seq(1:7), labels=c(&quot;Sun&quot;,&quot;Mon&quot;,&quot;Tue&quot;,&quot;Wed&quot;,&quot;Thur&quot;,&quot;Fri&quot;,&quot;Sat&quot;)) +  
+  labs( y = &quot;Number of Transaction&quot;,
+        title=&quot;Number of transactions for different Days&quot;)</code></pre>
+<p><img src="/blog/2019-11-03-e-commerce-data-analysis-customer-behaviour_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+</div>
+<div id="the-most-sold-products" class="section level2">
+<h2>The most sold products</h2>
+<p>The top 5 most sold products are presented in the code below. Here we see that Maze pen is the highest sold product with more than 16000 items. Then it follows by the google bottle and sports bag. When we see the product category, the office is the most sold category product follow by apparel and drinkware.</p>
+<pre class="r"><code>online %&gt;% group_by(Product.SKU,Product) %&gt;% summarise(sum.quantity = sum(Quantity.online)) %&gt;% arrange(desc(sum.quantity))%&gt;% head(5) %&gt;% 
+  ggplot(aes(x=reorder(Product,sum.quantity), y= sum.quantity)) + 
+    geom_bar(stat=&quot;identity&quot;,fill=&quot;steelblue&quot;) + 
+    coord_flip() + 
+  geom_text(aes(label=sum.quantity), hjust=1.6, color=&quot;white&quot;, size=3.5)+
+  theme(axis.title.y = element_blank()) +
+  labs( x=&quot;Total quantity&quot;, y = &quot;Product name&quot;,
+        title=&quot;Top 5 Product Sold Online&quot;)</code></pre>
+<p><img src="/blog/2019-11-03-e-commerce-data-analysis-customer-behaviour_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<pre class="r"><code>online %&gt;% group_by(Product.Category) %&gt;% summarise(sum.quantity = sum(Quantity.online)) %&gt;% arrange(desc(sum.quantity))%&gt;% head(5) %&gt;% 
+  ggplot(aes(x=reorder(Product.Category,sum.quantity), y= sum.quantity)) + 
+  geom_bar(stat=&quot;identity&quot;,fill=&quot;steelblue&quot;) + 
+  coord_flip() + 
+  geom_text(aes(label=sum.quantity), hjust=1.6, color=&quot;white&quot;, size=3.5)+
+  theme(axis.title.y = element_blank()) +
+  labs( x=&quot;Total quantity&quot;, y = &quot;Product Category&quot;,
+        title=&quot;Top 5 Product Category Sold Online&quot;)</code></pre>
+<p><img src="/blog/2019-11-03-e-commerce-data-analysis-customer-behaviour_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+</div>
+<div id="conclusions" class="section level2">
+<h2>Conclusions</h2>
+<p>In this post, we draw some behavior of customers when buying a product in an online and retail store. We discuss the date and time of customers buying a product from an online or a retail store. We also show the product and product category that mostly sold. We investigate a specific month to see how marketing spends and quantity sales interact. December is the month that most customers buy a product in both online and retail. The customer tends to do online shopping on Monday then the intensity is decreasing afterward. During the weekend is time for the customer to buy a product in the retail store. Within December, the highest transactions happen in the 18th and the lowest on the 24th.</p>
+<p>Thanks for reading this post!</p>
+<div id="references" class="section level3">
+<h3>References</h3>
+<ul>
+<li><strong>Photo by Carlos Muza on Unsplash</strong></li>
+</ul>
+</div>
+</div>
