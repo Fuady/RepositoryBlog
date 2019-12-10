@@ -1,0 +1,220 @@
+---
+title: 'Scraping IMDB website using rvest '
+banner: img/banners/movie.jpg
+author: A.M.Fuady
+date: '2019-11-10'
+slug: scraping-imdb-website-using-rvest
+categories:
+  - R
+tags:
+  - dplyr
+  - ggplot2
+  - rvest
+  - wordcloud
+---
+
+In this post, we will discuss how to scrap data from a website. As an illustration, we retrieve information on [the top 100 best movie all-time form the IMDB website](https://www.imdb.com/search/title/?count=100&groups=top_1000&sort=user_rating). We mainly use `rvest` package in R to capture the information from a website. 
+
+The results of multiple words are then visualized using `ggplot2` and `wordcloud`, with additional color `RcolorBrewer`. First thing first, installing and loading the package needed as follows: 
+
+```{r, message=FALSE, warning=FALSE}
+# install.packages('rvest')
+
+#Loading packages
+library(rvest)
+library(ggplot2)
+library(dplyr)
+library(wordcloud)
+library(RColorBrewer)
+```
+
+Now, we specify the URL destination, here we only focus on the first page of the top 1000 movie of all time from [IMDB](https://www.imdb.com/) which contains the top 100 movies. 
+```{r}
+#url of IMDB top 1000 movies of all time
+url <- 'https://www.imdb.com/search/title/?count=100&groups=top_1000&sort=user_rating'
+
+#Reading the HTML code from the website
+webpage <- read_html(url)
+```
+
+The first information that we want to get is the movie ranking. 
+```{r}
+#Specify the nodes using CSS selectors
+rank_data_html <- html_nodes(webpage,'.text-primary')
+
+#Converting the movie ranking to text
+rank_data <- html_text(rank_data_html)
+
+#Converting the movie ranking to numeric
+rank_data<-as.numeric(rank_data)
+
+#Top 6 of movie ranking
+head(rank_data)
+```
+
+The second information is the movie title
+```{r}
+# Soecify the nodes of movie title using CSS selector
+title_data_html <- html_nodes(webpage,'.lister-item-header a')
+
+#Converting the movie title to text
+title_data <- html_text(title_data_html)
+
+#Inspect the top 6 of movie title
+head(title_data)
+```
+
+The description of the movie is then extracted as follow
+```{r}
+description_data_html <- html_nodes(webpage,'.ratings-bar+ .text-muted')
+
+#Converting the movie description to text
+description_data <- html_text(description_data_html)
+
+#Removing '\n' from the movie description
+description_data<-gsub("\n","",description_data)
+
+#Inspect the top 6 of movie description
+head(description_data)
+```
+
+Next, the runtime of each movie are extracted as follows
+```{r}
+runtime_data_html <- html_nodes(webpage,'.text-muted .runtime')
+
+# Converting the movie runtime to text
+runtime_data <- html_text(runtime_data_html)
+
+# Remove 'mins' in the runtime text
+runtime_data<-gsub(" min","",runtime_data)
+
+# Convert text into numeric 
+runtime_data<-as.numeric(runtime_data)
+
+# Inspect top 6 of movie runtime
+head(runtime_data)
+```
+
+Extract genre information from each movie
+```{r}
+genre_data_html <- html_nodes(webpage,'.genre')
+
+#Converting the genre data to text
+genre_data <- html_text(genre_data_html)
+
+#Removing '\n'
+genre_data<-gsub("\n","",genre_data)
+
+#Removing excess spaces
+genre_data<-gsub(" ","",genre_data)
+
+# Select the first genre of each movie
+genre_data<-gsub(",.*","",genre_data)
+
+# Converting genre from text to factor
+genre_data<-as.factor(genre_data)
+
+# Inspect top 6 of movie genre
+head(genre_data)
+```
+
+Get IMDB rating as follows
+```{r}
+rating_data_html <- html_nodes(webpage,'.ratings-imdb-rating strong')
+
+# Converting movie ratings to text
+rating_data <- html_text(rating_data_html)
+
+# Converting movie ratings to numerical
+rating_data<-as.numeric(rating_data)
+
+# Inspect top 6 imdb ratings
+head(rating_data)
+```
+
+Extract director data for each movie
+```{r}
+directors_data_html <- html_nodes(webpage,'.text-muted+ p a:nth-child(1)')
+
+# Converting the movie directors to text
+directors_data <- html_text(directors_data_html)
+
+# Converting th movie directors into factors
+directors_data<-as.factor(directors_data)
+
+# Inspect top 6 of movie director
+head(directors_data)
+```
+
+Get the list of actor for each movie as follows
+```{r}
+actors_data_html <- html_nodes(webpage,'.lister-item-content .ghost+ a')
+
+# Converting the movie actors to text
+actors_data <- html_text(actors_data_html)
+
+# Converting the movie actors into factors
+actors_data<-as.factor(actors_data)
+
+# Inspect top 6 of movie actor
+head(actors_data)
+```
+
+
+Combine all into a data frame
+```{r}
+#Combining all the lists to form a data frame
+movies_df<-data.frame(Rank = rank_data, 
+                      Title = title_data, 
+                      Description = description_data, 
+                      Runtime = runtime_data, 
+                      Genre = genre_data, 
+                      Rating = rating_data, 
+                      Director = directors_data, 
+                      Actor = actors_data)
+
+head(movies_df)
+```
+
+
+Plot movie runtime vs movie rating for all top 100 movies. We color the point based on each genre and the extreme point for runtime and ratings are labeled.  We plot also the smooth curve with its confidence interval. 
+```{r}
+ggplot(movies_df, aes(x=Runtime, y = Rating, label=Title)) +
+  geom_point(aes( col=Genre)) +
+  geom_smooth(method="loess") +
+  geom_text(data=subset(movies_df, Rating > 9 | Runtime > 207 )) +
+  theme(legend.position = "bottom")
+```
+
+We visualized the top 20 directors with the highest number of movie directed using bar chart with coord polar.  
+```{r}
+movies_df %>% select(Director) %>% group_by(Director) %>% summarise(count=n())  %>% head(20) %>%
+  ggplot(aes(x=Director, y = count, fill=as.factor(count))) + 
+  geom_bar( stat="identity") +
+  coord_polar(start = pi/3, direction=-1, clip="off") +
+  geom_text(aes(label=count), hjust=0.1, color="black", size=3) +
+  theme(axis.text.x = element_text(angle=30))  +
+  theme(legend.position = "none") +
+  labs(x="Director", y="Number of Movies") 
+
+```
+
+Visualize intensity of actor played in the top 100 movies using `wordcloud`.
+```{r, warning=FALSE}
+Actor_df <- movies_df %>% select(Actor) %>% group_by(Actor) %>% summarise(count=n()) %>% arrange(desc(count)) 
+
+wordcloud(words = Actor_df$Actor, freq = Actor_df$count, min.freq = 1,
+          max.words=50, random.order=FALSE, rot.per=.1, 
+          colors=brewer.pal(8, "Dark2"))
+
+```
+
+## Conclusion
+
+This post contains a glance at how to scraping information from a website using *rvest*. Results of the scrapping are then visualized using *ggplot2* and *wordcloud*.  
+
+Thank you for reading this article!
+
+### References
+* [Web scraping in R](https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/)
+* Photo by lan deng on Unsplash

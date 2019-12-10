@@ -1,0 +1,224 @@
+---
+title: 'Scraping IMDB website using rvest '
+banner: img/banners/movie.jpg
+author: A.M.Fuady
+date: '2019-11-10'
+slug: scraping-imdb-website-using-rvest
+categories:
+  - R
+tags:
+  - dplyr
+  - ggplot2
+  - rvest
+  - wordcloud
+---
+
+
+
+<p>In this post, we will discuss how to scrap data from a website. As an illustration, we retrieve information on <a href="https://www.imdb.com/search/title/?count=100&amp;groups=top_1000&amp;sort=user_rating">the top 100 best movie all-time form the IMDB website</a>. We mainly use <code>rvest</code> package in R to capture the information from a website.</p>
+<p>The results of multiple words are then visualized using <code>ggplot2</code> and <code>wordcloud</code>, with additional color <code>RcolorBrewer</code>. First thing first, installing and loading the package needed as follows:</p>
+<pre class="r"><code># install.packages(&#39;rvest&#39;)
+
+#Loading packages
+library(rvest)
+library(ggplot2)
+library(dplyr)
+library(wordcloud)
+library(RColorBrewer)</code></pre>
+<p>Now, we specify the URL destination, here we only focus on the first page of the top 1000 movie of all time from <a href="https://www.imdb.com/">IMDB</a> which contains the top 100 movies.</p>
+<pre class="r"><code>#url of IMDB top 1000 movies of all time
+url &lt;- &#39;https://www.imdb.com/search/title/?count=100&amp;groups=top_1000&amp;sort=user_rating&#39;
+
+#Reading the HTML code from the website
+webpage &lt;- read_html(url)</code></pre>
+<p>The first information that we want to get is the movie ranking.</p>
+<pre class="r"><code>#Specify the nodes using CSS selectors
+rank_data_html &lt;- html_nodes(webpage,&#39;.text-primary&#39;)
+
+#Converting the movie ranking to text
+rank_data &lt;- html_text(rank_data_html)
+
+#Converting the movie ranking to numeric
+rank_data&lt;-as.numeric(rank_data)
+
+#Top 6 of movie ranking
+head(rank_data)</code></pre>
+<pre><code>## [1] 1 2 3 4 5 6</code></pre>
+<p>The second information is the movie title</p>
+<pre class="r"><code># Soecify the nodes of movie title using CSS selector
+title_data_html &lt;- html_nodes(webpage,&#39;.lister-item-header a&#39;)
+
+#Converting the movie title to text
+title_data &lt;- html_text(title_data_html)
+
+#Inspect the top 6 of movie title
+head(title_data)</code></pre>
+<pre><code>## [1] &quot;The Shawshank Redemption&quot;                     
+## [2] &quot;The Godfather&quot;                                
+## [3] &quot;The Dark Knight&quot;                              
+## [4] &quot;The Godfather: Part II&quot;                       
+## [5] &quot;The Lord of the Rings: The Return of the King&quot;
+## [6] &quot;Pulp Fiction&quot;</code></pre>
+<p>The description of the movie is then extracted as follow</p>
+<pre class="r"><code>description_data_html &lt;- html_nodes(webpage,&#39;.ratings-bar+ .text-muted&#39;)
+
+#Converting the movie description to text
+description_data &lt;- html_text(description_data_html)
+
+#Removing &#39;\n&#39; from the movie description
+description_data&lt;-gsub(&quot;\n&quot;,&quot;&quot;,description_data)
+
+#Inspect the top 6 of movie description
+head(description_data)</code></pre>
+<pre><code>## [1] &quot;    Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.&quot;                                                                       
+## [2] &quot;    The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.&quot;                                                                          
+## [3] &quot;    When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.&quot;
+## [4] &quot;    The early life and career of Vito Corleone in 1920s New York City is portrayed, while his son, Michael, expands and tightens his grip on the family crime syndicate.&quot;                         
+## [5] &quot;    Gandalf and Aragorn lead the World of Men against Sauron&#39;s army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.&quot;                                           
+## [6] &quot;    The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.&quot;</code></pre>
+<p>Next, the runtime of each movie are extracted as follows</p>
+<pre class="r"><code>runtime_data_html &lt;- html_nodes(webpage,&#39;.text-muted .runtime&#39;)
+
+# Converting the movie runtime to text
+runtime_data &lt;- html_text(runtime_data_html)
+
+# Remove &#39;mins&#39; in the runtime text
+runtime_data&lt;-gsub(&quot; min&quot;,&quot;&quot;,runtime_data)
+
+# Convert text into numeric 
+runtime_data&lt;-as.numeric(runtime_data)
+
+# Inspect top 6 of movie runtime
+head(runtime_data)</code></pre>
+<pre><code>## [1] 142 175 152 202 201 154</code></pre>
+<p>Extract genre information from each movie</p>
+<pre class="r"><code>genre_data_html &lt;- html_nodes(webpage,&#39;.genre&#39;)
+
+#Converting the genre data to text
+genre_data &lt;- html_text(genre_data_html)
+
+#Removing &#39;\n&#39;
+genre_data&lt;-gsub(&quot;\n&quot;,&quot;&quot;,genre_data)
+
+#Removing excess spaces
+genre_data&lt;-gsub(&quot; &quot;,&quot;&quot;,genre_data)
+
+# Select the first genre of each movie
+genre_data&lt;-gsub(&quot;,.*&quot;,&quot;&quot;,genre_data)
+
+# Converting genre from text to factor
+genre_data&lt;-as.factor(genre_data)
+
+# Inspect top 6 of movie genre
+head(genre_data)</code></pre>
+<pre><code>## [1] Drama     Crime     Action    Crime     Adventure Crime    
+## 10 Levels: Action Adventure Animation Biography Comedy Crime ... Western</code></pre>
+<p>Get IMDB rating as follows</p>
+<pre class="r"><code>rating_data_html &lt;- html_nodes(webpage,&#39;.ratings-imdb-rating strong&#39;)
+
+# Converting movie ratings to text
+rating_data &lt;- html_text(rating_data_html)
+
+# Converting movie ratings to numerical
+rating_data&lt;-as.numeric(rating_data)
+
+# Inspect top 6 imdb ratings
+head(rating_data)</code></pre>
+<pre><code>## [1] 9.3 9.2 9.0 9.0 8.9 8.9</code></pre>
+<p>Extract director data for each movie</p>
+<pre class="r"><code>directors_data_html &lt;- html_nodes(webpage,&#39;.text-muted+ p a:nth-child(1)&#39;)
+
+# Converting the movie directors to text
+directors_data &lt;- html_text(directors_data_html)
+
+# Converting th movie directors into factors
+directors_data&lt;-as.factor(directors_data)
+
+# Inspect top 6 of movie director
+head(directors_data)</code></pre>
+<pre><code>## [1] Frank Darabont       Francis Ford Coppola Christopher Nolan   
+## [4] Francis Ford Coppola Peter Jackson        Quentin Tarantino   
+## 70 Levels: Aamir Khan Aditya Dhar Akira Kurosawa ... Yavuz Turgul</code></pre>
+<p>Get the list of actor for each movie as follows</p>
+<pre class="r"><code>actors_data_html &lt;- html_nodes(webpage,&#39;.lister-item-content .ghost+ a&#39;)
+
+# Converting the movie actors to text
+actors_data &lt;- html_text(actors_data_html)
+
+# Converting the movie actors into factors
+actors_data&lt;-as.factor(actors_data)
+
+# Inspect top 6 of movie actor
+head(actors_data)</code></pre>
+<pre><code>## [1] Tim Robbins    Marlon Brando  Christian Bale Al Pacino     
+## [5] Elijah Wood    John Travolta 
+## 78 Levels: Aamir Khan Adam Driver Adrien Brody ... Zain Al Rafeea</code></pre>
+<p>Combine all into a data frame</p>
+<pre class="r"><code>#Combining all the lists to form a data frame
+movies_df&lt;-data.frame(Rank = rank_data, 
+                      Title = title_data, 
+                      Description = description_data, 
+                      Runtime = runtime_data, 
+                      Genre = genre_data, 
+                      Rating = rating_data, 
+                      Director = directors_data, 
+                      Actor = actors_data)
+
+head(movies_df)</code></pre>
+<pre><code>##   Rank                                         Title
+## 1    1                      The Shawshank Redemption
+## 2    2                                 The Godfather
+## 3    3                               The Dark Knight
+## 4    4                        The Godfather: Part II
+## 5    5 The Lord of the Rings: The Return of the King
+## 6    6                                  Pulp Fiction
+##                                                                                                                                                                                         Description
+## 1                                                                            Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.
+## 2                                                                               The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.
+## 3     When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.
+## 4                              The early life and career of Vito Corleone in 1920s New York City is portrayed, while his son, Michael, expands and tightens his grip on the family crime syndicate.
+## 5                                                Gandalf and Aragorn lead the World of Men against Sauron&#39;s army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.
+## 6                                                   The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.
+##   Runtime     Genre Rating             Director          Actor
+## 1     142     Drama    9.3       Frank Darabont    Tim Robbins
+## 2     175     Crime    9.2 Francis Ford Coppola  Marlon Brando
+## 3     152    Action    9.0    Christopher Nolan Christian Bale
+## 4     202     Crime    9.0 Francis Ford Coppola      Al Pacino
+## 5     201 Adventure    8.9        Peter Jackson    Elijah Wood
+## 6     154     Crime    8.9    Quentin Tarantino  John Travolta</code></pre>
+<p>Plot movie runtime vs movie rating for all top 100 movies. We color the point based on each genre and the extreme point for runtime and ratings are labeled. We plot also the smooth curve with its confidence interval.</p>
+<pre class="r"><code>ggplot(movies_df, aes(x=Runtime, y = Rating, label=Title)) +
+  geom_point(aes( col=Genre)) +
+  geom_smooth(method=&quot;loess&quot;) +
+  geom_text(data=subset(movies_df, Rating &gt; 9 | Runtime &gt; 207 )) +
+  theme(legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="/blog/2019-11-10-scraping-imdb-website-using-rvest_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>We visualized the top 20 directors with the highest number of movie directed using bar chart with coord polar.</p>
+<pre class="r"><code>movies_df %&gt;% select(Director) %&gt;% group_by(Director) %&gt;% summarise(count=n())  %&gt;% head(20) %&gt;%
+  ggplot(aes(x=Director, y = count, fill=as.factor(count))) + 
+  geom_bar( stat=&quot;identity&quot;) +
+  coord_polar(start = pi/3, direction=-1, clip=&quot;off&quot;) +
+  geom_text(aes(label=count), hjust=0.1, color=&quot;black&quot;, size=3) +
+  theme(axis.text.x = element_text(angle=30))  +
+  theme(legend.position = &quot;none&quot;) +
+  labs(x=&quot;Director&quot;, y=&quot;Number of Movies&quot;) </code></pre>
+<p><img src="/blog/2019-11-10-scraping-imdb-website-using-rvest_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>Visualize intensity of actor played in the top 100 movies using <code>wordcloud</code>.</p>
+<pre class="r"><code>Actor_df &lt;- movies_df %&gt;% select(Actor) %&gt;% group_by(Actor) %&gt;% summarise(count=n()) %&gt;% arrange(desc(count)) 
+
+wordcloud(words = Actor_df$Actor, freq = Actor_df$count, min.freq = 1,
+          max.words=50, random.order=FALSE, rot.per=.1, 
+          colors=brewer.pal(8, &quot;Dark2&quot;))</code></pre>
+<p><img src="/blog/2019-11-10-scraping-imdb-website-using-rvest_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This post contains a glance at how to scraping information from a website using <em>rvest</em>. Results of the scrapping are then visualized using <em>ggplot2</em> and <em>wordcloud</em>.</p>
+<p>Thank you for reading this article!</p>
+<div id="references" class="section level3">
+<h3>References</h3>
+<ul>
+<li><a href="https://www.analyticsvidhya.com/blog/2017/03/beginners-guide-on-web-scraping-in-r-using-rvest-with-hands-on-knowledge/">Web scraping in R</a></li>
+<li>Photo by lan deng on Unsplash</li>
+</ul>
+</div>
+</div>

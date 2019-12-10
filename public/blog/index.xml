@@ -6,10 +6,20 @@
     <description>Recent content in Blogs on Angga Fuady Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 03 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 10 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Scraping IMDB website using rvest </title>
+      <link>/blog/2019/11/10/2019-11-10-scraping-imdb-website-using-rvest/</link>
+      <pubDate>Sun, 10 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/11/10/2019-11-10-scraping-imdb-website-using-rvest/</guid>
+      <description>In this post, we will discuss how to scrap data from a website. As an illustration, we retrieve information on the top 100 best movie all-time form the IMDB website. We mainly use rvest package in R to capture the information from a website.
+The results of multiple words are then visualized using ggplot2 and wordcloud, with additional color RcolorBrewer. First thing first, installing and loading the package needed as follows:</description>
+    </item>
     
     <item>
       <title>E-commerce data analysis: Customer Behavior</title>
