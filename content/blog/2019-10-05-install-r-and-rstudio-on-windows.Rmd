@@ -1,0 +1,32 @@
+---
+title: Install R and RStudio on Windows
+banner: img/banners/RStudio-Logo.png
+author: A.M.Fuady
+date: '2019-10-05'
+slug: install-r-and-rstudio-on-windows
+categories:
+  - R
+tags:
+  - Install
+  - R
+---
+
+
+Here I want to elaborate steps needed to install R and RStudio on Windows. R is a programming language and free software environment for statistical computing and graphics. RStudio is an interactive desktop environment. Prior to installing RStudio, R should be installed first.
+
+## Installing R
+- You can download R from [the Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/)
+- Select your operating system: Linux, Mac OS X or Windows.
+- At the CRAN download page, several subdirectories are available, select __base__ to install the basic packages you need to get started.
+- Click Download R 3.6.2 for Windows or the newest version that appears.
+- Install R. Use default setting in the installation options.
+- Congrats! You have installed R.
+
+## Installing RStudio
+- You can download RStudio [here](https://rstudio.com/products/rstudio/download/#download)
+- Choose the Installer file that fits your operating system.
+- Install RStudio. Click all default settings.
+- Your RStudio is now installed.
+
+Let me know if you have any questions and Thanks for stopping by! 
+Picture by [RStudio](https://rstudio.com/about/logos/)

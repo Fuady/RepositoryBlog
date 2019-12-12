@@ -113,6 +113,16 @@
   </url>
   
   <url>
+    <loc>/tags/install/</loc>
+    <lastmod>2019-10-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/blog/2019/10/05/2019-10-05-install-r-and-rstudio-on-windows/</loc>
+    <lastmod>2019-10-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/about_me.nb/</loc>
     <priority>0</priority>
   </url>
