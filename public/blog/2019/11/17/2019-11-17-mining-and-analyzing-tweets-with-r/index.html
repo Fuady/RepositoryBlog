@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Mining and analyzing tweets with R</title>
+  <meta name="author" content="A.M.Fuady" />
+  
+  
+  
+  
+  <meta name="keywords" content="dplyr, wordcloud, twitteR, ggplot2, tm">
+  
+  
+  <meta name="description" content="">
+
+  <meta name="generator" content="Hugo 0.59.1" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.green.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="/index.xml" type="application/rss+xml" title="Angga Fuady Blog">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="en_us">
+  <meta property="og:site_name" content="Angga Fuady Blog">
+  <meta property="og:title" content="Mining and analyzing tweets with R">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="/blog/2019/11/17/2019-11-17-mining-and-analyzing-tweets-with-r/" />
+  <meta property="og:description" content="">
+  <meta property="og:image" content="/img/banners/word.jpg">
+  <meta property="og:image:type" content="image/jpg">
+  
+  
+  
+    <meta property="og:image:width" content="3000">
+    <meta property="og:image:height" content="2000">
+  
+  
+  <meta property="og:updated_time" content="2019-11-17T00:00:00Z">
+  
+    
+    
+    <meta property="article:section" content="R">
+    <meta property="article:tag" content="dplyr">
+    <meta property="article:tag" content="wordcloud">
+    <meta property="article:tag" content="twitteR">
+    <meta property="article:tag" content="ggplot2">
+    <meta property="article:tag" content="tm">
+    
+    
+    <meta property="article:published_time" content="2019-11-17T00:00:00Z">
+    <meta property="article:modified_time" content="2019-11-17T00:00:00Z">
+  
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <meta name="twitter:title" content="Mining and analyzing tweets with R">
+  
+  <meta name="twitter:image" content="/img/banners/word.jpg">
+  
+  <meta name="twitter:description" content="">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header>
+
+          <div class="navbar-affixed-top" data-spy="affix" data-offset-top="200">
+
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">
+
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/amf_logo_psd.png" alt="Mining and analyzing tweets with R logo" class="hidden-xs hidden-sm">
+                    <img src="/img/amf_logo_small_psd.png" alt="Mining and analyzing tweets with R logo" class="visible-xs visible-sm">
+                    <span class="sr-only">Mining and analyzing tweets with R - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">Home</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown active">
+                    
+                    <a href="/blog/">Blog</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/about_me">About Me</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">
+
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+
+                </span>
+                    </div>
+                </form>
+
+            </div>
+            
+
+        </div>
+    </div>
+    
+
+</div>
+
+
+
+
+        </header>
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Mining and analyzing tweets with R</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        <p class="text-muted text-uppercase mb-small text-right">By <a href="#">A.M.Fuady</a> | November 17, 2019</p>
+
+                        <div id="post-content">
+                          
+
+
+<p>In this post, I would like to demonstrate simple steps on how to extract and analyze twitter data using R. We mainly use <strong>twitteR</strong> package to extract information of tweets, and use <strong>wordcloud</strong> package to visualized word intensity.</p>
+<p>The first step is, of course, installing and loading some packages needed as follow</p>
+<pre class="r"><code>library(twitteR)
+library(tm)
+library(ggplot2)
+library(dplyr)
+library(wordcloud)
+library(RColorBrewer)
+library(stringr)</code></pre>
+<p><strong>twitteR</strong> package is used for extracting tweets’ information. Two packages are utilized for text transformation, namely <strong>tm</strong> and <strong>stringr</strong>. To visualized how often a specific word is chosen, we used <strong>wordcloud</strong>. <strong>dplyr</strong> is used for piping, <strong>RColorBrewer</strong> for multi-color illustration and finally <strong>ggplot2</strong> to plot the bar chart.</p>
+<p>After loading all the libraries needed, we need to set up the twitter API connection. This can be done by accessing the developer site of twitter, <a href="https://developer.twitter.com/en/apply-for-access.html">here</a>. In order to get access, you need to have a twitter account and get register to the developer site. Tutorial to access the developer site can be seen <a href="https://medium.com/@GalarnykMichael/accessing-data-from-twitter-api-using-r-part1-b387a1c7d3e">here</a>. After all steps, you will get four codes, namely Consumer key, Consumer Secret, Access Token, and Access Secret. These codes will be used to authorize you for extracting tweets.</p>
+<div id="set-up-twitter-api-connection" class="section level2">
+<h2>Set up twitter API connection</h2>
+<pre class="r"><code># Change the next four lines based on your own consumer_key, consume_secret, access_token, and access_secret. 
+consumer_key &lt;- &quot;ClOUrS8CVAp9yGCZQZfjDJIbk&quot;
+consumer_secret &lt;- &quot;3S2mru9GgwHrvYIBNV1iTkwgmO5Y9ExfTnOQ91OFlXAu4iDBLw&quot;
+access_token &lt;- &quot;1204041700441759744-mDdYIaPPboDPP1HTOenbBiwFP99eWt&quot;
+access_secret &lt;- &quot;dtbMBGgDzjjwwTcC7UbwrH7Hd8fNUj6GnqSP9LrWH4WB3&quot;
+
+setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_secret)</code></pre>
+<pre><code>## [1] &quot;Using direct authentication&quot;</code></pre>
+</div>
+<div id="searching-tweets-and-visualizing" class="section level2">
+<h2>Searching tweets and visualizing</h2>
+<p>In this section, I will demonstrate how to extract tweets and visualized them using bar charts and wordcloud. Here, we will search 1000 tweets that contain “data science”.</p>
+<pre class="r"><code># Search  some tweets in english containing the words &quot;data science&quot;
+ds_tweets = searchTwitter(&quot;data science&quot;, n=1000, lang=&quot;en&quot;)</code></pre>
+<p>Now, we have a large list of <code>ds_tweets</code> and then we convert it to a vector of text as follows</p>
+<pre class="r"><code># Extract the text from the tweets in a vector
+ds_text = sapply(ds_tweets, function(x) x$getText())
+head(ds_text)</code></pre>
+<pre><code>## [1] &quot;RT @EcoSenseNow: Real data, not wild predictions. Global vulnerability to climate-related hazards has declined 6.5 times for mortality &amp;amp; 5…&quot;
+## [2] &quot;RT couponfree01: Udemy Free Discount - Machine Learning A-Z\231: Hands-On Python &amp;amp;amp; R In Data Science #udemycoupon… https://t.co/e9I7TvOANT&quot;
+## [3] &quot;RT @EcoSenseNow: Real data, not wild predictions. Global vulnerability to climate-related hazards has declined 6.5 times for mortality &amp;amp; 5…&quot;
+## [4] &quot;RT @jgi: Starting 10am PT, Dec. 11 at #AGU19: Learn to use the open science #bioinformatics platform @DOEKBase at the Data Help Desk Demo w…&quot;   
+## [5] &quot;RT @DrCristinaF: IMO, this is a sign of science progressing - more interdisciplinary collaborations across the globe, harnessing huge data,…&quot;   
+## [6] &quot;RT @EcoSenseNow: Real data, not wild predictions. Global vulnerability to climate-related hazards has declined 6.5 times for mortality &amp;amp; 5…&quot;</code></pre>
+<p>Then, we create a corpus which collects all text document for text analysis.</p>
+<pre class="r"><code># create a corpus
+ds_corpus = Corpus(VectorSource(ds_text))</code></pre>
+<p>We perform some transformations of word collection and create a document term matrix as follows</p>
+<pre class="r"><code># create document term matrix applying some transformations
+tdm = TermDocumentMatrix(ds_corpus,
+                         control = list(removePunctuation = TRUE,
+                                        stopwords = c(&quot;data&quot;, &quot;science&quot;, stopwords(&quot;english&quot;)),
+                                        removeNumbers = TRUE, 
+                                        tolower = TRUE))</code></pre>
+<p>Here all punctuations and numbers are removed as well as some stop words list and specific words such as “data” and “science”, then all words are suppressed to lower. From the resulting data, the data frame is then constructed.</p>
+<pre class="r"><code>#  Obtain words and their frequencies
+# define tdm as matrix
+m = as.matrix(tdm)
+# get word counts in decreasing order
+word_freqs = sort(rowSums(m), decreasing=TRUE) 
+# create a data frame with words and their frequencies
+dm = data.frame(word=names(word_freqs), freq=word_freqs)</code></pre>
+<p>Finally, visualization of the top most frequent word is presented using a bar chart and wordcloud as follows</p>
+<pre class="r"><code>ggplot(dm %&gt;% head(10), aes(x= reorder(word, freq) , y = freq, label = freq))+
+  geom_bar(stat = &quot;identity&quot;) +
+  geom_col(fill = &quot;darkorange&quot;) +
+  geom_text( hjust=1.2, color=&quot;white&quot;, size=5) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = &quot;Word&quot;,
+       y = &quot;Frequency&quot;)</code></pre>
+<p><img src="/blog/2019-11-17-mining-and-analyzing-tweets-with-r_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code># visualized using wordcloud
+wordcloud(dm$word, dm$freq , min.freq = 2,
+          max.words=200, random.order=FALSE, rot.per=.1,
+          colors=brewer.pal(8, &quot;Dark2&quot;))</code></pre>
+<p><img src="/blog/2019-11-17-mining-and-analyzing-tweets-with-r_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="hashtag-visualization" class="section level2">
+<h2>Hashtag visualization</h2>
+<p>Now, we will extract only the hashtag used in the resulting tweets. We use <strong>stringr</strong>, specifically function <em>str_extract_all</em> to extract all words start with <code>#</code>. Then, all hashtags are filed within a data frame.</p>
+<pre class="r"><code># hashtag from search results &quot;data science&quot;
+# get the hashtags
+ds_hashtags = str_extract_all(ds_text, &quot;#\\w+&quot;)
+# put tags in vector
+df_hashtag &lt;-  ds_hashtags %&gt;% unlist() %&gt;% table() %&gt;% as.data.frame() 
+names(df_hashtag) &lt;- c(&quot;hashtag&quot;,&quot;freq&quot;)</code></pre>
+<p>Again, we visualized the top hashtag with a bar chart and wordcloud.</p>
+<pre class="r"><code>ggplot(df_hashtag %&gt;% arrange(-freq) %&gt;% head(10), aes(x= reorder(hashtag,freq) , y = freq, label = freq))+
+  geom_bar(stat = &quot;identity&quot;) +
+  geom_col(fill = &quot;darkred&quot;) +
+  geom_text( hjust=1.2, color=&quot;white&quot;, size=5) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = &quot;Hashtag&quot;,
+       y = &quot;Frequency&quot;)</code></pre>
+<p><img src="/blog/2019-11-17-mining-and-analyzing-tweets-with-r_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code># EPA hashtags wordcloud
+wordcloud(df_hashtag$hashtag, df_hashtag$freq , min.freq = 2,
+          max.words=200, random.order=FALSE, rot.per=.1,
+          colors=brewer.pal(8, &quot;Dark2&quot;))</code></pre>
+<p><img src="/blog/2019-11-17-mining-and-analyzing-tweets-with-r_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+<div id="account-mentioned-visualization" class="section level2">
+<h2>Account mentioned visualization</h2>
+<p>Using a similar idea, we extract all accounts mentioned from the resulting search tweets by selecting all words that start by <code>@</code>. Then, we stored the results into a data frame.</p>
+<pre class="r"><code># hashtag from search results &quot;data science&quot;
+# get the hashtags
+ds_mention = str_extract_all(ds_text, &quot;@\\w+&quot;)
+# put tags in vector
+df_mention &lt;-  ds_mention %&gt;% unlist() %&gt;% table() %&gt;% as.data.frame() 
+names(df_mention) &lt;- c(&quot;mention&quot;,&quot;freq&quot;)</code></pre>
+<p>Bar chart and wordcloud are used to visualized the top most frequent account mentioned as follows</p>
+<pre class="r"><code>ggplot(df_mention %&gt;% arrange(-freq) %&gt;% head(10), aes(x= reorder(mention, freq) , y = freq, label = freq))+
+  geom_bar(stat = &quot;identity&quot;) +
+  geom_col(fill = &quot;darkgreen&quot;) +
+  geom_text( hjust=1.2, color=&quot;white&quot;, size=5) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = &quot;Mention&quot;,
+       y = &quot;Frequency&quot;)</code></pre>
+<p><img src="/blog/2019-11-17-mining-and-analyzing-tweets-with-r_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>wordcloud(df_mention$mention, df_mention$freq, min.freq = 2,
+          max.words=200, random.order=FALSE, rot.per=.1,
+          colors=brewer.pal(8, &quot;Dark2&quot;))</code></pre>
+<p><img src="/blog/2019-11-17-mining-and-analyzing-tweets-with-r_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+<div id="conclusions" class="section level2">
+<h2>Conclusions</h2>
+<p>In this post, I demonstrate how to extract tweets information using R package <strong>twitteR</strong>. Besides that, visualization of most frequent words, hashtag, and account mentioned are also displayed using <strong>wordcloud</strong>.</p>
+<p>Thanks for reading this article!</p>
+<div id="references" class="section level3">
+<h3>References</h3>
+<ul>
+<li><a href="https://medium.com/@GalarnykMichael/accessing-data-from-twitter-api-using-r-part1-b387a1c7d3e">Accessing Twitter API</a></li>
+<li><a href="https://towardsdatascience.com/a-guide-to-mining-and-analysing-tweets-with-r-2f56818fdd16">Mining and analyzing tweets</a></li>
+<li>Photo by Jessicah Hast on Unsplash</li>
+</ul>
+</div>
+</div>
+
+                        </div>
+                        
+                        
+                        <div id="comments">
+                            <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "amfuady" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+                        </div>
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            
+            <li>
+                <a href="/categories/data-analysis">data-analysis (2)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/r">r (8)</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+<div class="panel sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Tags</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="tag-cloud">
+            
+            
+            <li>
+                <a href="/tags/date-time"><i class="fas fa-tags"></i> date-time</a>
+            </li>
+            
+            <li>
+                <a href="/tags/dplyr"><i class="fas fa-tags"></i> dplyr</a>
+            </li>
+            
+            <li>
+                <a href="/tags/ggplot2"><i class="fas fa-tags"></i> ggplot2</a>
+            </li>
+            
+            <li>
+                <a href="/tags/gtrendsr"><i class="fas fa-tags"></i> gtrendsr</a>
+            </li>
+            
+            <li>
+                <a href="/tags/install"><i class="fas fa-tags"></i> install</a>
+            </li>
+            
+            <li>
+                <a href="/tags/lubridate"><i class="fas fa-tags"></i> lubridate</a>
+            </li>
+            
+            <li>
+                <a href="/tags/maps"><i class="fas fa-tags"></i> maps</a>
+            </li>
+            
+            <li>
+                <a href="/tags/r"><i class="fas fa-tags"></i> r</a>
+            </li>
+            
+            <li>
+                <a href="/tags/rvest"><i class="fas fa-tags"></i> rvest</a>
+            </li>
+            
+            <li>
+                <a href="/tags/tm"><i class="fas fa-tags"></i> tm</a>
+            </li>
+            
+            <li>
+                <a href="/tags/twitter"><i class="fas fa-tags"></i> twitter</a>
+            </li>
+            
+            <li>
+                <a href="/tags/visualization"><i class="fas fa-tags"></i> visualization</a>
+            </li>
+            
+            <li>
+                <a href="/tags/wordcloud"><i class="fas fa-tags"></i> wordcloud</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/11/24/2019-11-24-exploratory-data-analysis-premiere-league-fifa20/">
+                          
+                            <img src="/img/banners/pl.jpg" class="img-responsive" alt="Exploratory data analysis: Premier league FIFA20">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/11/24/2019-11-24-exploratory-data-analysis-premiere-league-fifa20/">Exploratory data analysis: Premier league FIFA20</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/11/17/2019-11-17-mining-and-analyzing-tweets-with-r/">
+                          
+                            <img src="/img/banners/word.jpg" class="img-responsive" alt="Mining and analyzing tweets with R">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/11/17/2019-11-17-mining-and-analyzing-tweets-with-r/">Mining and analyzing tweets with R</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="/blog/2019/11/10/2019-11-10-scraping-imdb-website-using-rvest/">
+                          
+                            <img src="/img/banners/movie.jpg" class="img-responsive" alt="Scraping IMDB website using rvest ">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="/blog/2019/11/10/2019-11-10-scraping-imdb-website-using-rvest/">Scraping IMDB website using rvest </a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2019</p>
+            
+            <p class="pull-right">
+              Template by <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              Ported to Hugo by <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-150402048-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+<script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
+<script src="/js/hpneo.gmaps.js"></script>
+<script src="/js/gmaps.init.js"></script>
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+  </body>
+</html>

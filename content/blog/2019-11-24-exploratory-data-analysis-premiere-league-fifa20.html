@@ -1,0 +1,509 @@
+---
+title: 'Exploratory data analysis: Premier league FIFA20'
+banner: img/banners/pl.jpg
+author: A.M.Fuady
+date: '2019-11-24'
+slug: exploratory-data-analysis-premier-league-fifa20
+categories:
+  - data-analysis
+tags:
+  - dplyr
+  - ggplot2
+---
+
+
+
+<p>This post will explore data of players and clubs in the premier league season 2019/2020 from FIFA20 video games. Data has been scraped from the publicly available <a href="https://sofifa.com">website</a>. You may download the available data <a href="https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset">here</a> which contains the player’s career mode data from FIFA15 to FIFA20. For this post, we focus on the FIFA20 data.</p>
+<p>The first thing to do is loading some R packages needed as follows</p>
+<pre class="r"><code>library(dplyr) 
+library(ggplot2)
+library(magrittr) 
+library(stringr) 
+library(gridExtra) 
+library(reshape)
+library(ggcorrplot)</code></pre>
+<div id="loading-dataset-career-mode-players-data-in-fifa20" class="section level2">
+<h2>Loading dataset: career mode players data in FIFA20</h2>
+<pre class="r"><code>fifa &lt;- read.csv(&quot;~/RepositoryBlog/data/players_20.csv&quot;)
+fifa &lt;- fifa[-1]
+
+str(fifa)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    18278 obs. of  103 variables:
+##  $ player_url                : Factor w/ 18278 levels &quot;https://sofifa.com/player/101317/michael-ratajczak/20/159586&quot;,..: 397 5124 2497 3676 1537 2765 2674 4267 1088 5356 ...
+##  $ short_name                : Factor w/ 17354 levels &quot;A. Ã–mÃ¼r&quot;,&quot;A. Ã–nal&quot;,..: 9789 3218 12716 7914 4516 8755 11824 16600 9799 11669 ...
+##  $ long_name                 : Factor w/ 18218 levels &quot;Ã–mer Ali Åžahiner&quot;,..: 11009 3880 13648 8577 5362 10372 11787 17682 11439 13241 ...
+##  $ age                       : int  32 34 27 26 28 28 27 27 33 27 ...
+##  $ dob                       : Factor w/ 6142 levels &quot;1977-01-21&quot;,&quot;1977-07-01&quot;,..: 1175 540 2713 3040 2334 2500 2797 2508 676 2842 ...
+##  $ height_cm                 : int  170 187 175 188 175 181 187 193 172 175 ...
+##  $ weight_kg                 : int  72 83 68 87 74 70 85 92 66 71 ...
+##  $ nationality               : Factor w/ 162 levels &quot;Afghanistan&quot;,..: 6 122 19 135 13 13 58 109 35 44 ...
+##  $ club                      : Factor w/ 698 levels &quot; SSV Jahn Regensburg&quot;,..: 231 356 464 67 508 404 231 392 508 392 ...
+##  $ overall                   : int  94 93 92 91 91 91 90 90 90 90 ...
+##  $ potential                 : int  94 93 92 93 91 91 93 91 90 90 ...
+##  $ value_eur                 : int  95500000 58500000 105500000 77500000 90000000 90000000 67500000 78000000 45000000 80500000 ...
+##  $ wage_eur                  : int  565000 405000 290000 125000 470000 370000 250000 200000 340000 240000 ...
+##  $ player_positions          : Factor w/ 643 levels &quot;CAM&quot;,&quot;CAM, CDM&quot;,..: 545 621 345 227 351 12 227 56 156 575 ...
+##  $ preferred_foot            : Factor w/ 2 levels &quot;Left&quot;,&quot;Right&quot;: 1 2 2 2 2 2 2 2 2 1 ...
+##  $ international_reputation  : int  5 5 5 3 4 4 3 3 4 3 ...
+##  $ weak_foot                 : int  4 4 5 3 4 5 4 3 4 3 ...
+##  $ skill_moves               : int  4 5 5 1 4 4 1 2 4 4 ...
+##  $ work_rate                 : Factor w/ 9 levels &quot;High/High&quot;,&quot;High/Low&quot;,..: 8 2 3 9 3 1 9 9 1 3 ...
+##  $ body_type                 : Factor w/ 10 levels &quot;Akinfenwa&quot;,&quot;C. Ronaldo&quot;,..: 5 2 6 7 7 7 7 7 4 8 ...
+##  $ real_face                 : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+##  $ release_clause_eur        : int  195800000 96500000 195200000 164700000 184500000 166500000 143400000 150200000 92300000 148900000 ...
+##  $ player_tags               : Factor w/ 84 levels &quot;&quot;,&quot;#Acrobat&quot;,..: 27 74 75 1 72 38 1 83 35 73 ...
+##  $ team_position             : Factor w/ 30 levels &quot;&quot;,&quot;CAM&quot;,&quot;CB&quot;,..: 27 16 2 7 16 21 7 10 21 27 ...
+##  $ team_jersey_number        : int  10 7 10 13 7 17 1 4 10 11 ...
+##  $ loaned_from               : Factor w/ 317 levels &quot;&quot;,&quot;1. FC Heidenheim 1846&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ joined                    : Factor w/ 1761 levels &quot;&quot;,&quot;1998-01-01&quot;,..: 13 1401 1121 404 1713 631 394 1232 179 1089 ...
+##  $ contract_valid_until      : int  2021 2022 2022 2023 2024 2023 2022 2023 2020 2023 ...
+##  $ nation_position           : Factor w/ 27 levels &quot;&quot;,&quot;CAM&quot;,&quot;CB&quot;,..: 1 14 15 7 12 19 27 9 1 24 ...
+##  $ nation_jersey_number      : int  NA 7 10 1 10 7 22 4 NA 10 ...
+##  $ pace                      : int  87 90 91 NA 91 76 NA 77 74 93 ...
+##  $ shooting                  : int  92 93 85 NA 83 86 NA 60 76 86 ...
+##  $ passing                   : int  92 82 87 NA 86 92 NA 70 89 81 ...
+##  $ dribbling                 : int  96 89 95 NA 94 86 NA 71 89 89 ...
+##  $ defending                 : int  39 35 32 NA 35 61 NA 90 72 45 ...
+##  $ physic                    : int  66 78 58 NA 66 78 NA 86 66 74 ...
+##  $ gk_diving                 : int  NA NA NA 87 NA NA 88 NA NA NA ...
+##  $ gk_handling               : int  NA NA NA 92 NA NA 85 NA NA NA ...
+##  $ gk_kicking                : int  NA NA NA 78 NA NA 88 NA NA NA ...
+##  $ gk_reflexes               : int  NA NA NA 89 NA NA 90 NA NA NA ...
+##  $ gk_speed                  : int  NA NA NA 52 NA NA 45 NA NA NA ...
+##  $ gk_positioning            : int  NA NA NA 90 NA NA 88 NA NA NA ...
+##  $ player_traits             : Factor w/ 922 levels &quot;&quot;,&quot;Acrobatic Clearance&quot;,..: 112 687 787 334 165 718 920 203 19 113 ...
+##  $ attacking_crossing        : int  88 84 87 13 81 93 18 53 86 79 ...
+##  $ attacking_finishing       : int  95 94 87 11 84 82 14 52 72 90 ...
+##  $ attacking_heading_accuracy: int  70 89 62 15 61 55 11 86 55 59 ...
+##  $ attacking_short_passing   : int  92 83 87 43 89 92 61 78 92 84 ...
+##  $ attacking_volleys         : int  88 87 87 13 83 82 14 45 76 79 ...
+##  $ skill_dribbling           : int  97 89 96 12 95 86 21 70 87 89 ...
+##  $ skill_curve               : int  93 81 88 13 83 85 18 60 85 83 ...
+##  $ skill_fk_accuracy         : int  94 76 87 14 79 83 12 70 78 69 ...
+##  $ skill_long_passing        : int  92 77 81 40 83 91 63 81 88 75 ...
+##  $ skill_ball_control        : int  96 92 95 30 94 91 30 76 92 89 ...
+##  $ movement_acceleration     : int  91 89 94 43 94 77 38 74 77 94 ...
+##  $ movement_sprint_speed     : int  84 91 89 60 88 76 50 79 71 92 ...
+##  $ movement_agility          : int  93 87 96 67 95 78 37 61 92 91 ...
+##  $ movement_reactions        : int  95 96 92 88 90 91 86 88 89 92 ...
+##  $ movement_balance          : int  95 71 84 49 94 76 43 53 93 88 ...
+##  $ power_shot_power          : int  86 95 80 59 82 91 66 81 79 80 ...
+##  $ power_jumping             : int  68 95 61 78 56 63 79 90 68 69 ...
+##  $ power_stamina             : int  75 85 81 41 84 89 35 75 85 85 ...
+##  $ power_strength            : int  68 78 49 78 63 74 78 92 58 73 ...
+##  $ power_long_shots          : int  94 93 84 12 80 90 10 64 82 84 ...
+##  $ mentality_aggression      : int  48 63 51 34 54 76 43 82 62 63 ...
+##  $ mentality_interceptions   : int  40 29 36 19 41 61 22 89 82 55 ...
+##  $ mentality_positioning     : int  94 95 87 11 87 88 11 47 79 92 ...
+##  $ mentality_vision          : int  94 82 90 65 89 94 70 65 91 84 ...
+##  $ mentality_penalties       : int  75 85 90 11 88 79 25 62 82 77 ...
+##  $ mentality_composure       : int  96 95 94 68 91 91 70 89 92 91 ...
+##  $ defending_marking         : int  33 28 27 27 34 68 25 91 68 38 ...
+##  $ defending_standing_tackle : int  37 32 26 12 27 58 13 92 76 43 ...
+##  $ defending_sliding_tackle  : int  26 24 29 18 22 51 10 85 71 41 ...
+##  $ goalkeeping_diving        : int  6 7 9 87 11 15 88 13 13 14 ...
+##  $ goalkeeping_handling      : int  11 11 9 92 12 13 85 10 9 14 ...
+##  $ goalkeeping_kicking       : int  15 15 15 78 6 5 88 13 7 9 ...
+##  $ goalkeeping_positioning   : int  14 14 15 90 8 10 88 11 14 11 ...
+##  $ goalkeeping_reflexes      : int  8 11 11 89 8 13 90 11 9 14 ...
+##  $ ls                        : Factor w/ 95 levels &quot;&quot;,&quot;30+2&quot;,&quot;31+2&quot;,..: 94 95 89 1 88 86 1 60 76 89 ...
+##  $ st                        : Factor w/ 95 levels &quot;&quot;,&quot;30+2&quot;,&quot;31+2&quot;,..: 94 95 89 1 88 86 1 60 76 89 ...
+##  $ rs                        : Factor w/ 95 levels &quot;&quot;,&quot;30+2&quot;,&quot;31+2&quot;,..: 94 95 89 1 88 86 1 60 76 89 ...
+##  $ lw                        : Factor w/ 108 levels &quot;&quot;,&quot;25+2&quot;,&quot;27+2&quot;,..: 108 106 107 1 106 104 1 64 100 105 ...
+##  $ lf                        : Factor w/ 104 levels &quot;&quot;,&quot;26+2&quot;,&quot;27+2&quot;,..: 104 103 102 1 101 100 1 65 94 101 ...
+##  $ cf                        : Factor w/ 104 levels &quot;&quot;,&quot;26+2&quot;,&quot;27+2&quot;,..: 104 103 102 1 101 100 1 65 94 101 ...
+##  $ rf                        : Factor w/ 104 levels &quot;&quot;,&quot;26+2&quot;,&quot;27+2&quot;,..: 104 103 102 1 101 100 1 65 94 101 ...
+##  $ rw                        : Factor w/ 108 levels &quot;&quot;,&quot;25+2&quot;,&quot;27+2&quot;,..: 108 106 107 1 106 104 1 64 100 105 ...
+##  $ lam                       : Factor w/ 104 levels &quot;&quot;,&quot;27+2&quot;,&quot;28+2&quot;,..: 104 101 103 1 102 101 1 64 99 100 ...
+##  $ cam                       : Factor w/ 104 levels &quot;&quot;,&quot;27+2&quot;,&quot;28+2&quot;,..: 104 101 103 1 102 101 1 64 99 100 ...
+##  $ ram                       : Factor w/ 104 levels &quot;&quot;,&quot;27+2&quot;,&quot;28+2&quot;,..: 104 101 103 1 102 101 1 64 99 100 ...
+##  $ lm                        : Factor w/ 101 levels &quot;&quot;,&quot;27+2&quot;,&quot;30+2&quot;,..: 101 99 100 1 100 99 1 62 95 98 ...
+##  $ lcm                       : Factor w/ 89 levels &quot;&quot;,&quot;31+2&quot;,&quot;32+2&quot;,..: 88 80 82 1 84 89 1 64 89 80 ...
+##  $ cm                        : Factor w/ 89 levels &quot;&quot;,&quot;31+2&quot;,&quot;32+2&quot;,..: 88 80 82 1 84 89 1 64 89 80 ...
+##  $ rcm                       : Factor w/ 89 levels &quot;&quot;,&quot;31+2&quot;,&quot;32+2&quot;,..: 88 80 82 1 84 89 1 64 89 80 ...
+##  $ rm                        : Factor w/ 101 levels &quot;&quot;,&quot;27+2&quot;,&quot;30+2&quot;,..: 101 99 100 1 100 99 1 62 95 98 ...
+##  $ lwb                       : Factor w/ 99 levels &quot;&quot;,&quot;30+2&quot;,&quot;31+2&quot;,..: 65 59 61 1 61 84 1 88 92 70 ...
+##  $ ldm                       : Factor w/ 99 levels &quot;&quot;,&quot;28+2&quot;,&quot;29+2&quot;,..: 60 51 51 1 55 84 1 95 92 63 ...
+##  $ cdm                       : Factor w/ 99 levels &quot;&quot;,&quot;28+2&quot;,&quot;29+2&quot;,..: 60 51 51 1 55 84 1 95 92 63 ...
+##  $ rdm                       : Factor w/ 99 levels &quot;&quot;,&quot;28+2&quot;,&quot;29+2&quot;,..: 60 51 51 1 55 84 1 95 92 63 ...
+##  $ rwb                       : Factor w/ 99 levels &quot;&quot;,&quot;30+2&quot;,&quot;31+2&quot;,..: 65 59 61 1 61 84 1 88 92 70 ...
+##  $ lb                        : Factor w/ 97 levels &quot;&quot;,&quot;30+2&quot;,&quot;31+2&quot;,..: 54 51 51 1 51 76 1 92 88 62 ...
+##   [list output truncated]</code></pre>
+<p>This dataset consists of complete information for each player such as name, club, nationality, body measurement, overall skills, specific skills, player position, market value, etc. Here, we only focus on the premier league club season 2019/2020. We subset the dataset by selecting the only club within the premier league this season.</p>
+</div>
+<div id="selecting-premier-league-club-20192020" class="section level1">
+<h1>Selecting Premier league club 2019/2020</h1>
+<pre class="r"><code>PremierL &lt;- c(&quot;Arsenal&quot;,&quot;Aston Villa&quot;, &quot;Bournemouth&quot;, &quot;Brighton &amp; Hove Albion&quot;, &quot;Burnley&quot;, &quot;Chelsea&quot;, &quot;Crystal Palace&quot;, &quot;Everton&quot;, &quot;Leicester City&quot;, &quot;Liverpool&quot;, 
+              &quot;Manchester City&quot;, &quot;Manchester United&quot;, &quot;Newcastle United&quot;, &quot;Norwich City&quot;, &quot;Sheffield United&quot;, &quot;Southampton&quot;, &quot;Tottenham Hotspur&quot;, &quot;Watford&quot;, &quot;West Ham United&quot;, &quot;Wolverhampton Wanderers&quot;)
+
+pl &lt;- fifa  %&gt;% filter(club %in% PremierL)</code></pre>
+<p>The <code>pl</code> data frame contains all information of players in the premier league. In the following code, we define a new variable called <code>Pref.Pos</code> to refer a preferred position for each player. Some players have multiple positions, but we only select the first player position available.</p>
+<pre class="r"><code>pl  %&lt;&gt;% mutate(Pref.Pos = unlist(lapply(strsplit(x = as.character(pl$player_positions),split = &quot;,&quot;), &#39;[[&#39;,1 ) ))</code></pre>
+<p>Next, we grouped player position into four different classes, namely <code>Goal Keeper</code>, <code>Defence</code>, <code>Midfielder</code> and <code>Forward</code>. Then, we assign that information into new variables.</p>
+<pre class="r"><code>pl  %&lt;&gt;% mutate(Goal_Keeper = if_else(Pref.Pos %in% &quot;GK&quot;,1,0),
+                Defence = if_else(Pref.Pos %in% c(&quot;CB&quot;, &quot;RB&quot;, &quot;LB&quot;, &quot;LWB&quot;, &quot;RWB&quot;), 1, 0),
+                Midfielder = if_else(Pref.Pos %in% c(&quot;CM&quot;, &quot;CDM&quot;,&quot;CAM&quot;,&quot;LM&quot;,&quot;RM&quot;), 1, 0),
+                Forward = if_else(Pref.Pos %in% c(&quot;ST&quot;, &quot;CF&quot;, &quot;LW&quot;,&quot;RW&quot;), 1, 0)) 
+names(pl)</code></pre>
+<pre><code>##   [1] &quot;player_url&quot;                 &quot;short_name&quot;                
+##   [3] &quot;long_name&quot;                  &quot;age&quot;                       
+##   [5] &quot;dob&quot;                        &quot;height_cm&quot;                 
+##   [7] &quot;weight_kg&quot;                  &quot;nationality&quot;               
+##   [9] &quot;club&quot;                       &quot;overall&quot;                   
+##  [11] &quot;potential&quot;                  &quot;value_eur&quot;                 
+##  [13] &quot;wage_eur&quot;                   &quot;player_positions&quot;          
+##  [15] &quot;preferred_foot&quot;             &quot;international_reputation&quot;  
+##  [17] &quot;weak_foot&quot;                  &quot;skill_moves&quot;               
+##  [19] &quot;work_rate&quot;                  &quot;body_type&quot;                 
+##  [21] &quot;real_face&quot;                  &quot;release_clause_eur&quot;        
+##  [23] &quot;player_tags&quot;                &quot;team_position&quot;             
+##  [25] &quot;team_jersey_number&quot;         &quot;loaned_from&quot;               
+##  [27] &quot;joined&quot;                     &quot;contract_valid_until&quot;      
+##  [29] &quot;nation_position&quot;            &quot;nation_jersey_number&quot;      
+##  [31] &quot;pace&quot;                       &quot;shooting&quot;                  
+##  [33] &quot;passing&quot;                    &quot;dribbling&quot;                 
+##  [35] &quot;defending&quot;                  &quot;physic&quot;                    
+##  [37] &quot;gk_diving&quot;                  &quot;gk_handling&quot;               
+##  [39] &quot;gk_kicking&quot;                 &quot;gk_reflexes&quot;               
+##  [41] &quot;gk_speed&quot;                   &quot;gk_positioning&quot;            
+##  [43] &quot;player_traits&quot;              &quot;attacking_crossing&quot;        
+##  [45] &quot;attacking_finishing&quot;        &quot;attacking_heading_accuracy&quot;
+##  [47] &quot;attacking_short_passing&quot;    &quot;attacking_volleys&quot;         
+##  [49] &quot;skill_dribbling&quot;            &quot;skill_curve&quot;               
+##  [51] &quot;skill_fk_accuracy&quot;          &quot;skill_long_passing&quot;        
+##  [53] &quot;skill_ball_control&quot;         &quot;movement_acceleration&quot;     
+##  [55] &quot;movement_sprint_speed&quot;      &quot;movement_agility&quot;          
+##  [57] &quot;movement_reactions&quot;         &quot;movement_balance&quot;          
+##  [59] &quot;power_shot_power&quot;           &quot;power_jumping&quot;             
+##  [61] &quot;power_stamina&quot;              &quot;power_strength&quot;            
+##  [63] &quot;power_long_shots&quot;           &quot;mentality_aggression&quot;      
+##  [65] &quot;mentality_interceptions&quot;    &quot;mentality_positioning&quot;     
+##  [67] &quot;mentality_vision&quot;           &quot;mentality_penalties&quot;       
+##  [69] &quot;mentality_composure&quot;        &quot;defending_marking&quot;         
+##  [71] &quot;defending_standing_tackle&quot;  &quot;defending_sliding_tackle&quot;  
+##  [73] &quot;goalkeeping_diving&quot;         &quot;goalkeeping_handling&quot;      
+##  [75] &quot;goalkeeping_kicking&quot;        &quot;goalkeeping_positioning&quot;   
+##  [77] &quot;goalkeeping_reflexes&quot;       &quot;ls&quot;                        
+##  [79] &quot;st&quot;                         &quot;rs&quot;                        
+##  [81] &quot;lw&quot;                         &quot;lf&quot;                        
+##  [83] &quot;cf&quot;                         &quot;rf&quot;                        
+##  [85] &quot;rw&quot;                         &quot;lam&quot;                       
+##  [87] &quot;cam&quot;                        &quot;ram&quot;                       
+##  [89] &quot;lm&quot;                         &quot;lcm&quot;                       
+##  [91] &quot;cm&quot;                         &quot;rcm&quot;                       
+##  [93] &quot;rm&quot;                         &quot;lwb&quot;                       
+##  [95] &quot;ldm&quot;                        &quot;cdm&quot;                       
+##  [97] &quot;rdm&quot;                        &quot;rwb&quot;                       
+##  [99] &quot;lb&quot;                         &quot;lcb&quot;                       
+## [101] &quot;cb&quot;                         &quot;rcb&quot;                       
+## [103] &quot;rb&quot;                         &quot;Pref.Pos&quot;                  
+## [105] &quot;Goal_Keeper&quot;                &quot;Defence&quot;                   
+## [107] &quot;Midfielder&quot;                 &quot;Forward&quot;</code></pre>
+<div id="exploratory-data-club" class="section level2">
+<h2>Exploratory data: Club</h2>
+<p>The first exploration is on the club level. We want to know how many players are in each club, how much the total value of each club, the average age of player within a club, the average potential and overall skills of the player within a club.</p>
+<p>The number of the player within a club is presented in the code below</p>
+<pre class="r"><code># Number of player per club
+ggplot(pl %&gt;% select(club) %&gt;% group_by(club) %&gt;% mutate(count=n()) %&gt;% unique(), aes(x=club, y=count, label=count))+
+  geom_col(fill = &quot;royalblue&quot;) +
+  geom_text( hjust=1.2, color=&quot;white&quot;, size=3) +
+  coord_flip()+
+  theme_bw()+
+  labs(y = &quot;Frequency&quot;,
+       title = &quot;Number of Players in Clubs&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>We see that all clubs have 33 players. Next, we will show how much the total value of each club. The total value is computed by summarizing all the market values of each player within a specific club.</p>
+<pre class="r"><code># total value per club
+pl %&gt;% group_by(club) %&gt;% summarise(Total.Value = sum(value_eur, na.rm = TRUE)) %&gt;% 
+  ggplot(aes(reorder(club, Total.Value), Total.Value, label = paste0(&quot;€&quot;, Total.Value / 1000000, &quot;M&quot;)))+
+  geom_col(fill = &quot;darkviolet&quot;) +
+  geom_text( hjust=1.2, color=&quot;white&quot;, size=3) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = &quot;Clubs&quot;,
+       y= &quot;Club Value&quot;,
+       title=&quot;Total value per club&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Manchester City is the club with the highest total value with more than 845 million euro and Sheffield United has the lowest total value with around 96 million euro. Next, we will show the average player age within a club.</p>
+<pre class="r"><code>#average age per club
+pl %&gt;% group_by(club) %&gt;% summarise(Avg.Age = mean(age, na.rm = TRUE)) %&gt;% 
+  ggplot(aes(reorder(club, -Avg.Age), Avg.Age, label = round(Avg.Age, digits=2)))+
+  geom_col(fill = &quot;darkseagreen&quot;)+
+  geom_text( hjust=1.2, color=&quot;white&quot;, size=5) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = &quot;Club&quot;,
+       y= &quot;Average Age&quot;,
+       title=&quot;Average Age&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>The club with the youngest player average age is Wolverhampton Wanderers with 23.76 years of age and the oldest is Watford with 27 years of age.</p>
+<pre class="r"><code># average overall
+pl %&gt;% group_by(club) %&gt;% summarise(Avg.Overall = mean(overall, na.rm = TRUE)) %&gt;% 
+  ggplot(aes(reorder(club, Avg.Overall), Avg.Overall, label = round(Avg.Overall, digits = 2)))+
+  geom_col(fill = &quot;forestgreen&quot;)+
+  geom_text( hjust=1.2, color=&quot;white&quot;, size=5) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = &quot;Club&quot;,
+       y = &quot;Average Overall&quot;,
+       title=&quot;Average overall&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>The bar chart of the average overall skill is presented in the code above. We see that Chelsea has the largest average overall skills with 77.06, the second place is Manchester City with 77. In the average potential below, Manchester City having the highest potential with 84.3 followed by Tottenham Hotspur with 83.24. The lowest average overall skills and potential is Sheffield United with 68.88 and 73.45, respectively.</p>
+<pre class="r"><code># average potential
+pl %&gt;% group_by(club) %&gt;% summarise(Avg.Potential = mean(potential, na.rm = TRUE)) %&gt;% 
+  ggplot(aes(reorder(club, Avg.Potential), Avg.Potential, label = round(Avg.Potential, digits = 2))) +
+  geom_col(fill = &quot;gold&quot;)+
+  geom_text( hjust=1.2, color=&quot;white&quot;, size=5) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = &quot;Club&quot;,
+       y = &quot;Average Potential&quot;,
+       title=&quot;Average potential&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="exploratory-data-player" class="section level2">
+<h2>Exploratory data: Player</h2>
+<p>Next, we will explore the player data. The correlation between the market value, age, overall skills and potential are displayed below</p>
+<pre class="r"><code># correlation between value, age, overall, potential
+ggcorrplot(cor(pl[,c(4,10:12)]) , p.mat = cor_pmat(pl[,c(4,10:12)]), hc.order=TRUE, type=&#39;lower&#39;, lab=TRUE)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>We see that the market value is highly correlated with the overall skills. On the other hand, age seems to have a low correlation with the market value. Below we see the distribution of player market value, age, overall skills, and potential skills.</p>
+<pre class="r"><code>  ggplot(pl, aes(value_eur))+
+    geom_histogram( aes(y = ..density..), color=&quot;black&quot;, fill = &quot;white&quot;) +
+    geom_density(aes(y = ..density..), alpha=0.2, fill = &quot;coral&quot;) +
+    theme_bw() +
+    labs(title = &quot;Distributions of player value&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre class="r"><code>  ggplot(pl, aes(age)) +
+    geom_histogram( aes(y = ..density..), color=&quot;black&quot;, fill = &quot;white&quot;) +
+    geom_density(aes(y = ..density..), alpha=0.2, fill = &quot;darkblue&quot;) +
+    theme_bw()+
+    labs(title = &quot;Distributions of age&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(pl, aes(overall))+
+    geom_histogram( aes(y = ..density..), color=&quot;black&quot;, fill = &quot;white&quot;) +
+    geom_density(aes(y = ..density..), alpha=0.2, fill = &quot;darkred&quot;) +
+    theme_bw() +
+    labs(title = &quot;Distributions of Overall&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>  ggplot(pl, aes(potential))+
+    geom_histogram( aes(y = ..density..), color=&quot;black&quot;, fill = &quot;white&quot;) +
+    geom_density(aes(y = ..density..), alpha=0.2, fill = &quot;darkgreen&quot;) +
+    theme_bw() +
+    labs(title = &quot;Distributions of Potential&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<p>From the four groups defined earlier, we may see how many players within each group. The counts are presented using the bar chart as follows</p>
+<pre class="r"><code># Number of player per position
+player_per_pos &lt;- data.frame(Position=c(&quot;Goal Keeper&quot;, &quot;Defence&quot;, &quot;Midfielder&quot;, &quot;Forward&quot;), 
+           Number_of_player = c(sum(pl$Goal_Keeper), sum(pl$Defence), sum(pl$Midfielder), sum(pl$Forward)))
+
+
+ggplot(player_per_pos, aes(reorder(Position, Number_of_player), Number_of_player, fill = Position, label = Number_of_player))+
+  geom_col(show.legend = FALSE)+
+  geom_text( hjust=1.6, color=&quot;white&quot;, size=5)+
+  coord_flip()+
+  scale_fill_ordinal()+
+  theme_minimal()+
+  labs(x = &quot;Position&quot;,
+       title = &quot;Number of Players&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>Midfielder becomes the most preferred position followed by Defence. 35% of players in the premier league is a midfielder and only 10% is a goalkeeper. Now, we sort the most valuable player in the 2019/2020 season.</p>
+<pre class="r"><code># most valuable player
+pl  %&gt;% arrange(-value_eur) %&gt;% head(5) %&gt;% 
+  ggplot(aes(reorder(short_name, value_eur), value_eur, label = paste0(&quot;€&quot;, value_eur / 1000000, &quot;M&quot;)))+
+  geom_col(fill = &quot;slategrey&quot;)+
+  geom_text( hjust=1.6, color=&quot;white&quot;, size=5)+
+  coord_flip()+
+  theme_minimal()+
+  labs(title = &quot;Most Valuable Players&quot;,
+       x = &quot;Players&quot;,
+       y = &quot;Values&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Kevin de Bruyne is the most valuable player in this season with about 90 million euro market value followed by Harry Kane and Mohammed Salah with 83 million and 80.5 million, respectively. Now, we break down the most valuable player for each position group as follows</p>
+<pre class="r"><code># top 5 player for each position
+grid.arrange(
+  pl  %&gt;% arrange(-value_eur) %&gt;% filter(Goal_Keeper == 1) %&gt;% head(5) %&gt;% 
+    ggplot(aes(reorder(short_name, value_eur), value_eur, label = paste0(&quot;€&quot;, value_eur / 1000000, &quot;M&quot;)))+
+    geom_col(fill = &quot;slateblue&quot;)+
+    geom_text( hjust=1.2, color=&quot;white&quot;, size=5)+
+    coord_flip()+
+    theme_minimal()+
+    labs(subtitle = &quot;Most Valuable Goal Keepers&quot;,
+         x = &quot;Players&quot;,
+         y = NULL)+
+    theme(axis.text.x=element_blank()),
+  
+  pl  %&gt;% arrange(-value_eur) %&gt;% filter(Defence == 1) %&gt;% head(5) %&gt;% 
+    ggplot(aes(reorder(short_name, value_eur), value_eur, label = paste0(&quot;€&quot;, value_eur / 1000000, &quot;M&quot;)))+
+    geom_col(fill = &quot;violet&quot;)+
+    geom_text( hjust=1.2, color=&quot;white&quot;, size=5)+
+    coord_flip()+
+    theme_minimal()+
+    labs(subtitle = &quot;Most Valuable Defence Players&quot;,
+         x = NULL,
+         y = NULL)+
+    theme(axis.text.x=element_blank()),
+  
+  pl  %&gt;% arrange(-value_eur) %&gt;% filter(Midfielder == 1) %&gt;% head(5) %&gt;% 
+    ggplot(aes(reorder(short_name, value_eur), value_eur, label = paste0(&quot;€&quot;, value_eur / 1000000, &quot;M&quot;)))+
+    geom_col(fill = &quot;salmon&quot;)+
+    geom_text( hjust=1.2, color=&quot;white&quot;, size=5)+
+    coord_flip()+
+    theme_minimal()+
+    labs(subtitle = &quot;Most Valuable Midfielder Players&quot;,
+         x = &quot;Players&quot;,
+         y = NULL)+
+    theme(axis.text.x=element_blank()),
+  
+  pl  %&gt;% arrange(-value_eur) %&gt;% filter(Forward == 1) %&gt;% head(5) %&gt;% 
+    ggplot(aes(reorder(short_name, value_eur), value_eur, label = paste0(&quot;€&quot;, value_eur / 1000000, &quot;M&quot;)))+
+    geom_col(fill = &quot;royalblue&quot;)+
+    geom_text( hjust=1.2, color=&quot;white&quot;, size=5)+
+    coord_flip()+
+    theme_minimal()+
+    labs(subtitle = &quot;Most Valuable Forward Players&quot;,
+         x = NULL,
+         y = NULL)+
+    theme(axis.text.x=element_blank())
+)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Alisson Becker leads the goalkeeper most valuable player with 58 million euro, In the defense department Virgil van Dijk with 78 million euro, in the midfielder position Kevin de Bruyne and for the forward position is Harry Kane.</p>
+<pre class="r"><code># nationality
+pl %&gt;% select(nationality) %&gt;% 
+  group_by(nationality) %&gt;% 
+  mutate(count=n()) %&gt;% unique() %&gt;% arrange(-count) %&gt;% head(10) %&gt;%
+  ggplot(aes(x=reorder(nationality,-count), y = count)) +
+  geom_bar(stat=&quot;identity&quot;, fill=&quot;darkgreen&quot;) +
+  geom_text(aes(label=count), nudge_y = 10, color = &quot;darkgreen&quot;, size = 5) +
+  labs(x=&quot;Nationality&quot;, y=&quot;Number of players&quot;) +
+  theme_bw()</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>We sort the number of players based on their nationality in the code above. We see that more than 30 players are coming from France, Spain, and the Republic of Ireland.</p>
+</div>
+<div id="player-comparison" class="section level2">
+<h2>Player comparison</h2>
+<p>In this section, we compare and illustrate each specific skill of two players, here as an example, we choose to compare Kevin de Bruyne and Paul Pogba. For these two players, we compare the attacking skills, individual skills, movement skills, power, mentality, and defending skills. For the goalkeeping skills, we compare David De Gea and Alisson Becker.</p>
+<pre class="r"><code>pl %&gt;% select(short_name,starts_with(&quot;attacking&quot;)) %&gt;% filter(short_name %in% c(&quot;K. De Bruyne&quot;, &quot;P. Pogba&quot;)) %&gt;% 
+  melt(id=&quot;short_name&quot;) %&gt;%
+  ggplot(aes(x=variable, y=value, group=short_name, color=short_name, fill=short_name, label=value)) +
+  geom_polygon(alpha=0.2) +
+  geom_point() +
+  geom_text(nudge_y = 0.2, size = 4) +
+  coord_polar(start=pi/2) +
+  scale_x_discrete(labels=c(&quot;attacking_volleys&quot; = &quot;Volleys&quot;, 
+                            &quot;attacking_crossing&quot; = &quot;Crossing&quot;,
+                            &quot;attacking_short_passing&quot; = &quot;Short Passing&quot;,
+                            &quot;attacking_finishing&quot; = &quot;Finishing&quot;,
+                            &quot;attacking_heading_accuracy&quot; = &quot;Heading&quot;)) +
+  theme(legend.position = &quot;bottom&quot;) +
+  labs(x=&quot;&quot;, y=&quot;value&quot;, title=&quot;Attacking&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>In the attacking skills, De Bruyne is leading in the short passing, finishing, and crossing, while Pogba leads in heading and volley.</p>
+<pre class="r"><code>pl %&gt;% select(short_name,starts_with(&quot;skill&quot;)) %&gt;% filter(short_name %in% c(&quot;K. De Bruyne&quot;, &quot;P. Pogba&quot;)) %&gt;% 
+  melt(id=&quot;short_name&quot;) %&gt;%
+  ggplot(aes(x=variable, y=value, group=short_name, color=short_name, fill=short_name, label=value)) +
+  geom_polygon(alpha=0.2) +
+  geom_point() +
+  geom_text(nudge_y = 0.2, size = 4) +
+  coord_polar(start=pi/2) +
+  scale_x_discrete(labels=c(&quot;skill_long_passing&quot; = &quot;Long Passing&quot;, 
+                            &quot;skill_fk_accuracy&quot; = &quot;Accuracy&quot;,
+                            &quot;skill_curve&quot; = &quot;Curve&quot;,
+                            &quot;skill_dribbling&quot; = &quot;Dribbling&quot;,
+                            &quot;skill_moves&quot; = &quot;Moves&quot;,
+                            &quot;skill_ball_control&quot; = &quot;Control&quot;)) +
+  theme(legend.position = &quot;bottom&quot;) +
+  labs(x=&quot;&quot;, y=&quot;value&quot;, title=&quot;Skills&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>In the individual skills, both players have almost similar skills value for all skills compartments. For movement skills, De Bruyne leads on four skills, namely agility, reaction, balance and acceleration, and only fall three points behind Pogba in speed.</p>
+<pre class="r"><code>pl %&gt;% select(short_name,starts_with(&quot;movement&quot;)) %&gt;% filter(short_name %in% c(&quot;K. De Bruyne&quot;, &quot;P. Pogba&quot;)) %&gt;% 
+  melt(id=&quot;short_name&quot;) %&gt;%
+  ggplot(aes(x=variable, y=value, group=short_name, color=short_name, fill=short_name, label=value)) +
+  geom_polygon(alpha=0.2) +
+  geom_point() +
+  geom_text(nudge_y = 0.2, size = 4) +
+  coord_polar(start=pi/2) +
+  scale_x_discrete(labels=c(&quot;movement_reactions&quot; = &quot;Reactions&quot;, 
+                            &quot;movement_balance&quot; = &quot;Balance&quot;,
+                            &quot;movement_agility&quot; = &quot;Agility&quot;,
+                            &quot;movement_sprint_speed&quot; = &quot;Speed&quot;,
+                            &quot;movement_acceleration&quot; = &quot;Acceleration&quot;)) +
+  theme(legend.position = &quot;bottom&quot;) +
+  labs(x=&quot;&quot;, y=&quot;value&quot;, title=&quot;Movement&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>In the power department, De Bruyne is again leading, but in strength and jumping, Pogba having a higher skill point.</p>
+<pre class="r"><code>pl %&gt;% select(short_name,starts_with(&quot;power&quot;)) %&gt;% filter(short_name %in% c(&quot;K. De Bruyne&quot;, &quot;P. Pogba&quot;)) %&gt;% 
+  melt(id=&quot;short_name&quot;) %&gt;%
+  ggplot(aes(x=variable, y=value, group=short_name, color=short_name, fill=short_name, label=value)) +
+  geom_polygon(alpha=0.2) +
+  geom_point() +
+  geom_text(nudge_y = 0.2, size = 4) +
+  coord_polar(start=pi/2) +
+  scale_x_discrete(labels=c(&quot;power_strength&quot; = &quot;Strength&quot;, 
+                            &quot;power_long_shots&quot; = &quot;Long shots&quot;,
+                            &quot;power_stamina&quot; = &quot;Stamina&quot;,
+                            &quot;power_jumping&quot; = &quot;Jumping&quot;,
+                            &quot;power_shot_power&quot; = &quot;Shot Power&quot;)) +
+  theme(legend.position = &quot;bottom&quot;) +
+  labs(x=&quot;&quot;, y=&quot;value&quot;, title=&quot;Power&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<pre class="r"><code>pl %&gt;% select(short_name,starts_with(&quot;mentality&quot;)) %&gt;% filter(short_name %in% c(&quot;K. De Bruyne&quot;, &quot;P. Pogba&quot;)) %&gt;% 
+  melt(id=&quot;short_name&quot;) %&gt;%
+  ggplot(aes(x=variable, y=value, group=short_name, color=short_name, fill=short_name, label=value)) +
+  geom_polygon(alpha=0.2) +
+  geom_point() +
+  geom_text(nudge_y = 0.2, size = 4) +
+  coord_polar(start=pi/2) +
+  scale_x_discrete(labels=c(&quot;mentality_penalties&quot; = &quot;Penalties&quot;, 
+                            &quot;mentality_vision&quot; = &quot;Vision&quot;,
+                            &quot;mentality_positioning&quot; = &quot;Positioning&quot;,
+                            &quot;mentality_interceptions&quot; = &quot;Interceptions&quot;,
+                            &quot;mentality_aggression&quot; = &quot;Aggression&quot;,
+                            &quot;mentality_composure&quot; = &quot;Composure&quot;)) +
+  theme(legend.position = &quot;bottom&quot;) +
+  labs(x=&quot;&quot;, y=&quot;value&quot;, title=&quot;Mentality&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>For mentality, these two players share a similar number of leads. De Bruyne leads in vision, composure, and positioning, while Pogba leads in penalties, aggression, and interceptions. For the defending skills, Pogba has more skills than De Bruyne by leading in standing and sliding tackle, and defending general while De Bruyne has more points in the marking skill.</p>
+<pre class="r"><code>pl %&gt;% select(short_name,starts_with(&quot;defending&quot;)) %&gt;% filter(short_name %in% c(&quot;K. De Bruyne&quot;, &quot;P. Pogba&quot;)) %&gt;% 
+  melt(id=&quot;short_name&quot;) %&gt;%
+  ggplot(aes(x=variable, y=value, group=short_name, color=short_name, fill=short_name, label=value)) +
+  geom_polygon(alpha=0.2) +
+  geom_point() +
+  geom_text(nudge_y = 0.2, size = 4) +
+  coord_polar(start=pi/2) +
+  scale_x_discrete(labels=c(&quot;defending_marking&quot; = &quot;Marking&quot;, 
+                            &quot;defending_standing_tackle&quot; = &quot;Standing tackle&quot;,
+                            &quot;defending_sliding_tackle&quot; = &quot;Sliding tackle&quot;)) +
+  theme(legend.position = &quot;bottom&quot;) +
+  labs(x=&quot;&quot;, y=&quot;value&quot;, title=&quot;Defending&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<pre class="r"><code>pl %&gt;% select(short_name,starts_with(&quot;goalkeeping&quot;)) %&gt;% filter(short_name %in% c(&quot;De Gea&quot;, &quot;Alisson&quot;)) %&gt;%
+  melt(id=&quot;short_name&quot;) %&gt;%
+  ggplot(aes(x=variable, y=value, group=short_name, color=short_name, fill=short_name, label=value)) +
+  geom_polygon(alpha=0.2) +
+  geom_point() +
+  geom_text(nudge_y = 0.2, size = 4) +
+  coord_polar(start=pi/2) +
+  scale_x_discrete(labels=c(&quot;goalkeeping_diving&quot; = &quot;Diving&quot;,
+                            &quot;goalkeeping_handling&quot; = &quot;Handling&quot;,
+                            &quot;goalkeeping_kicking&quot; = &quot;Kicking&quot;,
+                            &quot;goalkeeping_positioning&quot; = &quot;Positioning&quot;,
+                            &quot;goalkeeping_reflexes&quot; = &quot;Reflexes&quot;)) +
+  theme(legend.position = &quot;bottom&quot;) +
+  labs(x=&quot;&quot;, y=&quot;value&quot;, title=&quot;Goalkeeping&quot;)</code></pre>
+<p><img src="/blog/2019-11-24-exploratory-data-analysis-premiere-league-fifa20_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>For comparison of goalkeeping skills, we compare De Gea and Alisson. Here, Alisson has more points on positioning handing and kicking, while De Gea leads diving and reflexes.</p>
+</div>
+<div id="conclusions" class="section level2">
+<h2>Conclusions</h2>
+<p>This post mainly focuses on the data exploration of premier league players in the season of 2019/2020 from FIFA20 games. We summaries information on the club level as well as on the player level. We show some information, such as the most valuable club and the most valuable player, the average age, potential and overall skills of players. In the last part of the analysis, we compare two players based on their skills.</p>
+<p>Thanks for reading this article!</p>
+<div id="references" class="section level3">
+<h3>References</h3>
+<ul>
+<li>Dataset FIFA20: <a href="https://sofifa.com">here</a> and <a href="https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset">here</a></li>
+<li>Photo by Nathan Rogers on Unsplash</li>
+</ul>
+</div>
+</div>
+</div>

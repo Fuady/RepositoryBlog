@@ -1,0 +1,187 @@
+---
+title: Mining and analyzing tweets with R
+banner: img/banners/word.jpg
+author: A.M.Fuady
+date: '2019-11-17'
+slug: mining-and-analyzing-tweets-with-r
+categories:
+  - R
+tags:
+  - dplyr
+  - wordcloud
+  - twitteR
+  - ggplot2
+  - tm
+---
+
+In this post, I would like to demonstrate simple steps on how to extract and analyze twitter data using R. We mainly use **twitteR** package to extract information of tweets, and use **wordcloud** package to visualized word intensity. 
+
+The first step is, of course, installing and loading some packages needed as follow
+```{r, message=FALSE, warning=FALSE}
+library(twitteR)
+library(tm)
+library(ggplot2)
+library(dplyr)
+library(wordcloud)
+library(RColorBrewer)
+library(stringr)
+```
+
+**twitteR** package is used for extracting tweets' information. Two packages are utilized for text transformation, namely **tm** and **stringr**. To visualized how often a specific word is chosen, we used **wordcloud**. **dplyr** is used for piping,   **RColorBrewer** for multi-color illustration and finally **ggplot2** to plot the bar chart.
+
+After loading all the libraries needed, we need to set up the twitter API connection. This can be done by accessing the developer site of twitter, [here](https://developer.twitter.com/en/apply-for-access.html). In order to get access, you need to have a twitter account and get register to the developer site. Tutorial to access the developer site can be seen [here](https://medium.com/@GalarnykMichael/accessing-data-from-twitter-api-using-r-part1-b387a1c7d3e). After all steps, you will get four codes, namely Consumer key, Consumer Secret, Access Token, and Access Secret. These codes will be used to authorize you for extracting tweets. 
+
+## Set up twitter API connection
+```{r}
+# Change the next four lines based on your own consumer_key, consume_secret, access_token, and access_secret. 
+consumer_key <- "ClOUrS8CVAp9yGCZQZfjDJIbk"
+consumer_secret <- "3S2mru9GgwHrvYIBNV1iTkwgmO5Y9ExfTnOQ91OFlXAu4iDBLw"
+access_token <- "1204041700441759744-mDdYIaPPboDPP1HTOenbBiwFP99eWt"
+access_secret <- "dtbMBGgDzjjwwTcC7UbwrH7Hd8fNUj6GnqSP9LrWH4WB3"
+
+setup_twitter_oauth(consumer_key, consumer_secret, access_token, access_secret)
+```
+
+## Searching tweets and visualizing
+In this section, I will demonstrate how to extract tweets and visualized them using bar charts and wordcloud. Here, we will search 1000 tweets that contain "data science". 
+
+```{r}
+# Search  some tweets in english containing the words "data science"
+ds_tweets = searchTwitter("data science", n=1000, lang="en")
+```
+
+Now, we have a large list of `ds_tweets` and then we convert it to a vector of text as follows
+
+```{r}
+# Extract the text from the tweets in a vector
+ds_text = sapply(ds_tweets, function(x) x$getText())
+head(ds_text)
+```
+
+Then, we create a corpus which collects all text document for text analysis. 
+
+```{r}
+# create a corpus
+ds_corpus = Corpus(VectorSource(ds_text))
+```
+
+We perform some transformations of word collection and create a document term matrix as follows 
+```{r}
+# create document term matrix applying some transformations
+tdm = TermDocumentMatrix(ds_corpus,
+                         control = list(removePunctuation = TRUE,
+                                        stopwords = c("data", "science", stopwords("english")),
+                                        removeNumbers = TRUE, 
+                                        tolower = TRUE))
+```
+
+Here all punctuations and numbers are removed as well as some stop words list and specific words such as "data" and "science", then all words are suppressed to lower. From the resulting data, the data frame is then constructed.
+
+```{r}
+#  Obtain words and their frequencies
+# define tdm as matrix
+m = as.matrix(tdm)
+# get word counts in decreasing order
+word_freqs = sort(rowSums(m), decreasing=TRUE) 
+# create a data frame with words and their frequencies
+dm = data.frame(word=names(word_freqs), freq=word_freqs)
+```
+
+Finally, visualization of the top most frequent word is presented using a bar chart and wordcloud as follows
+
+```{r,warning=FALSE}
+ggplot(dm %>% head(10), aes(x= reorder(word, freq) , y = freq, label = freq))+
+  geom_bar(stat = "identity") +
+  geom_col(fill = "darkorange") +
+  geom_text( hjust=1.2, color="white", size=5) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = "Word",
+       y = "Frequency")
+```
+
+
+```{r, warning=FALSE}
+# visualized using wordcloud
+wordcloud(dm$word, dm$freq , min.freq = 2,
+          max.words=200, random.order=FALSE, rot.per=.1,
+          colors=brewer.pal(8, "Dark2"))
+
+```
+
+
+## Hashtag visualization 
+Now, we will extract only the hashtag used in the resulting tweets. We use **stringr**, specifically function  *str_extract_all* to extract all words start with `#`. Then, all hashtags are filed within a data frame.
+
+```{r}
+# hashtag from search results "data science"
+# get the hashtags
+ds_hashtags = str_extract_all(ds_text, "#\\w+")
+# put tags in vector
+df_hashtag <-  ds_hashtags %>% unlist() %>% table() %>% as.data.frame() 
+names(df_hashtag) <- c("hashtag","freq")
+```
+
+Again, we visualized the top hashtag with a bar chart and wordcloud.
+
+```{r}
+ggplot(df_hashtag %>% arrange(-freq) %>% head(10), aes(x= reorder(hashtag,freq) , y = freq, label = freq))+
+  geom_bar(stat = "identity") +
+  geom_col(fill = "darkred") +
+  geom_text( hjust=1.2, color="white", size=5) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = "Hashtag",
+       y = "Frequency")
+```
+
+```{r,warning=FALSE}
+# EPA hashtags wordcloud
+wordcloud(df_hashtag$hashtag, df_hashtag$freq , min.freq = 2,
+          max.words=200, random.order=FALSE, rot.per=.1,
+          colors=brewer.pal(8, "Dark2"))
+```
+
+## Account mentioned visualization
+Using a similar idea, we extract all accounts mentioned from the resulting search tweets by selecting all words that start by `@`. Then, we stored the results into a data frame. 
+
+```{r, warning=FALSE, message=FALSE}
+# hashtag from search results "data science"
+# get the hashtags
+ds_mention = str_extract_all(ds_text, "@\\w+")
+# put tags in vector
+df_mention <-  ds_mention %>% unlist() %>% table() %>% as.data.frame() 
+names(df_mention) <- c("mention","freq")
+
+```
+
+Bar chart and wordcloud are used to visualized the top most frequent account mentioned as follows 
+
+```{r}
+ggplot(df_mention %>% arrange(-freq) %>% head(10), aes(x= reorder(mention, freq) , y = freq, label = freq))+
+  geom_bar(stat = "identity") +
+  geom_col(fill = "darkgreen") +
+  geom_text( hjust=1.2, color="white", size=5) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = "Mention",
+       y = "Frequency")
+```
+
+
+```{r, warning=FALSE}
+wordcloud(df_mention$mention, df_mention$freq, min.freq = 2,
+          max.words=200, random.order=FALSE, rot.per=.1,
+          colors=brewer.pal(8, "Dark2"))
+```
+
+
+## Conclusions
+In this post, I demonstrate how to extract tweets information using R package **twitteR**. Besides that, visualization of most frequent words, hashtag, and account mentioned are also displayed using **wordcloud**.
+
+Thanks for reading this article!
+
+### References
+* [Accessing Twitter API](https://medium.com/@GalarnykMichael/accessing-data-from-twitter-api-using-r-part1-b387a1c7d3e)
+* [Mining and analyzing tweets](https://towardsdatascience.com/a-guide-to-mining-and-analysing-tweets-with-r-2f56818fdd16)
+* Photo by Jessicah Hast on Unsplash

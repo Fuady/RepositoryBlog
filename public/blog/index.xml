@@ -6,10 +6,32 @@
     <description>Recent content in Blogs on Angga Fuady Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Nov 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 24 Nov 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Exploratory data analysis: Premier league FIFA20</title>
+      <link>/blog/2019/11/24/2019-11-24-exploratory-data-analysis-premiere-league-fifa20/</link>
+      <pubDate>Sun, 24 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/11/24/2019-11-24-exploratory-data-analysis-premiere-league-fifa20/</guid>
+      <description>This post will explore data of players and clubs in the premier league season 2019/2020 from FIFA20 video games. Data has been scraped from the publicly available website. You may download the available data here which contains the player’s career mode data from FIFA15 to FIFA20. For this post, we focus on the FIFA20 data.
+The first thing to do is loading some R packages needed as follows
+library(dplyr) library(ggplot2)library(magrittr) library(stringr) library(gridExtra) library(reshape)library(ggcorrplot)Loading dataset: career mode players data in FIFA20fifa &amp;lt;- read.</description>
+    </item>
+    
+    <item>
+      <title>Mining and analyzing tweets with R</title>
+      <link>/blog/2019/11/17/2019-11-17-mining-and-analyzing-tweets-with-r/</link>
+      <pubDate>Sun, 17 Nov 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/11/17/2019-11-17-mining-and-analyzing-tweets-with-r/</guid>
+      <description>In this post, I would like to demonstrate simple steps on how to extract and analyze twitter data using R. We mainly use twitteR package to extract information of tweets, and use wordcloud package to visualized word intensity.
+The first step is, of course, installing and loading some packages needed as follow
+library(twitteR)library(tm)library(ggplot2)library(dplyr)library(wordcloud)library(RColorBrewer)library(stringr)twitteR package is used for extracting tweets’ information. Two packages are utilized for text transformation, namely tm and stringr.</description>
+    </item>
     
     <item>
       <title>Scraping IMDB website using rvest </title>
