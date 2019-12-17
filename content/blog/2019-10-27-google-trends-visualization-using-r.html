@@ -5,7 +5,7 @@ author: A.M.Fuady
 date: '2019-10-27'
 slug: google-trends-visualization-using-r
 categories:
-  - R
+  - R package
 tags:
   - visualization
   - ggplot2
@@ -58,12 +58,12 @@ names(AseanMap)[5] &lt;- c(&quot;location&quot;)</code></pre>
 <pre class="r"><code>time_trend_seagames = SeaGames$interest_over_time
 head(time_trend_seagames)</code></pre>
 <pre><code>##         date hits   geo time   keyword gprop category
-## 1 2004-01-01    2 world  all Sea Games   web        0
-## 2 2004-02-01    1 world  all Sea Games   web        0
-## 3 2004-03-01    1 world  all Sea Games   web        0
-## 4 2004-04-01    1 world  all Sea Games   web        0
-## 5 2004-05-01    1 world  all Sea Games   web        0
-## 6 2004-06-01    1 world  all Sea Games   web        0</code></pre>
+## 1 2004-01-01    1 world  all Sea Games   web        0
+## 2 2004-02-01   &lt;1 world  all Sea Games   web        0
+## 3 2004-03-01   &lt;1 world  all Sea Games   web        0
+## 4 2004-04-01   &lt;1 world  all Sea Games   web        0
+## 5 2004-05-01   &lt;1 world  all Sea Games   web        0
+## 6 2004-06-01   &lt;1 world  all Sea Games   web        0</code></pre>
 <pre class="r"><code>ggplot(time_trend_seagames, aes(x=date, y=hits) ) +
         geom_line(col=&quot;blue&quot;) + 
         xlab(&#39;Time&#39;) + ylab(&#39;Search Hits&#39;) + 

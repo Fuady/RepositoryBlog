@@ -5,9 +5,8 @@ author: A.M.Fuady
 date: '2019-10-20'
 slug: set-date-and-time-using-lubridate
 categories:
-  - R
+  - R package
 tags:
-  - R
   - lubridate
   - ggplot2
   - dplyr

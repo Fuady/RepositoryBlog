@@ -5,7 +5,7 @@ author: A.M.Fuady
 date: '2019-10-27'
 slug: google-trends-visualization-using-r
 categories:
-  - R
+  - R package
 tags:
   - visualization
   - ggplot2

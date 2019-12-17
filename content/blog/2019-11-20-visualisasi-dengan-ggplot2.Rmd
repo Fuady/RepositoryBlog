@@ -5,9 +5,8 @@ author: A.M.Fuady
 date: '2019-10-06'
 slug: data-visualization-using-ggplot2
 categories: 
-  - R
+  - R package
 tags:
-  - R
   - ggplot2
   - visualization
 ---

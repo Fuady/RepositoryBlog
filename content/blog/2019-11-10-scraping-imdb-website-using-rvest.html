@@ -5,7 +5,7 @@ author: A.M.Fuady
 date: '2019-11-10'
 slug: scraping-imdb-website-using-rvest
 categories:
-  - R
+  - R package
 tags:
   - dplyr
   - ggplot2
@@ -152,7 +152,7 @@ actors_data&lt;-as.factor(actors_data)
 head(actors_data)</code></pre>
 <pre><code>## [1] Tim Robbins    Marlon Brando  Christian Bale Al Pacino     
 ## [5] Elijah Wood    John Travolta 
-## 78 Levels: Aamir Khan Adam Driver Adrien Brody ... Zain Al Rafeea</code></pre>
+## 79 Levels: Aamir Khan Adam Driver Adrien Brody ... Zain Al Rafeea</code></pre>
 <p>Combine all into a data frame</p>
 <pre class="r"><code>#Combining all the lists to form a data frame
 movies_df&lt;-data.frame(Rank = rank_data, 

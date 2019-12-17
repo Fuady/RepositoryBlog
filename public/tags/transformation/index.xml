@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>transformation on Angga Fuady Blog</title>
+    <link>/tags/transformation/</link>
+    <description>Recent content in transformation on Angga Fuady Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 13 Oct 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/transformation/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Data transformation and manipulation using dplyr</title>
+      <link>/blog/2019/10/13/2019-11-23-data-transformation-and-manipulation-using-dplyr/</link>
+      <pubDate>Sun, 13 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/10/13/2019-11-23-data-transformation-and-manipulation-using-dplyr/</guid>
+      <description>This time we will discuss on how to transform and manipulate data using the dplyr package. Specifically, here are some topics that will be covered
+Filter observations based on their values using filter().Reorder lines using arrange().Selecting variables using select().Create a new variable from an existing variable using mutate().Make a group summary of variables using summarise().Combining several datasets using various join functions.In this post, we use nycflights13 datasets which contains all flights that depaeted from New York City (eg EWR, JFK, and LGA) to destinations in the United States, Puerto Rico and the American Virgin Islands) in 2013 with total of 336,776 flights.</description>
+    </item>
+    
+  </channel>
+</rss>

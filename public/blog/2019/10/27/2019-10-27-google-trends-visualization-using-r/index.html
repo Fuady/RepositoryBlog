@@ -83,7 +83,7 @@
   
     
     
-    <meta property="article:section" content="R">
+    <meta property="article:section" content="R package">
     <meta property="article:tag" content="visualization">
     <meta property="article:tag" content="ggplot2">
     <meta property="article:tag" content="gtrendsr">
@@ -258,12 +258,12 @@ names(AseanMap)[5] &lt;- c(&quot;location&quot;)</code></pre>
 <pre class="r"><code>time_trend_seagames = SeaGames$interest_over_time
 head(time_trend_seagames)</code></pre>
 <pre><code>##         date hits   geo time   keyword gprop category
-## 1 2004-01-01    2 world  all Sea Games   web        0
-## 2 2004-02-01    1 world  all Sea Games   web        0
-## 3 2004-03-01    1 world  all Sea Games   web        0
-## 4 2004-04-01    1 world  all Sea Games   web        0
-## 5 2004-05-01    1 world  all Sea Games   web        0
-## 6 2004-06-01    1 world  all Sea Games   web        0</code></pre>
+## 1 2004-01-01    1 world  all Sea Games   web        0
+## 2 2004-02-01   &lt;1 world  all Sea Games   web        0
+## 3 2004-03-01   &lt;1 world  all Sea Games   web        0
+## 4 2004-04-01   &lt;1 world  all Sea Games   web        0
+## 5 2004-05-01   &lt;1 world  all Sea Games   web        0
+## 6 2004-06-01   &lt;1 world  all Sea Games   web        0</code></pre>
 <pre class="r"><code>ggplot(time_trend_seagames, aes(x=date, y=hits) ) +
         geom_line(col=&quot;blue&quot;) + 
         xlab(&#39;Time&#39;) + ylab(&#39;Search Hits&#39;) + 
@@ -380,7 +380,11 @@ SeaGamesMerged &lt;- SeaGamesInterestByRegion %&gt;% dplyr::left_join(x = .,  y 
             </li>
             
             <li>
-                <a href="/categories/r">r (8)</a>
+                <a href="/categories/how-to">how-to (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/r-package">r-package (6)</a>
             </li>
             
         </ul>
@@ -422,7 +426,11 @@ SeaGamesMerged &lt;- SeaGamesInterestByRegion %&gt;% dplyr::left_join(x = .,  y 
             </li>
             
             <li>
-                <a href="/tags/install"><i class="fas fa-tags"></i> install</a>
+                <a href="/tags/install-r"><i class="fas fa-tags"></i> install-r</a>
+            </li>
+            
+            <li>
+                <a href="/tags/install-rstudio"><i class="fas fa-tags"></i> install-rstudio</a>
             </li>
             
             <li>
@@ -434,15 +442,15 @@ SeaGamesMerged &lt;- SeaGamesInterestByRegion %&gt;% dplyr::left_join(x = .,  y 
             </li>
             
             <li>
-                <a href="/tags/r"><i class="fas fa-tags"></i> r</a>
-            </li>
-            
-            <li>
                 <a href="/tags/rvest"><i class="fas fa-tags"></i> rvest</a>
             </li>
             
             <li>
                 <a href="/tags/tm"><i class="fas fa-tags"></i> tm</a>
+            </li>
+            
+            <li>
+                <a href="/tags/transformation"><i class="fas fa-tags"></i> transformation</a>
             </li>
             
             <li>

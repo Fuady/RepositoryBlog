@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Install R on Angga Fuady Blog</title>
+    <link>/tags/install-r/</link>
+    <description>Recent content in Install R on Angga Fuady Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 05 Oct 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/install-r/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Install R and RStudio on Windows</title>
+      <link>/blog/2019/10/05/2019-10-05-install-r-and-rstudio-on-windows/</link>
+      <pubDate>Sat, 05 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/2019/10/05/2019-10-05-install-r-and-rstudio-on-windows/</guid>
+      <description>Here I want to elaborate steps needed to install R and RStudio on Windows. R is a programming language and free software environment for statistical computing and graphics. RStudio is an interactive desktop environment. Prior to installing RStudio, R should be installed first.
+Installing RYou can download R from the Comprehensive R Archive Network (CRAN)Select your operating system: Linux, Mac OS X or Windows.At the CRAN download page, several subdirectories are available, select base to install the basic packages you need to get started.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -9,6 +9,8 @@ categories:
 tags:
   - dplyr
   - ggplot2
+  - transformation
+  - visualization
 ---
 
 This post will explore data of players and clubs in the premier league season 2019/2020 from FIFA20 video games. Data has been scraped from the publicly available [website](https://sofifa.com). You may download the available data [here](https://www.kaggle.com/stefanoleone992/fifa-20-complete-player-dataset) which contains the player's career mode data from FIFA15 to FIFA20. For this post, we focus on the FIFA20 data.

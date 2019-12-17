@@ -111,20 +111,29 @@
     </item>
     
     <item>
-      <title>R</title>
-      <link>/tags/r/</link>
-      <pubDate>Sun, 20 Oct 2019 00:00:00 +0000</pubDate>
+      <title>transformation</title>
+      <link>/tags/transformation/</link>
+      <pubDate>Sun, 13 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/r/</guid>
+      <guid>/tags/transformation/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Install</title>
-      <link>/tags/install/</link>
+      <title>Install R</title>
+      <link>/tags/install-r/</link>
       <pubDate>Sat, 05 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/install/</guid>
+      <guid>/tags/install-r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Install RStudio</title>
+      <link>/tags/install-rstudio/</link>
+      <pubDate>Sat, 05 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/install-rstudio/</guid>
       <description></description>
     </item>
     

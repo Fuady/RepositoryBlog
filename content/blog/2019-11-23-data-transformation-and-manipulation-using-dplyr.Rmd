@@ -5,10 +5,10 @@ author: A.M.Fuady
 date: '2019-10-13'
 slug: data-transformation-and-manipulation-using-dplyr
 categories:
-  - R
+  - R package
 tags:
-  - R
   - dplyr
+  - transformation
 ---
 
 This time we will discuss on how to transform and manipulate data using the __dplyr__ package. Specifically, here are some topics that will be covered

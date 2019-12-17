@@ -5,7 +5,6 @@ author: A.M.Fuady
 date: '2019-11-03'
 slug: e-commerce-data-analysis-customer-behavior
 categories:
-  - R
   - data-analysis
 tags:
   - date-time
@@ -23,6 +22,7 @@ The data in this post are based on keaggle datasets of e-commerce, you can downl
 Some libraries needed in this analysis are as follow:
 ```{r, warning=FALSE, message=FALSE}
 library(dplyr)
+library(ggplot2)
 library(magrittr)
 library(Hmisc)
 library(lubridate)

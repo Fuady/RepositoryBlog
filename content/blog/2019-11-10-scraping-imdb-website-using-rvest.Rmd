@@ -5,7 +5,7 @@ author: A.M.Fuady
 date: '2019-11-10'
 slug: scraping-imdb-website-using-rvest
 categories:
-  - R
+  - R package
 tags:
   - dplyr
   - ggplot2

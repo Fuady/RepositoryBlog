@@ -22,75 +22,5 @@ The first step is, of course, installing and loading some packages needed as fol
 library(twitteR)library(tm)library(ggplot2)library(dplyr)library(wordcloud)library(RColorBrewer)library(stringr)twitteR package is used for extracting tweets’ information. Two packages are utilized for text transformation, namely tm and stringr.</description>
     </item>
     
-    <item>
-      <title>Scraping IMDB website using rvest </title>
-      <link>/blog/2019/11/10/2019-11-10-scraping-imdb-website-using-rvest/</link>
-      <pubDate>Sun, 10 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2019/11/10/2019-11-10-scraping-imdb-website-using-rvest/</guid>
-      <description>In this post, we will discuss how to scrap data from a website. As an illustration, we retrieve information on the top 100 best movie all-time form the IMDB website. We mainly use rvest package in R to capture the information from a website.
-The results of multiple words are then visualized using ggplot2 and wordcloud, with additional color RcolorBrewer. First thing first, installing and loading the package needed as follows:</description>
-    </item>
-    
-    <item>
-      <title>E-commerce data analysis: Customer Behavior</title>
-      <link>/blog/2019/11/03/2019-11-03-e-commerce-data-analysis-customer-behaviour/</link>
-      <pubDate>Sun, 03 Nov 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2019/11/03/2019-11-03-e-commerce-data-analysis-customer-behaviour/</guid>
-      <description>We will perform e-commerce data analysis, more specifically on customer behavior. We are interested in some questions, such as what kind of product that mostly sold? or in which month customers buy more products? or how is the online purchasing trends? , etc.
-The data in this post are based on keaggle datasets of e-commerce, you can download here. Four tables of datasets are available, namely, marketing spends, key SKU, online and retail.</description>
-    </item>
-    
-    <item>
-      <title>Google Trends Visualization using R</title>
-      <link>/blog/2019/10/27/2019-10-27-google-trends-visualization-using-r/</link>
-      <pubDate>Sun, 27 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2019/10/27/2019-10-27-google-trends-visualization-using-r/</guid>
-      <description>In this post, we will visualize Google Trends search hits using R. We will combine the results of google trends with the world map figure. Here, we extract google search results on Sea games from 2004 in the Southeast Asia countries and plot the hits on the map.
-First of all, we need some packages. For capturing the google search hits, we use gtrendsR. To get the world map, we use the R package called maps.</description>
-    </item>
-    
-    <item>
-      <title>Set date and time using lubridate</title>
-      <link>/blog/2019/10/20/2019-10-20-set-date-and-time-using-lubridate/</link>
-      <pubDate>Sun, 20 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2019/10/20/2019-10-20-set-date-and-time-using-lubridate/</guid>
-      <description>This post will discuss how to work with date/time data. Here, we will use the R package lubridate and use the NYC flight data nycflights13. There are two types of date/time data that will be covered in this post, namely date (print date only) and date-time (print date and time).
-# install packages if needed#install.packages(&amp;quot;lubridate&amp;quot;, &amp;quot;nycflights13&amp;quot;, &amp;quot;ggplot2&amp;quot;)# load librarieslibrary(lubridate)library(nycflights13)library(ggplot2)library(dplyr)Extracting current date or date-timeWe can print the current date or date-time information using today() or now() function.</description>
-    </item>
-    
-    <item>
-      <title>Data transformation and manipulation using dplyr</title>
-      <link>/blog/2019/10/13/2019-11-23-data-transformation-and-manipulation-using-dplyr/</link>
-      <pubDate>Sun, 13 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2019/10/13/2019-11-23-data-transformation-and-manipulation-using-dplyr/</guid>
-      <description>This time we will discuss on how to transform and manipulate data using the dplyr package. Specifically, here are some topics that will be covered
-Filter observations based on their values using filter().Reorder lines using arrange().Selecting variables using select().Create a new variable from an existing variable using mutate().Make a group summary of variables using summarise().Combining several datasets using various join functions.In this post, we use nycflights13 datasets which contains all flights that depaeted from New York City (eg EWR, JFK, and LGA) to destinations in the United States, Puerto Rico and the American Virgin Islands) in 2013 with total of 336,776 flights.</description>
-    </item>
-    
-    <item>
-      <title>Data visualization using ggplot2</title>
-      <link>/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/</link>
-      <pubDate>Sun, 06 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/</guid>
-      <description>This post will discuss how to visualize data using the ggplot2 package. R has several systems for creating visualizations, but ggplot2 is a package that is often used to present data.
-Before we begin, in this article I will use the mpg dataset in the ggplot2 package. This dataset contains a collection of observations from 38 car models. Of course, first of all, we need to load the ggplot2 package as follows:</description>
-    </item>
-    
-    <item>
-      <title>Install R and RStudio on Windows</title>
-      <link>/blog/2019/10/05/2019-10-05-install-r-and-rstudio-on-windows/</link>
-      <pubDate>Sat, 05 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2019/10/05/2019-10-05-install-r-and-rstudio-on-windows/</guid>
-      <description>Here I want to elaborate steps needed to install R and RStudio on Windows. R is a programming language and free software environment for statistical computing and graphics. RStudio is an interactive desktop environment. Prior to installing RStudio, R should be installed first.
-Installing RYou can download R from the Comprehensive R Archive Network (CRAN)Select your operating system: Linux, Mac OS X or Windows.At the CRAN download page, several subdirectories are available, select base to install the basic packages you need to get started.</description>
-    </item>
-    
   </channel>
 </rss>

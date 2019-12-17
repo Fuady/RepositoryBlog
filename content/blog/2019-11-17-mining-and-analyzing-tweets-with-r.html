@@ -5,7 +5,7 @@ author: A.M.Fuady
 date: '2019-11-17'
 slug: mining-and-analyzing-tweets-with-r
 categories:
-  - R
+  - R package
 tags:
   - dplyr
   - wordcloud
@@ -47,11 +47,11 @@ ds_tweets = searchTwitter(&quot;data science&quot;, n=1000, lang=&quot;en&quot;)
 <pre class="r"><code># Extract the text from the tweets in a vector
 ds_text = sapply(ds_tweets, function(x) x$getText())
 head(ds_text)</code></pre>
-<pre><code>## [1] &quot;RT @EcoSenseNow: Real data, not wild predictions. Global vulnerability to climate-related hazards has declined 6.5 times for mortality &amp;amp; 5…&quot;
-## [2] &quot;RT couponfree01: Udemy Free Discount - Machine Learning A-Z\231: Hands-On Python &amp;amp;amp; R In Data Science #udemycoupon… https://t.co/e9I7TvOANT&quot;
-## [3] &quot;RT @EcoSenseNow: Real data, not wild predictions. Global vulnerability to climate-related hazards has declined 6.5 times for mortality &amp;amp; 5…&quot;
-## [4] &quot;RT @jgi: Starting 10am PT, Dec. 11 at #AGU19: Learn to use the open science #bioinformatics platform @DOEKBase at the Data Help Desk Demo w…&quot;   
-## [5] &quot;RT @DrCristinaF: IMO, this is a sign of science progressing - more interdisciplinary collaborations across the globe, harnessing huge data,…&quot;   
+<pre><code>## [1] &quot;Google Dataset Searchability for #DataScience and #DataLiteracy is the new search feature amongst its indexing serv… https://t.co/NR20Zq06G4&quot;      
+## [2] &quot;RT @actuarynews: Satisfying our appetites, analysing environmental data and improving business decision making are among the many things da…&quot;      
+## [3] &quot;RT @Carolynyjohnson: “The complicated question that this data is raising is: Should women start to overhype their research?” \n\nOr should me…&quot;    
+## [4] &quot;RT @rafiziramli: An opportunity to join the data &amp;amp; AI revolution: \n\nWe are looking for excellent graduates from any technical background wh…&quot;
+## [5] &quot;@fish_scientist @MollyAshur Interesting! I didn&#39;t realize there were concerted efforts to control their numbers. Wh… https://t.co/WqKDPsAnsF&quot;      
 ## [6] &quot;RT @EcoSenseNow: Real data, not wild predictions. Global vulnerability to climate-related hazards has declined 6.5 times for mortality &amp;amp; 5…&quot;</code></pre>
 <p>Then, we create a corpus which collects all text document for text analysis.</p>
 <pre class="r"><code># create a corpus

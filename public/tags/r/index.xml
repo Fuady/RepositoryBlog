@@ -21,35 +21,5 @@
 # install packages if needed#install.packages(&amp;quot;lubridate&amp;quot;, &amp;quot;nycflights13&amp;quot;, &amp;quot;ggplot2&amp;quot;)# load librarieslibrary(lubridate)library(nycflights13)library(ggplot2)library(dplyr)Extracting current date or date-timeWe can print the current date or date-time information using today() or now() function.</description>
     </item>
     
-    <item>
-      <title>Data transformation and manipulation using dplyr</title>
-      <link>/blog/2019/10/13/2019-11-23-data-transformation-and-manipulation-using-dplyr/</link>
-      <pubDate>Sun, 13 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2019/10/13/2019-11-23-data-transformation-and-manipulation-using-dplyr/</guid>
-      <description>This time we will discuss on how to transform and manipulate data using the dplyr package. Specifically, here are some topics that will be covered
-Filter observations based on their values using filter().Reorder lines using arrange().Selecting variables using select().Create a new variable from an existing variable using mutate().Make a group summary of variables using summarise().Combining several datasets using various join functions.In this post, we use nycflights13 datasets which contains all flights that depaeted from New York City (eg EWR, JFK, and LGA) to destinations in the United States, Puerto Rico and the American Virgin Islands) in 2013 with total of 336,776 flights.</description>
-    </item>
-    
-    <item>
-      <title>Data visualization using ggplot2</title>
-      <link>/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/</link>
-      <pubDate>Sun, 06 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2019/10/06/2019-11-20-visualisasi-dengan-ggplot2/</guid>
-      <description>This post will discuss how to visualize data using the ggplot2 package. R has several systems for creating visualizations, but ggplot2 is a package that is often used to present data.
-Before we begin, in this article I will use the mpg dataset in the ggplot2 package. This dataset contains a collection of observations from 38 car models. Of course, first of all, we need to load the ggplot2 package as follows:</description>
-    </item>
-    
-    <item>
-      <title>Install R and RStudio on Windows</title>
-      <link>/blog/2019/10/05/2019-10-05-install-r-and-rstudio-on-windows/</link>
-      <pubDate>Sat, 05 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2019/10/05/2019-10-05-install-r-and-rstudio-on-windows/</guid>
-      <description>Here I want to elaborate steps needed to install R and RStudio on Windows. R is a programming language and free software environment for statistical computing and graphics. RStudio is an interactive desktop environment. Prior to installing RStudio, R should be installed first.
-Installing RYou can download R from the Comprehensive R Archive Network (CRAN)Select your operating system: Linux, Mac OS X or Windows.At the CRAN download page, several subdirectories are available, select base to install the basic packages you need to get started.</description>
-    </item>
-    
   </channel>
 </rss>

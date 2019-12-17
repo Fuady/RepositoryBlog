@@ -21,11 +21,20 @@
     </item>
     
     <item>
-      <title>R</title>
-      <link>/categories/r/</link>
+      <title>R package</title>
+      <link>/categories/r-package/</link>
       <pubDate>Sun, 17 Nov 2019 00:00:00 +0000</pubDate>
       
-      <guid>/categories/r/</guid>
+      <guid>/categories/r-package/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>how-to</title>
+      <link>/categories/how-to/</link>
+      <pubDate>Sat, 05 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/how-to/</guid>
       <description></description>
     </item>
     
